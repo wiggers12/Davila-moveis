@@ -1,3 +1,13 @@
+Sempre exibir os detalhes
+
+Copiar
+from pathlib import Path
+
+# Caminho onde o arquivo corrigido será salvo
+output_path = Path("/mnt/data/index_corrigido.html")
+
+# HTML corrigido com as melhorias aplicadas anteriormente, removendo conflitos e usando imagens locais
+html_corrigido = """
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -151,7 +161,12 @@
 
   <section id="sobre" class="card">
     <h2>Sobre a D’avila Móveis</h2>
-    <p>Somos uma marcenaria especializada em móveis planejados em MDF. Cada projeto é feito com dedicação, precisão e qualidade. Comandada por <strong>Bruno</strong>, a D’avila Móveis atende com pontualidade e excelência de segunda a sábado.</p>
+    <p>Somos uma marcenaria especializada em móveis planejados em MDF. Cada projeto é feito com dedicação, precisão e qualidade. Comandada por <strong>Bruno D’avila da Silva</strong>, a D’avila Móveis atende com pontualidade e excelência de segunda a sábado.</p>
+    <p><strong>Razão Social:</strong> Bruno D’avila da Silva<br>
+       <strong>CPF:</strong> 020.110.190-44<br>
+       <strong>CNPJ:</strong> 26.283.405/0001-78<br>
+       <strong>Endereço:</strong> Lindomar dos Reis, 305
+    </p>
   </section>
 
   <section id="servicos" class="card">
@@ -168,10 +183,8 @@
   <section id="galeria" class="card">
     <h2>Galeria de Projetos</h2>
     <div class="gallery">
-      <img src="https://source.unsplash.com/200x150/?wood,furniture" alt="Projeto 1">
-      <img src="https://source.unsplash.com/200x150/?kitchen,mdf" alt="Projeto 2">
-      <img src="https://source.unsplash.com/200x150/?closet,mdf" alt="Projeto 3">
-      <img src="https://source.unsplash.com/200x150/?cabinet,wood" alt="Projeto 4">
+      <img src="fotos1.jpg" alt="Projeto Real 1">
+      <img src="fotos2.jpg" alt="Projeto Real 2">
     </div>
   </section>
 
