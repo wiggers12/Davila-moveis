@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>D’avila Móveis - Sob Medida em MDF</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #f8f8f8;
+      color: #333;
+    }
+
+    header {
+      background: #2e2e2e;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      background: #444;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 10px 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 10px 15px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffc107;
+    }
+
+    .hero {
+      background: url('https://images.unsplash.com/photo-1598300051408-1037aa6e3d3a') center/cover no-repeat;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 1px 1px 4px black;
+      text-align: center;
+    }
+
+    section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background: #fff;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 5px;
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    .testimonial {
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    form input, form textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .btn {
+      background-color: #ffc107;
+      border: none;
+      padding: 10px 20px;
+      color: #333;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    footer {
+      background: #2e2e2e;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
+      color: white;
+      border-radius: 50%;
+      padding: 15px;
+      font-size: 24px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>D’avila Móveis</h1>
+    <p>Especializados em móveis sob medida em MDF</p>
+  </header>
+
+  <nav>
+    <a href="#sobre">Sobre</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#galeria">Galeria</a>
+    <a href="#depoimentos">Depoimentos</a>
+    <a href="#contato">Contato</a>
+  </nav>
+
+  <div class="hero">
+    <h2>Transformamos MDF em sonhos sob medida</h2>
+  </div>
+
+  <section id="sobre" class="card">
+    <h2>Sobre a D’avila Móveis</h2>
+    <p>Somos uma marcenaria especializada em móveis planejados em MDF. Cada projeto é feito com dedicação, precisão e qualidade. Comandada por <strong>Bruno</strong>, a D’avila Móveis atende com pontualidade e excelência de segunda a sábado.</p>
+  </section>
+
+  <section id="servicos" class="card">
+    <h2>Serviços</h2>
+    <ul>
+      <li>Cozinhas Planejadas</li>
+      <li>Closets e Guarda-Roupas</li>
+      <li>Painéis para TV</li>
+      <li>Home Office</li>
+      <li>Banheiros e Lavabos</li>
+    </ul>
+  </section>
+
+  <section id="galeria" class="card">
+    <h2>Galeria de Projetos</h2>
+    <div class="gallery">
+      <img src="https://source.unsplash.com/200x150/?wood,furniture" alt="Projeto 1">
+      <img src="https://source.unsplash.com/200x150/?kitchen,mdf" alt="Projeto 2">
+      <img src="https://source.unsplash.com/200x150/?closet,mdf" alt="Projeto 3">
+      <img src="https://source.unsplash.com/200x150/?cabinet,wood" alt="Projeto 4">
+    </div>
+  </section>
+
+  <section id="depoimentos" class="card">
+    <h2>Depoimentos</h2>
+    <p class="testimonial">“Excelente trabalho, muito capricho e entrega no prazo!” – João S.</p>
+    <p class="testimonial">“Amei meus móveis novos. Superaram minhas expectativas!” – Carla M.</p>
+    <p class="testimonial">“Empresa de confiança. Recomendo!” – Rafael P.</p>
+  </section>
+
+  <section id="contato" class="card">
+    <h2>Contato</h2>
+    <form>
+      <input type="text" placeholder="Seu nome" required>
+      <input type="email" placeholder="Seu e-mail" required>
+      <textarea rows="5" placeholder="Mensagem ou orçamento"></textarea>
+      <button type="submit" class="btn">Enviar</button>
+    </form>
+    <p><strong>📧 E-mail:</strong> <a href="mailto:davilamoveis@outlook.com">davilamoveis@outlook.com</a></p>
+    <p><strong>📞 WhatsApp:</strong> <a href="https://wa.me/55519985709778" target="_blank">51 99857-0978</a></p>
+    <p><strong>📍 Atendimento:</strong> Seg a Sex 8h às 18h, Sáb 8h às 12h</p>
+  </section>
+
+  <a class="whatsapp-btn" href="https://wa.me/55519985709778" target="_blank">💬</a>
+
+  <footer>
+    <p>&copy; 2025 D’avila Móveis - Todos os direitos reservados</p>
+    <div>
+      <a href="https://www.instagram.com/davilamoveissobmedida" target="_blank">📷 Instagram</a>
+    </div>
+  </footer>
+
+</body>
+</html>
