@@ -1,13 +1,4 @@
-Sempre exibir os detalhes
 
-Copiar
-from pathlib import Path
-
-# Caminho onde o arquivo corrigido será salvo
-output_path = Path("/mnt/data/index_corrigido.html")
-
-# HTML corrigido com as melhorias aplicadas anteriormente, removendo conflitos e usando imagens locais
-html_corrigido = """
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,6 +6,13 @@ html_corrigido = """
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>D’avila Móveis - Sob Medida em MDF</title>
   <style>
+    :root {
+      --cor-primaria: #d8a353;
+      --cor-secundaria: #3e2f1c;
+      --cor-clara: #ffffff;
+      --cor-texto: #2a1b0f;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -23,19 +21,25 @@ html_corrigido = """
     }
 
     body {
-      background: #f8f8f8;
-      color: #333;
+      background: url('https://www.transparenttextures.com/patterns/wood-pattern.png') repeat;
+      color: var(--cor-texto);
     }
 
     header {
-      background: #2e2e2e;
-      color: #fff;
-      padding: 20px;
+      background: var(--cor-secundaria);
+      color: var(--cor-clara);
+      padding: 30px 20px;
       text-align: center;
     }
 
+    header img {
+      width: 100px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
     nav {
-      background: #444;
+      background: #5a3e2b;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
@@ -43,19 +47,20 @@ html_corrigido = """
     }
 
     nav a {
-      color: white;
+      color: var(--cor-clara);
       text-decoration: none;
       margin: 10px 15px;
       font-weight: bold;
+      font-size: 1.1em;
       transition: color 0.3s;
     }
 
     nav a:hover {
-      color: #ffc107;
+      color: var(--cor-primaria);
     }
 
     .hero {
-      background: url('https://images.unsplash.com/photo-1598300051408-1037aa6e3d3a') center/cover no-repeat;
+      background: linear-gradient(to right, #00000099, #00000099), url('https://images.unsplash.com/photo-1598300051408-1037aa6e3d3a') center/cover no-repeat;
       height: 300px;
       display: flex;
       align-items: center;
@@ -72,27 +77,33 @@ html_corrigido = """
     }
 
     .card {
-      background: #fff;
-      margin-bottom: 20px;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      background: #fefaf3;
+      margin-bottom: 25px;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 15px;
     }
 
     .gallery img {
       width: 100%;
-      border-radius: 5px;
+      border-radius: 8px;
       transition: transform 0.3s;
     }
 
     .gallery img:hover {
-      transform: scale(1.05);
+      transform: scale(1.03);
+    }
+
+    .video-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
     }
 
     .testimonial {
@@ -102,27 +113,35 @@ html_corrigido = """
 
     form input, form textarea {
       width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
+      margin-bottom: 15px;
+      padding: 12px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 6px;
     }
 
     .btn {
-      background-color: #ffc107;
+      background-color: var(--cor-primaria);
       border: none;
-      padding: 10px 20px;
-      color: #333;
+      padding: 12px 25px;
+      color: #000;
       font-weight: bold;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
+      font-size: 1em;
     }
 
     footer {
-      background: #2e2e2e;
+      background: var(--cor-secundaria);
       color: white;
       text-align: center;
-      padding: 20px 10px;
+      padding: 25px 15px;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: white;
+      font-size: 1.5em;
+      text-decoration: none;
     }
 
     .whatsapp-btn {
@@ -143,6 +162,7 @@ html_corrigido = """
 <body>
 
   <header>
+    <img src="logo.jpg" alt="Logo D'avila Móveis">
     <h1>D’avila Móveis</h1>
     <p>Especializados em móveis sob medida em MDF</p>
   </header>
@@ -151,7 +171,7 @@ html_corrigido = """
     <a href="#sobre">Sobre</a>
     <a href="#servicos">Serviços</a>
     <a href="#galeria">Galeria</a>
-    <a href="#depoimentos">Depoimentos</a>
+    <a href="#video">Vídeo</a>
     <a href="#contato">Contato</a>
   </nav>
 
@@ -161,7 +181,7 @@ html_corrigido = """
 
   <section id="sobre" class="card">
     <h2>Sobre a D’avila Móveis</h2>
-    <p>Somos uma marcenaria especializada em móveis planejados em MDF. Cada projeto é feito com dedicação, precisão e qualidade. Comandada por <strong>Bruno D’avila da Silva</strong>, a D’avila Móveis atende com pontualidade e excelência de segunda a sábado.</p>
+    <p>Comandada por <strong>Bruno D’avila da Silva</strong>, somos especialistas em móveis planejados em MDF, com excelência e atendimento personalizado.</p>
     <p><strong>Razão Social:</strong> Bruno D’avila da Silva<br>
        <strong>CPF:</strong> 020.110.190-44<br>
        <strong>CNPJ:</strong> 26.283.405/0001-78<br>
@@ -188,11 +208,14 @@ html_corrigido = """
     </div>
   </section>
 
-  <section id="depoimentos" class="card">
-    <h2>Depoimentos</h2>
-    <p class="testimonial">“Excelente trabalho, muito capricho e entrega no prazo!” – João S.</p>
-    <p class="testimonial">“Amei meus móveis novos. Superaram minhas expectativas!” – Carla M.</p>
-    <p class="testimonial">“Empresa de confiança. Recomendo!” – Rafael P.</p>
+  <section id="video" class="card">
+    <h2>Vídeo Institucional</h2>
+    <div class="video-container">
+      <video width="100%" height="360" controls>
+        <source src="video.de.trabalho.mp4" type="video/mp4">
+        Seu navegador não suporta a exibição do vídeo.
+      </video>
+    </div>
   </section>
 
   <section id="contato" class="card">
@@ -212,8 +235,9 @@ html_corrigido = """
 
   <footer>
     <p>&copy; 2025 D’avila Móveis - Todos os direitos reservados</p>
-    <div>
-      <a href="https://www.instagram.com/davilamoveissobmedida" target="_blank">📷 Instagram</a>
+    <div class="social-links">
+      <a href="https://www.instagram.com/davilamoveissobmedida" target="_blank">📷</a>
+      <a href="https://wa.me/55519985709778" target="_blank">💬</a>
     </div>
   </footer>
 
