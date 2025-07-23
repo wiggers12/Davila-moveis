@@ -4,171 +4,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>D’avila Móveis - Sob Medida em MDF</title>
+  <title>D’avila Móveis - Móveis Sob Medida</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <style>
-    :root {
-      --cor-primaria: #d8a353;
-      --cor-secundaria: #3e2f1c;
-      --cor-clara: #ffffff;
-      --cor-texto: #2a1b0f;
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+    body { background: #fdfdfd; color: #333; line-height: 1.6; scroll-behavior: smooth; }
+
+    header { background: #1a1a1a; color: white; text-align: center; padding: 40px 20px; }
+    header h1 { font-size: 2.5rem; }
+
+    nav { position: sticky; top: 0; background: #262626; display: flex; justify-content: center; padding: 10px; z-index: 999; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+    nav a:hover { color: #ffc107; }
+
+    .hero { background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover no-repeat; height: 400px;
+      display: flex; justify-content: center; align-items: center; color: white; text-shadow: 2px 2px 6px black; text-align: center; }
+    .hero h2 { font-size: 2.5rem; }
+
+    section { padding: 60px 20px; max-width: 1200px; margin: auto; }
+
+    .highlight, .form-card {
+      background: #fffef5; padding: 30px; margin-bottom: 40px;
+      border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-    }
+    .highlight h3 { color: #cc9900; margin-bottom: 15px; }
 
-    body {
-      background: url('https://www.transparenttextures.com/patterns/wood-pattern.png') repeat;
-      color: var(--cor-texto);
-    }
+    .swiper { width: 100%; padding-top: 20px; padding-bottom: 40px; }
+    .swiper-slide img { width: 100%; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
-    header {
-      background: var(--cor-secundaria);
-      color: var(--cor-clara);
-      padding: 30px 20px;
-      text-align: center;
-    }
-
-    header img {
-      width: 100px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-
-    nav {
-      background: #5a3e2b;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      padding: 10px 0;
-    }
-
-    nav a {
-      color: var(--cor-clara);
-      text-decoration: none;
-      margin: 10px 15px;
-      font-weight: bold;
-      font-size: 1.1em;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: var(--cor-primaria);
-    }
-
-    .hero {
-      background: linear-gradient(to right, #00000099, #00000099), url('https://images.unsplash.com/photo-1598300051408-1037aa6e3d3a') center/cover no-repeat;
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-shadow: 1px 1px 4px black;
-      text-align: center;
-    }
-
-    section {
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .card {
-      background: #fefaf3;
-      margin-bottom: 25px;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 15px;
-    }
-
-    .gallery img {
-      width: 100%;
-      border-radius: 8px;
-      transition: transform 0.3s;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.03);
-    }
-
-    .video-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    .testimonial {
-      font-style: italic;
-      margin-bottom: 10px;
-    }
-
+    .form-card h2 { margin-bottom: 20px; text-align: center; }
+    form { display: flex; flex-direction: column; gap: 15px; }
     form input, form textarea {
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 15px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;
     }
 
-    .btn {
-      background-color: var(--cor-primaria);
-      border: none;
-      padding: 12px 25px;
-      color: #000;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1em;
-    }
+    .btn { background: #ffc107; color: #333; font-weight: bold; padding: 15px; text-align: center;
+      border-radius: 6px; cursor: pointer; border: none; transition: background 0.3s; }
+    .btn:hover { background: #e0a800; }
+
+    .video { text-align: center; }
+    .video video { width: 100%; max-width: 720px; border-radius: 10px; }
 
     footer {
-      background: var(--cor-secundaria);
-      color: white;
-      text-align: center;
-      padding: 25px 15px;
+      background: #1a1a1a; color: white; text-align: center; padding: 30px 20px; margin-top: 60px;
     }
 
-    .social-links a {
-      margin: 0 10px;
-      color: white;
-      font-size: 1.5em;
-      text-decoration: none;
+    .floating-btns {
+      position: fixed; right: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000;
     }
-
-    .whatsapp-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #25D366;
-      color: white;
-      border-radius: 50%;
-      padding: 15px;
-      font-size: 24px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      z-index: 1000;
-      text-decoration: none;
+    .floating-btns a {
+      background: #25D366; color: white; font-size: 1.5rem; padding: 12px; border-radius: 50%; text-align: center;
+      text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
+    .floating-btns .instagram { background: #E1306C; }
   </style>
 </head>
 <body>
 
   <header>
-    <img src="logo.jpg" alt="Logo D'avila Móveis">
     <h1>D’avila Móveis</h1>
-    <p>Especializados em móveis sob medida em MDF</p>
+    <p>Soluções inteligentes em móveis planejados</p>
   </header>
 
   <nav>
-    <a href="#sobre">Sobre</a>
     <a href="#servicos">Serviços</a>
     <a href="#galeria">Galeria</a>
     <a href="#video">Vídeo</a>
@@ -176,70 +77,83 @@
   </nav>
 
   <div class="hero">
-    <h2>Transformamos MDF em sonhos sob medida</h2>
+    <h2>Transformamos MDF em projetos únicos</h2>
   </div>
 
-  <section id="sobre" class="card">
-    <h2>Sobre a D’avila Móveis</h2>
-    <p>Comandada por <strong>Bruno D’avila da Silva</strong>, somos especialistas em móveis planejados em MDF, com excelência e atendimento personalizado.</p>
-    <p><strong>Razão Social:</strong> Bruno D’avila da Silva<br>
-       <strong>CPF:</strong> 020.110.190-44<br>
-       <strong>CNPJ:</strong> 26.283.405/0001-78<br>
-       <strong>Endereço:</strong> Lindomar dos Reis, 305
-    </p>
-  </section>
-
-  <section id="servicos" class="card">
-    <h2>Serviços</h2>
+  <section id="servicos" class="highlight" data-sr>
+    <h3>Nossos Serviços</h3>
     <ul>
-      <li>Cozinhas Planejadas</li>
-      <li>Closets e Guarda-Roupas</li>
-      <li>Painéis para TV</li>
-      <li>Home Office</li>
-      <li>Banheiros e Lavabos</li>
+      <li>Cozinhas planejadas com acabamentos premium</li>
+      <li>Closets e guarda-roupas sob medida</li>
+      <li>Home office funcional e elegante</li>
+      <li>Painéis e estantes para sala</li>
+      <li>Banheiros personalizados</li>
     </ul>
   </section>
 
-  <section id="galeria" class="card">
-    <h2>Galeria de Projetos</h2>
-    <div class="gallery">
-      <img src="fotos1.jpg" alt="Projeto Real 1">
-      <img src="fotos2.jpg" alt="Projeto Real 2">
+  <section id="galeria">
+    <h2 style="text-align:center; margin-bottom:20px;">Galeria</h2>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="fotos1.jpg" alt="Projeto 1" /></div>
+        <div class="swiper-slide"><img src="fotos2.jpg" alt="Projeto 2" /></div>
+        <div class="swiper-slide"><img src="https://source.unsplash.com/300x200/?kitchen" alt="Extra 1" /></div>
+        <div class="swiper-slide"><img src="https://source.unsplash.com/300x200/?closet" alt="Extra 2" /></div>
+      </div>
     </div>
   </section>
 
-  <section id="video" class="card">
-    <h2>Vídeo Institucional</h2>
-    <div class="video-container">
-      <video width="100%" height="360" controls>
-        <source src="video.de.trabalho.mp4" type="video/mp4">
-        Seu navegador não suporta a exibição do vídeo.
-      </video>
-    </div>
+  <section id="video" class="video" data-sr>
+    <h2>Conheça nosso trabalho</h2>
+    <video controls>
+      <source src="video.de.trabalho.mp4" type="video/mp4">
+    </video>
   </section>
 
-  <section id="contato" class="card">
-    <h2>Contato</h2>
-    <form>
-      <input type="text" placeholder="Seu nome" required>
-      <input type="email" placeholder="Seu e-mail" required>
-      <textarea rows="5" placeholder="Mensagem ou orçamento"></textarea>
-      <button type="submit" class="btn">Enviar</button>
+  <section id="contato" class="form-card" data-sr>
+    <h2>Entre em Contato</h2>
+    <form id="contact-form">
+      <input type="text" name="user_name" placeholder="Seu nome" required />
+      <input type="email" name="user_email" placeholder="Seu e-mail" required />
+      <textarea name="message" rows="5" placeholder="Sua mensagem" required></textarea>
+      <button class="btn" type="submit">Enviar</button>
     </form>
-    <p><strong>📧 E-mail:</strong> <a href="mailto:davilamoveis@outlook.com">davilamoveis@outlook.com</a></p>
-    <p><strong>📞 WhatsApp:</strong> <a href="https://wa.me/55519985709778" target="_blank">51 99857-0978</a></p>
-    <p><strong>📍 Atendimento:</strong> Seg a Sex 8h às 18h, Sáb 8h às 12h</p>
+    <p style="text-align:center; margin-top:10px;">
+      Ou fale direto no <a href="https://wa.me/5551985709778">WhatsApp</a>
+    </p>
   </section>
-
-  <a class="whatsapp-btn" href="https://wa.me/55519985709778" target="_blank">💬</a>
 
   <footer>
-    <p>&copy; 2025 D’avila Móveis - Todos os direitos reservados</p>
-    <div class="social-links">
-      <a href="https://www.instagram.com/davilamoveissobmedida" target="_blank">📷</a>
-      <a href="https://wa.me/55519985709778" target="_blank">💬</a>
-    </div>
+    <p>&copy; 2025 D’avila Móveis | Desenvolvido por Dionatan Wiggers</p>
+    <p><a href="https://www.instagram.com/davilamoveissobmedida" style="color:#ffc107;">@davilamoveissobmedida</a></p>
   </footer>
 
+  <div class="floating-btns">
+    <a href="https://wa.me/5551985709778" title="WhatsApp">💬</a>
+    <a href="https://www.instagram.com/davilamoveissobmedida" class="instagram" title="Instagram">📸</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    ScrollReveal().reveal('[data-sr]', { delay: 200, distance: '20px', duration: 800, easing: 'ease-out', origin: 'bottom' });
+
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      autoplay: { delay: 3000 },
+      slidesPerView: 1,
+      spaceBetween: 20,
+      breakpoints: { 768: { slidesPerView: 2 } }
+    });
+
+    emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
+        .then(() => alert('Mensagem enviada com sucesso!'))
+        .catch(() => alert('Erro ao enviar mensagem.'));
+    });
+  </script>
 </body>
 </html>
