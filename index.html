@@ -1,488 +1,609 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Cartão Digital Profissional — Agendamento Online</title>
-<meta name="description" content="Página premium para profissionais. Agendamento online com WhatsApp, galeria, depoimentos, preços e mapa."/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Cartão Digital — Construtor</title>
 <meta name="theme-color" content="#0b0f1a"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  :root{--ring:#22d3ee}
-  html{scroll-behavior:smooth}
-  .card{background:#0f172a; border:1px solid #19243b}
-  .soft{background:#0b1221}
-  .ring-focus:focus{box-shadow:0 0 0 4px var(--ring)/30%}
-  .grid-auto{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-  .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 1rem;border-radius:.8rem;font-weight:700}
-  .btn-brand{background:linear-gradient(180deg,#22d3ee,#0ea5e9);color:#05222a}
-  .btn-ghost{background:#0a1426;border:1px solid #16243d;color:#cbd5e1}
-  .btn-full{justify-content:center;width:100%}
-  .badge{display:inline-flex;gap:.5rem;align-items:center;border:1px solid #1f2c45;border-radius:999px;padding:.4rem .7rem;background:#0a1426}
-  .muted{color:#9aa7bd}
-  .ok{color:#34d399}.bad{color:#fb7185}
-  .floating{position:fixed;right:16px;bottom:16px;z-index:40}
-  .shadow-soft{box-shadow:0 12px 40px #0006}
-  .input{width:100%;padding:.9rem 1rem;border-radius:.7rem;border:1px solid #1f2c45;background:#0a1426;color:#e2e8f0;outline:none}
-  .input::placeholder{color:#64748b}
-  .label{display:block;margin:.4rem 0 .35rem;color:#cbd5e1;font-weight:600}
-  .hint{font-size:.8rem;color:#93a3be}
-  .pill{border:1px solid #1f2c45;border-radius:999px;padding:.35rem .65rem;color:#a8b4ca;font-size:.8rem}
+:root{
+  --bg:#0b0f1a;--card:#0f172a;--soft:#0a1426;--text:#e6edf7;--muted:#9aa7bd;
+  --ring:#22d3ee;--border:#1b2740;--brand:#22d3ee;--brand2:#0ea5e9;--accent:#f7c948;
+}
+*{box-sizing:border-box}
+html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+body{background:var(--bg);color:var(--text)}
+a{color:inherit;text-decoration:none}
+.container{max-width:1180px;margin:auto;padding:18px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+.soft{background:var(--soft);border:1px solid var(--border);border-radius:12px}
+.grid{display:grid;gap:14px}
+@media(min-width:900px){.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:repeat(3,1fr)}}
+h1,h2,h3{margin:.1rem 0 .6rem}
+.muted{color:var(--muted)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-weight:700;background:#0a1426;color:#cfe3ff}
+.btn.brand{background:linear-gradient(180deg,var(--brand),var(--brand2));color:#05222a;border-color:#29d3f1}
+.btn.alt{background:#0d1730}
+.badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--border);background:#0a1426;border-radius:999px;padding:.35rem .6rem}
+.small{font-size:12px}
+.pill{border:1px solid var(--border);border-radius:999px;padding:.3rem .6rem;color:var(--muted);font-size:12px}
+.input,select,textarea{width:100%;padding:.8rem;border-radius:10px;border:1px solid var(--border);background:#0a1426;color:#e6edf7;outline:none}
+textarea{min-height:100px;resize:vertical}
+.label{display:block;margin:.35rem 0 .3rem;font-weight:700}
+.gallery{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:700px){.gallery{grid-template-columns:repeat(3,1fr)}}
+.gallery img{width:100%;height:180px;object-fit:cover;border-radius:10px;border:1px solid var(--border);background:#0b0f1a}
+.kv{display:flex;justify-content:space-between;gap:8px}
+.footer{margin:18px 0;text-align:center;color:var(--muted);font-size:13px}
+.ok{color:#34d399}.bad{color:#fb7185}
+/* painél (builder) */
+#builderToggle{position:fixed;left:16px;bottom:16px;z-index:50}
+#builder{position:fixed;inset:0 0 0 auto;width:min(480px,100%);background:#0a1224;color:#e6edf7;border-left:1px solid var(--border);transform:translateX(100%);transition:.3s;z-index:60;overflow:auto}
+#builder.open{transform:translateX(0)}
+.builder-h{position:sticky;top:0;background:#091227;border-bottom:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.section{padding:12px 14px;border-bottom:1px dashed #15223b}
+.section h3{margin:.2rem 0 .6rem}
+.grid-2c{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.color-swatch{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);cursor:pointer}
+.logo{width:92px;height:92px;border-radius:12px;border:1px solid var(--border);background:#0b0f1a;display:grid;place-items:center;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:contain}
+hr{border:0;border-top:1px solid var(--border);margin:10px 0}
+.sticky-cta{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;gap:10px;flex-direction:column}
+.hidden{display:none}
 </style>
 </head>
-<body class="bg-[#0b0f1a] text-slate-100">
+<body>
 
-<!-- =========================
-     CONFIG (edite aqui)
-========================= -->
+<div class="container">
+  <!-- HERO -->
+  <section class="card">
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <div class="row" style="align-items:center">
+        <div class="logo" id="logoBox"><span class="muted">LOGO</span></div>
+        <div style="margin-left:12px">
+          <h1 id="heroTitle">Sua Marca — Profissão</h1>
+          <div class="muted" id="heroSubtitle">Cidade • Qualidade • Atendimento rápido</div>
+          <div class="badge" style="margin-top:8px">
+            <i id="statusIcon" class="fa-solid fa-circle bad"></i>
+            <span id="statusText">Fechado agora</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <a id="ctaWhats" class="btn brand"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a id="ctaMaps" class="btn alt"><i class="fa-solid fa-map-location-dot"></i> Como chegar</a>
+        <button id="ctaShare" class="btn alt"><i class="fa-solid fa-share-nodes"></i> Compartilhar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFO RÁPIDA -->
+  <section class="grid grid-3" style="margin-top:12px">
+    <div class="card"><div class="muted small">WhatsApp</div><div id="whatsPretty" style="font-weight:800"></div></div>
+    <div class="card"><div class="muted small">Endereço</div><div id="addressLine" style="font-weight:800"></div></div>
+    <div class="card"><div class="muted small">Cidade</div><div id="cityLine" style="font-weight:800"></div></div>
+  </section>
+
+  <!-- SOBRE + SERVIÇOS -->
+  <section class="grid grid-2" style="margin-top:12px">
+    <div class="card">
+      <h2>Sobre</h2>
+      <p id="aboutText" class="muted">Conte a sua história, diferenciais, missão e o que o cliente pode esperar do seu atendimento.</p>
+      <div class="row" id="quickTags" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h2>Serviços</h2>
+      <ul id="servicesList" class="muted" style="padding-left:16px"></ul>
+    </div>
+  </section>
+
+  <!-- PLANOS -->
+  <section class="grid grid-3" style="margin-top:12px">
+    <div class="card">
+      <h3>Plano Básico</h3>
+      <div class="muted">Preço</div><div id="priceBasic" style="font-weight:800">R$ —</div>
+      <ul id="featBasic" class="muted" style="margin-top:8px;padding-left:16px"></ul>
+      <a class="btn brand" data-plan="Básico" style="margin-top:10px"><i class="fab fa-whatsapp"></i> Quero esse</a>
+    </div>
+    <div class="card">
+      <h3>Plano Profissional</h3>
+      <div class="muted">Preço</div><div id="pricePro" style="font-weight:800">R$ —</div>
+      <ul id="featPro" class="muted" style="margin-top:8px;padding-left:16px"></ul>
+      <a class="btn brand" data-plan="Profissional" style="margin-top:10px"><i class="fab fa-whatsapp"></i> Quero esse</a>
+    </div>
+    <div class="card">
+      <h3>Plano Premium</h3>
+      <div class="muted">Preço</div><div id="pricePremium" style="font-weight:800">R$ —</div>
+      <ul id="featPremium" class="muted" style="margin-top:8px;padding-left:16px"></ul>
+      <a class="btn brand" data-plan="Premium" style="margin-top:10px"><i class="fab fa-whatsapp"></i> Quero esse</a>
+    </div>
+  </section>
+
+  <!-- GALERIA -->
+  <section class="card" style="margin-top:12px">
+    <h2>Galeria</h2>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section class="card" style="margin-top:12px">
+    <h2>Depoimentos</h2>
+    <div id="testimonials" class="grid"></div>
+  </section>
+
+  <!-- AGENDAMENTO -->
+  <section id="agendar" class="card" style="margin-top:12px">
+    <h2>Agendar / Solicitar Orçamento</h2>
+    <div class="grid grid-2">
+      <div>
+        <label class="label">Seu nome</label>
+        <input id="fName" class="input" placeholder="Ex.: Ana Silva">
+      </div>
+      <div>
+        <label class="label">Seu WhatsApp</label>
+        <input id="fPhone" class="input" placeholder="(DDD) 9xxxx-xxxx">
+      </div>
+      <div>
+        <label class="label">Serviço</label>
+        <select id="fService" class="input"></select>
+      </div>
+      <div>
+        <label class="label">Data</label>
+        <input id="fDate" type="date" class="input">
+      </div>
+      <div>
+        <label class="label">Hora</label>
+        <input id="fTime" type="time" step="900" class="input">
+      </div>
+      <div>
+        <label class="label">Mensagem (opcional)</label>
+        <input id="fMsg" class="input" placeholder="Objetivo, bairro, preferências...">
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button id="btnWA" class="btn brand"><i class="fab fa-whatsapp"></i> Enviar no WhatsApp</button>
+      <button id="btnICS" class="btn alt"><i class="fa-regular fa-calendar-plus"></i> Baixar evento (.ics)</button>
+      <span id="formErr" class="small bad" style="display:none"></span>
+    </div>
+  </section>
+
+  <!-- MAPA & CONTATOS -->
+  <section class="grid grid-2" style="margin-top:12px">
+    <div class="card">
+      <h2>Localização & Contatos</h2>
+      <p id="fullAddress" class="muted"></p>
+      <div class="row" style="margin-top:8px">
+        <a id="instaLink" class="pill" target="_blank">Instagram</a>
+        <a id="waLink" class="pill" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+    <div class="card">
+      <iframe id="mapFrame" width="100%" height="260" style="border:1px solid var(--border);border-radius:12px;background:#0b0f1a" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <div class="footer">© <span id="year"></span> <span id="footBrand">Sua Marca</span> — Cartão Digital</div>
+</div>
+
+<!-- BOTÕES FLUTUANTES -->
+<div class="sticky-cta">
+  <a id="floatWA" class="btn brand"><i class="fab fa-whatsapp"></i> Falar agora</a>
+  <button id="builderToggle" class="btn alt"><i class="fa-solid fa-wrench"></i> Personalizar</button>
+</div>
+
+<!-- PAINEL DO USUÁRIO (BUILDER) -->
+<aside id="builder">
+  <div class="builder-h">
+    <strong>Personalizar Página</strong>
+    <div class="row">
+      <button id="exportJSON" class="btn alt small">Exportar JSON</button>
+      <button id="importJSON" class="btn alt small">Importar JSON</button>
+      <button id="exportHTML" class="btn brand small">Exportar HTML</button>
+      <button id="closeBuilder" class="btn alt small">Fechar</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Identidade</h3>
+    <div class="grid-2c">
+      <div>
+        <label class="label">Nome / Marca</label>
+        <input id="iBusiness" class="input" placeholder="Minha Marca">
+      </div>
+      <div>
+        <label class="label">Profissão</label>
+        <input id="iProfession" class="input" placeholder="Ex.: Barbearia, Academia, Salão, Clínica...">
+      </div>
+    </div>
+    <label class="label">Sobre</label>
+    <textarea id="iAbout" class="input" placeholder="Conte rapidamente quem você é e seu diferencial."></textarea>
+    <div class="row" style="margin-top:8px;align-items:center">
+      <div class="logo" id="logoBoxCfg"><span class="muted">LOGO</span></div>
+      <div>
+        <label class="label">Enviar logo</label>
+        <input id="iLogo" type="file" accept="image/*" class="input">
+        <div class="small muted">PNG ou JPG. Usamos a imagem como marca no topo.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Cores</h3>
+    <div class="row" id="palettePresets">
+      <!-- presets gerados via JS -->
+    </div>
+    <div class="grid-2c" style="margin-top:8px">
+      <div>
+        <label class="label">Cor Primária</label>
+        <input id="cBrand" type="color" class="input" value="#22d3ee">
+      </div>
+      <div>
+        <label class="label">Cor Secundária</label>
+        <input id="cBrand2" type="color" class="input" value="#0ea5e9">
+      </div>
+      <div>
+        <label class="label">Fundo</label>
+        <input id="cBg" type="color" class="input" value="#0b0f1a">
+      </div>
+      <div>
+        <label class="label">Cartões</label>
+        <input id="cCard" type="color" class="input" value="#0f172a">
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Contato & Endereço</h3>
+    <div class="grid-2c">
+      <div>
+        <label class="label">WhatsApp (E.164)</label>
+        <input id="iWhatsE164" class="input" placeholder="Ex.: 5551991271598">
+      </div>
+      <div>
+        <label class="label">WhatsApp (exibição)</label>
+        <input id="iWhatsPretty" class="input" placeholder="(51) 99127-1598">
+      </div>
+      <div>
+        <label class="label">Instagram (URL)</label>
+        <input id="iInstagram" class="input" placeholder="https://instagram.com/seuuser">
+      </div>
+      <div>
+        <label class="label">Cidade / UF</label>
+        <input id="iCity" class="input" placeholder="Porto Alegre, RS">
+      </div>
+      <div class="grid-2c" style="grid-column:1/-1">
+        <div>
+          <label class="label">Endereço</label>
+          <input id="iAddress" class="input" placeholder="Rua das Oliveiras, 175">
+        </div>
+        <div>
+          <label class="label">Tagline (curta)</label>
+          <input id="iTag" class="input" placeholder="Qualidade • Agilidade • Confiança">
+        </div>
+      </div>
+      <div>
+        <label class="label">Chips (separe por vírgula)</label>
+        <input id="iTags" class="input" placeholder="Orçamento rápido, PIX e Cartão, Nota fiscal">
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Serviços</h3>
+    <div class="row">
+      <input id="iService" class="input" placeholder="Ex.: Corte Premium"/>
+      <button id="addService" class="btn brand small">Adicionar</button>
+    </div>
+    <ul id="servicesAdmin" class="small" style="margin-top:8px"></ul>
+    <hr>
+    <h3>Planos & Preços</h3>
+    <div class="grid-2c">
+      <div><label class="label">Básico (R$)</label><input id="pBasic" class="input" placeholder="149"></div>
+      <div><label class="label">Profissional (R$)</label><input id="pPro" class="input" placeholder="299"></div>
+      <div><label class="label">Premium (R$)</label><input id="pPremium" class="input" placeholder="599"></div>
+    </div>
+    <div class="small muted" style="margin-top:6px">Recursos (cada linha = 1 item)</div>
+    <div class="grid-3" style="display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr">
+      <textarea id="pfBasic" class="input" placeholder="Atendimento pontual&#10;Suporte por WhatsApp"></textarea>
+      <textarea id="pfPro" class="input" placeholder="Tudo do Básico&#10;Entrega em 48h&#10;1 revisão"></textarea>
+      <textarea id="pfPremium" class="input" placeholder="Tudo do Pro&#10;Prioridade&#10;Suporte estendido"></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Galeria</h3>
+    <div class="row">
+      <input id="iGalleryUrl" class="input" placeholder="URL da imagem (https://...)">
+      <button id="addGallery" class="btn brand small">Adicionar</button>
+    </div>
+    <ul id="galleryAdmin" class="small" style="margin-top:8px"></ul>
+  </div>
+
+  <div class="section">
+    <h3>Depoimentos</h3>
+    <div class="grid-2c">
+      <input id="iTestName" class="input" placeholder="Nome do cliente">
+      <input id="iTestText" class="input" placeholder="Depoimento curto">
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button id="addTest" class="btn brand small">Adicionar</button>
+    </div>
+    <ul id="testsAdmin" class="small" style="margin-top:8px"></ul>
+  </div>
+
+  <div class="section">
+    <h3>Horários de Funcionamento</h3>
+    <div class="small muted">Deixe vazio para “fechado”. Formato HH:MM.</div>
+    <div id="hoursAdmin" class="grid-2c" style="margin-top:8px"></div>
+  </div>
+
+  <div class="section">
+    <div class="row">
+      <button id="saveLocal" class="btn brand"><i class="fa-solid fa-floppy-disk"></i> Salvar (navegador)</button>
+      <button id="clearLocal" class="btn alt"><i class="fa-solid fa-trash"></i> Limpar dados</button>
+    </div>
+    <div class="small muted" style="margin-top:6px">Os dados ficam salvos no seu navegador (localStorage).</div>
+  </div>
+</aside>
+
 <script>
-const CONFIG = {
-  businessName: "Seu Negócio / Sua Marca",
-  professionalName: "Profissional",
-  profession: "Serviços Profissionais",
-  city: "Porto Alegre, RS",
-  address: "Rua das Oliveiras, 175",
-  instagram: "https://instagram.com/pedrowiggers",
-  whatsappE164: "5551991271598",      // (55 + DDD + número)
-  whatsappDisplay: "(51) 99127-1598",
-  quickTags: ["Atendimento humanizado","Orçamento rápido","Pagamento no PIX/Cartão","Nota fiscal"],
-  about: "Atendimento profissional, pontual e transparente. Solicite orçamento sem compromisso.",
-  services: [
-    "Corte Premium e Barba (Barbearia)",
-    "Plano Mensal (Academia / Personal)",
-    "Colorimetria / Make / Unhas (Salão)",
-    "Consultoria / Sessão Individual"
-  ],
-  prices: {
-    basic: { value: "R$ 149", features: ["Atendimento pontual","Suporte por WhatsApp"] },
-    pro: { value: "R$ 299", features: ["Tudo do Básico","Entrega em até 48h","1 revisão"] },
-    premium: { value: "R$ 599", features: ["Tudo do Pro","Prioridade","Suporte estendido"] }
-  },
-  testimonials: [
-    { name:"Ana", text:"Excelente atendimento! Resultado acima do esperado." },
-    { name:"Lucas", text:"Profissional atencioso e competente. Recomendo!" },
-    { name:"Marina", text:"Meu negócio ganhou outra cara com esse cartão digital." }
-  ],
-  gallery: [
-    "https://images.unsplash.com/photo-1599351431409-3b5ef9f9470f?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1571019613576-2b21cbb63f8d?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1600334129128-8c6c6a7c2f1b?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1515165562835-c3b8c1a9d6d3?q=80&w=1200&auto=format&fit=crop"
-  ],
-  // horário de funcionamento (0=Dom...6=Sáb) — null = fechado
-  hours: {
-    0: null,
-    1: {open:"09:00", close:"19:00"},
-    2: {open:"09:00", close:"19:00"},
-    3: {open:"09:00", close:"19:00"},
-    4: {open:"09:00", close:"19:00"},
-    5: {open:"09:00", close:"19:00"},
-    6: {open:"09:00", close:"14:00"}
-  },
-  timezone: "America/Sao_Paulo"
+/* ========= Estado & defaults ========= */
+const LS_KEY = "builder_config_v1";
+let CONFIG = {
+  brand:"Sua Marca", profession:"Profissão", about:"Atendimento profissional.",
+  city:"Porto Alegre, RS", address:"Rua das Oliveiras, 175",
+  whatsappE164:"5551991271598", whatsappPretty:"(51) 99127-1598",
+  instagram:"https://instagram.com/pedrowiggers",
+  tagline:"Qualidade • Agilidade • Confiança",
+  tags:["Orçamento rápido","PIX e Cartão","Nota fiscal"],
+  services:["Serviço 1","Serviço 2","Serviço 3"],
+  prices:{ basic:{value:"149", features:["Atendimento pontual","Suporte WhatsApp"]},
+           pro:{value:"299", features:["Tudo do Básico","Entrega 48h","1 revisão"]},
+           premium:{value:"599", features:["Tudo do Pro","Prioridade","Suporte estendido"]} },
+  gallery:[],
+  tests:[{name:"Ana",text:"Excelente!"}],
+  logoData:null,
+  colors:{brand:"#22d3ee",brand2:"#0ea5e9",bg:"#0b0f1a",card:"#0f172a"},
+  hours:{
+    0:{open:"",close:""},1:{open:"09:00",close:"19:00"},2:{open:"09:00",close:"19:00"},
+    3:{open:"09:00",close:"19:00"},4:{open:"09:00",close:"19:00"},5:{open:"09:00",close:"19:00"},
+    6:{open:"09:00",close:"14:00"}
+  }
 };
-</script>
 
-<!-- =========================
-     HERO
-========================= -->
-<section class="max-w-6xl mx-auto px-5 pt-10">
-  <div class="card rounded-2xl p-6 md:p-8 shadow-soft">
-    <div class="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-      <div>
-        <h1 id="heroTitle" class="text-2xl md:text-4xl font-extrabold leading-tight"></h1>
-        <p id="heroSubtitle" class="mt-2 text-slate-300"></p>
-        <div class="mt-3 badge">
-          <i id="statusIcon" class="fa-solid fa-circle ok"></i>
-          <span id="statusText">Carregando...</span>
-        </div>
-        <div class="mt-4 flex flex-wrap gap-2" id="quickTags"></div>
-        <div class="mt-5 flex flex-wrap gap-3">
-          <a id="ctaWhats" class="btn btn-brand shadow-soft"><i class="fab fa-whatsapp"></i> Falar no WhatsApp</a>
-          <a id="ctaMaps" class="btn btn-ghost"><i class="fa-solid fa-map-location-dot"></i> Como chegar</a>
-          <button id="ctaShare" class="btn btn-ghost"><i class="fa-solid fa-share-nodes"></i> Compartilhar</button>
-        </div>
-        <p class="muted mt-2">Tempo médio de resposta: <b id="sla">~15 min</b></p>
-      </div>
-      <div class="soft rounded-xl p-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div class="p-3 card rounded-xl">
-            <div class="text-sm muted">WhatsApp</div>
-            <div id="whatsPretty" class="font-bold"></div>
-          </div>
-          <div class="p-3 card rounded-xl">
-            <div class="text-sm muted">Endereço</div>
-            <div id="addressLine" class="font-bold"></div>
-          </div>
-          <div class="p-3 card rounded-xl">
-            <div class="text-sm muted">Profissão</div>
-            <div id="professionLine" class="font-bold"></div>
-          </div>
-          <div class="p-3 card rounded-xl">
-            <div class="text-sm muted">Cidade</div>
-            <div id="cityLine" class="font-bold"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =========================
-     SOBRE + SERVIÇOS
-========================= -->
-<section class="max-w-6xl mx-auto px-5 mt-6 grid-auto">
-  <div class="card rounded-2xl p-6">
-    <h2 class="text-xl font-extrabold">Sobre</h2>
-    <p id="aboutText" class="mt-2 muted"></p>
-  </div>
-  <div class="card rounded-2xl p-6">
-    <h2 class="text-xl font-extrabold">Serviços</h2>
-    <ul id="servicesList" class="mt-3 space-y-2"></ul>
-  </div>
-</section>
-
-<!-- =========================
-     PLANOS / PREÇOS
-========================= -->
-<section class="max-w-6xl mx-auto px-5 mt-6 grid-auto">
-  <div class="card rounded-2xl p-6">
-    <h3 class="text-lg font-bold">Plano Básico</h3>
-    <div id="priceBasic" class="text-2xl font-extrabold mt-1"></div>
-    <ul id="featBasic" class="mt-3 space-y-1 muted"></ul>
-    <a class="btn btn-brand btn-full mt-4" data-plan="Básico"><i class="fab fa-whatsapp"></i> Quero esse</a>
-  </div>
-  <div class="card rounded-2xl p-6">
-    <h3 class="text-lg font-bold">Plano Profissional</h3>
-    <div id="pricePro" class="text-2xl font-extrabold mt-1"></div>
-    <ul id="featPro" class="mt-3 space-y-1 muted"></ul>
-    <a class="btn btn-brand btn-full mt-4" data-plan="Profissional"><i class="fab fa-whatsapp"></i> Quero esse</a>
-  </div>
-  <div class="card rounded-2xl p-6">
-    <h3 class="text-lg font-bold">Plano Premium</h3>
-    <div id="pricePremium" class="text-2xl font-extrabold mt-1"></div>
-    <ul id="featPremium" class="mt-3 space-y-1 muted"></ul>
-    <a class="btn btn-brand btn-full mt-4" data-plan="Premium"><i class="fab fa-whatsapp"></i> Quero esse</a>
-  </div>
-</section>
-
-<!-- =========================
-     GALERIA
-========================= -->
-<section class="max-w-6xl mx-auto px-5 mt-6 card rounded-2xl p-6">
-  <h2 class="text-xl font-extrabold">Galeria / Portfólio</h2>
-  <div id="gallery" class="mt-3 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
-  <p class="muted mt-2 text-sm">Dica: troque as imagens no CONFIG por fotos reais do seu trabalho.</p>
-</section>
-
-<!-- =========================
-     DEPOIMENTOS
-========================= -->
-<section class="max-w-6xl mx-auto px-5 mt-6 card rounded-2xl p-6">
-  <h2 class="text-xl font-extrabold">Depoimentos</h2>
-  <div id="testimonials" class="mt-3 grid-auto"></div>
-</section>
-
-<!-- =========================
-     FAQ
-========================= -->
-<section class="max-w-6xl mx-auto px-5 mt-6 card rounded-2xl p-6">
-  <h2 class="text-xl font-extrabold">Perguntas Frequentes</h2>
-  <div id="faqList" class="mt-3 space-y-2"></div>
-</section>
-
-<!-- =========================
-     AGENDAMENTO ONLINE
-========================= -->
-<section id="agendar" class="max-w-6xl mx-auto px-5 mt-6 card rounded-2xl p-6">
-  <h2 class="text-xl font-extrabold">Agendar / Solicitar Aula ou Serviço</h2>
-  <p class="muted text-sm">Preencha os dados abaixo. Você poderá enviar pelo WhatsApp e opcionalmente baixar o compromisso no seu calendário (.ics).</p>
-  <div class="grid md:grid-cols-2 gap-3 mt-3">
-    <div>
-      <label class="label">Seu nome</label>
-      <input id="formName" class="input ring-focus" placeholder="Ex.: Ana Souza">
-    </div>
-    <div>
-      <label class="label">Telefone / WhatsApp</label>
-      <input id="formPhone" class="input ring-focus" placeholder="(DDD) 9xxxx-xxxx">
-    </div>
-    <div>
-      <label class="label">Serviço</label>
-      <select id="formService" class="input ring-focus"></select>
-    </div>
-    <div>
-      <label class="label">Data</label>
-      <input id="formDate" type="date" class="input ring-focus">
-      <div class="hint">Horário local do Brasil.</div>
-    </div>
-    <div>
-      <label class="label">Hora</label>
-      <input id="formTime" type="time" class="input ring-focus" step="900">
-      <div class="hint">Intervalo de 15 minutos.</div>
-    </div>
-    <div>
-      <label class="label">Mensagem (opcional)</label>
-      <input id="formMsg" class="input ring-focus" placeholder="Ex.: objetivo, bairro, preferências...">
-    </div>
-  </div>
-  <div class="flex flex-wrap gap-3 mt-4">
-    <button id="btnSendWA" class="btn btn-brand"><i class="fab fa-whatsapp"></i> Enviar no WhatsApp</button>
-    <button id="btnICS" class="btn btn-ghost"><i class="fa-regular fa-calendar-plus"></i> Baixar .ics</button>
-    <button id="btnClearForm" class="btn btn-ghost"><i class="fa-solid fa-eraser"></i> Limpar</button>
-  </div>
-  <p id="formError" class="mt-3 text-rose-400 hidden"></p>
-</section>
-
-<!-- =========================
-     MAPA / CONTATO
-========================= -->
-<section id="contato" class="max-w-6xl mx-auto px-5 mt-6 grid-auto">
-  <div class="card rounded-2xl p-6">
-    <h2 class="text-xl font-extrabold">Localização & Contatos</h2>
-    <div class="mt-2 grid md:grid-cols-2 gap-4">
-      <div>
-        <div class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-sky-400"></i><b>Endereço</b></div>
-        <div id="fullAddress" class="mt-1"></div>
-        <div class="flex items-center gap-2 mt-3"><i class="fab fa-instagram text-pink-400"></i><a id="instaLink" class="underline">Instagram</a></div>
-        <div class="flex items-center gap-2 mt-2"><i class="fab fa-whatsapp text-green-400"></i><a id="waLink" class="underline">WhatsApp</a></div>
-      </div>
-      <div>
-        <iframe id="mapFrame" width="100%" height="240" class="rounded-xl border border-[#1f2c45]" style="background:#0a1426" loading="lazy" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =========================
-     RODAPÉ
-========================= -->
-<footer class="max-w-6xl mx-auto px-5 mt-6 mb-24">
-  <div class="text-center muted">
-    © <span id="year"></span> <span id="brandFoot"></span> — Cartão Digital Premium
-  </div>
-</footer>
-
-<!-- Botão flutuante WhatsApp -->
-<a id="floatWA" class="floating btn btn-brand shadow-soft"><i class="fab fa-whatsapp"></i></a>
-
-<script>
-/* ==== Utilitários simples ==== */
-const $ = s => document.querySelector(s);
-const dayNames = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-function parseHM(hm){if(!hm) return null; const [h,m]=hm.split(':').map(Number); return {h,m};}
-function setMinDateToday(input){const d=new Date(); const iso=d.toISOString().slice(0,10); input.min=iso;}
-function toLocalISO(date){const z=date.getTimezoneOffset()*60000; return new Date(date - z).toISOString().slice(0,16);}
-
-/* ==== Status de funcionamento ==== */
-function isOpen(now){
-  const idx = now.getDay();
-  const rule = CONFIG.hours[idx];
-  if(!rule) return {open:false, today:idx, rule:null};
-  const [oh,om] = CONFIG.hours[idx].open.split(':').map(Number);
-  const [ch,cm] = CONFIG.hours[idx].close.split(':').map(Number);
-  const start = new Date(now); start.setHours(oh,om,0,0);
-  const end   = new Date(now); end.setHours(ch,cm,0,0);
-  return {open: now>=start && now<=end, today:idx, rule};
+/* ========= Helpers ========= */
+const $ = s=>document.querySelector(s);
+const el = (t,cls,txt)=>{const e=document.createElement(t); if(cls) e.className=cls; if(txt) e.textContent=txt; return e;}
+function setTheme(c){document.documentElement.style.setProperty('--brand',c.brand);document.documentElement.style.setProperty('--brand2',c.brand2);document.documentElement.style.setProperty('--bg',c.bg);document.documentElement.style.setProperty('--card',c.card);}
+function statusOpen(now=new Date()){
+  const d=now.getDay(); const h=CONFIG.hours[d]; if(!h||!h.open||!h.close) return {open:false};
+  const [oh,om]=h.open.split(':').map(Number); const [ch,cm]=h.close.split(':').map(Number);
+  const s=new Date(now); s.setHours(oh||0,om||0,0,0); const e=new Date(now); e.setHours(ch||0,cm||0,0,0);
+  return {open: now>=s && now<=e};
 }
-
-/* ==== Montagem dinâmica ==== */
-function init() {
-  // Hero
-  $('#heroTitle').textContent = `${CONFIG.professionalName || CONFIG.businessName} — ${CONFIG.profession}`;
-  $('#heroSubtitle').textContent = `${CONFIG.city}`;
-  $('#whatsPretty').textContent = CONFIG.whatsappDisplay;
-  $('#addressLine').textContent = CONFIG.address;
-  $('#professionLine').textContent = CONFIG.profession;
-  $('#cityLine').textContent = CONFIG.city;
-  $('#aboutText').textContent = CONFIG.about;
-  $('#brandFoot').textContent = CONFIG.businessName || CONFIG.professionalName;
-  $('#year').textContent = new Date().getFullYear();
-
-  // Status
-  const st = isOpen(new Date());
-  $('#statusIcon').className = 'fa-solid fa-circle ' + (st.open ? 'ok' : 'bad');
-  $('#statusText').textContent = st.open ? 'Aberto agora' : 'Fechado agora';
-
-  // Tags
-  CONFIG.quickTags.slice(0,6).forEach(t=>{
-    const s = document.createElement('span'); s.className='pill'; s.textContent=t; $('#quickTags').appendChild(s);
-  });
-
-  // Links
-  const waMsgDefault = encodeURIComponent(`Olá! Vim pelo cartão digital e quero saber sobre: ${CONFIG.services[0] || 'um serviço'}.`);
-  const waBase = `https://wa.me/${CONFIG.whatsappE164}`;
-  const waLink = `${waBase}?text=${waMsgDefault}`;
-  $('#ctaWhats').href = waLink;
-  $('#floatWA').href = waLink;
-  $('#waLink').href = waLink;
-  $('#instaLink').href = CONFIG.instagram;
-
-  // Maps
-  $('#fullAddress').textContent = `${CONFIG.address} — ${CONFIG.city}`;
-  $('#mapFrame').src = `https://www.google.com/maps?q=${encodeURIComponent(CONFIG.address+', '+CONFIG.city)}&output=embed`;
-
-  // Services
-  CONFIG.services.forEach(s=>{
-    const li=document.createElement('li');
-    li.innerHTML = `<span class="pill">${s}</span>`;
-    $('#servicesList').appendChild(li);
-  });
-
-  // Prices
-  $('#priceBasic').textContent = CONFIG.prices.basic.value;
-  $('#pricePro').textContent = CONFIG.prices.pro.value;
-  $('#pricePremium').textContent = CONFIG.prices.premium.value;
-  CONFIG.prices.basic.features.forEach(f=>{ const li=document.createElement('li'); li.textContent='• '+f; $('#featBasic').appendChild(li); });
-  CONFIG.prices.pro.features.forEach(f=>{ const li=document.createElement('li'); li.textContent='• '+f; $('#featPro').appendChild(li); });
-  CONFIG.prices.premium.features.forEach(f=>{ const li=document.createElement('li'); li.textContent='• '+f; $('#featPremium').appendChild(li); });
-
-  // Gallery
-  CONFIG.gallery.forEach(src=>{
-    const img=document.createElement('img'); img.src=src; img.alt='Portfólio'; img.className='rounded-xl border border-[#1f2c45]'; $('#gallery').appendChild(img);
-  });
-
-  // Testimonials
-  CONFIG.testimonials.forEach(t=>{
-    const d=document.createElement('div'); d.className='card rounded-xl p-4';
-    d.innerHTML = `<div>"${t.text}"</div><div class="muted mt-2">— ${t.name}</div>`;
-    $('#testimonials').appendChild(d);
-  });
-
-  // FAQ (exemplos)
-  const FAQ = [
-    {q:'Como funciona o agendamento?', a:'Você escolhe data/horário, envia pelo WhatsApp e confirmamos a disponibilidade.'},
-    {q:'Quais formas de pagamento?', a:'PIX, cartão (link) e dinheiro.'},
-    {q:'Posso reagendar?', a:'Sim, avise com 12h de antecedência para tentarmos remanejar.'}
-  ];
-  FAQ.forEach(f=>{
-    const det=document.createElement('details'); det.className='soft rounded-lg p-3 border border-[#1f2c45]';
-    const sum=document.createElement('summary'); sum.textContent=f.q; sum.className='cursor-pointer font-semibold';
-    const p=document.createElement('p'); p.textContent=f.a; p.className='muted mt-2';
-    det.appendChild(sum); det.appendChild(p); $('#faqList').appendChild(det);
-  });
-
-  // Agendamento: popular serviços
-  CONFIG.services.forEach(s=>{ const o=document.createElement('option'); o.textContent=s; $('#formService').appendChild(o); });
-  setMinDateToday($('#formDate'));
-
-  // Compartilhar
-  $('#ctaShare').onclick = async ()=>{
-    const data = { title: CONFIG.businessName || CONFIG.professionalName, text: 'Cartão Digital Profissional', url: location.href };
-    try{
-      if(navigator.share){ await navigator.share(data); }
-      else { await navigator.clipboard.writeText(location.href); alert('Link copiado!'); }
-    }catch(e){}
-  };
-
-  // Botões de planos -> WhatsApp
-  document.querySelectorAll('[data-plan]').forEach(b=>{
-    b.addEventListener('click',()=>{
-      const plan = b.getAttribute('data-plan');
-      const msg = encodeURIComponent(`Olá! Tenho interesse no plano ${plan}. Podemos conversar?`);
-      window.open(`${waBase}?text=${msg}`,'_blank');
-    });
+function refreshStatus(){ const st=statusOpen(); $('#statusIcon').className='fa-solid fa-circle '+(st.open?'ok':'bad'); $('#statusText').textContent=st.open?'Aberto agora':'Fechado agora'; }
+function waLink(msg){return `https://wa.me/${CONFIG.whatsappE164}?text=${encodeURIComponent(msg)}`;}
+function renderChips(container,tags){container.innerHTML=''; tags.forEach(t=>{const s=el('span','pill',t); container.appendChild(s);});}
+function renderListUL(container,items){container.innerHTML=''; items.forEach(i=>{const li=el('li',null,'• '+i); container.appendChild(li);});}
+function renderPrices(){ $('#priceBasic').textContent=`R$ ${CONFIG.prices.basic.value}`; $('#pricePro').textContent=`R$ ${CONFIG.prices.pro.value}`; $('#pricePremium').textContent=`R$ ${CONFIG.prices.premium.value}`;
+  renderListUL($('#featBasic'),CONFIG.prices.basic.features);
+  renderListUL($('#featPro'),CONFIG.prices.pro.features);
+  renderListUL($('#featPremium'),CONFIG.prices.premium.features);
+}
+function renderGallery(){ const g=$('#gallery'); g.innerHTML=''; CONFIG.gallery.forEach((src,i)=>{const img=el('img'); img.src=src; img.alt='img'+i; g.appendChild(img);}); }
+function renderTests(){ const t=$('#testimonials'); t.innerHTML=''; CONFIG.tests.forEach(v=>{const c=el('div','soft'); c.style.padding='12px'; c.innerHTML=`<div>"${v.text}"</div><div class="small muted" style="margin-top:6px">— ${v.name}</div>`; t.appendChild(c);}); }
+function renderServices(){ renderListUL($('#servicesList'),CONFIG.services); const sel=$('#fService'); sel.innerHTML=''; CONFIG.services.forEach(s=>{const o=el('option'); o.textContent=s; sel.appendChild(o);}); }
+function renderHeader(){
+  $('#heroTitle').textContent=`${CONFIG.brand} — ${CONFIG.profession}`;
+  $('#heroSubtitle').textContent=CONFIG.tagline||CONFIG.city;
+  $('#whatsPretty').textContent=CONFIG.whatsappPretty;
+  $('#addressLine').textContent=CONFIG.address;
+  $('#cityLine').textContent=CONFIG.city;
+  $('#aboutText').textContent=CONFIG.about;
+  $('#fullAddress').textContent=`${CONFIG.address} — ${CONFIG.city}`;
+  $('#instaLink').href=CONFIG.instagram||'#';
+  $('#waLink').href=waLink(`Olá! Vim pelo cartão digital e queria informações.`);
+  $('#ctaWhats').href=$('#floatWA').href=waLink(`Olá! Vim pelo cartão digital e quero falar com você.`);
+  $('#ctaMaps').href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(CONFIG.address+', '+CONFIG.city)}`;
+  renderChips($('#quickTags'),CONFIG.tags||[]);
+  $('#footBrand').textContent=CONFIG.brand;
+  $('#mapFrame').src=`https://www.google.com/maps?q=${encodeURIComponent(CONFIG.address+', '+CONFIG.city)}&output=embed`;
+  if(CONFIG.logoData){ $('#logoBox').innerHTML=''; const img=new Image(); img.src=CONFIG.logoData; $('#logoBox').appendChild(img); $('#logoBoxCfg').innerHTML=''; $('#logoBoxCfg').appendChild(img.cloneNode());}
+  setTheme(CONFIG.colors);
+  refreshStatus();
+}
+function hydrateBuilder(){
+  $('#iBusiness').value=CONFIG.brand; $('#iProfession').value=CONFIG.profession; $('#iAbout').value=CONFIG.about;
+  $('#iWhatsE164').value=CONFIG.whatsappE164; $('#iWhatsPretty').value=CONFIG.whatsappPretty; $('#iInstagram').value=CONFIG.instagram;
+  $('#iCity').value=CONFIG.city; $('#iAddress').value=CONFIG.address; $('#iTag').value=CONFIG.tagline; $('#iTags').value=(CONFIG.tags||[]).join(', ');
+  $('#cBrand').value=CONFIG.colors.brand; $('#cBrand2').value=CONFIG.colors.brand2; $('#cBg').value=CONFIG.colors.bg; $('#cCard').value=CONFIG.colors.card;
+  // services admin
+  paintServicesAdmin();
+  // prices
+  $('#pBasic').value=CONFIG.prices.basic.value; $('#pPro').value=CONFIG.prices.pro.value; $('#pPremium').value=CONFIG.prices.premium.value;
+  $('#pfBasic').value=(CONFIG.prices.basic.features||[]).join('\n');
+  $('#pfPro').value=(CONFIG.prices.pro.features||[]).join('\n');
+  $('#pfPremium').value=(CONFIG.prices.premium.features||[]).join('\n');
+  // gallery admin
+  paintGalleryAdmin();
+  // tests admin
+  paintTestsAdmin();
+  // hours admin
+  paintHoursAdmin();
+}
+function paintServicesAdmin(){
+  const ul=$('#servicesAdmin'); ul.innerHTML='';
+  CONFIG.services.forEach((s,i)=>{ const li=el('li'); li.innerHTML=`${s} <button data-i="${i}" class="btn alt small" style="float:right">remover</button>`; ul.appendChild(li); });
+}
+function paintGalleryAdmin(){
+  const ul=$('#galleryAdmin'); ul.innerHTML='';
+  CONFIG.gallery.forEach((u,i)=>{ const li=el('li'); li.innerHTML=`${u} <button data-i="${i}" class="btn alt small" style="float:right">remover</button>`; ul.appendChild(li); });
+}
+function paintTestsAdmin(){
+  const ul=$('#testsAdmin'); ul.innerHTML='';
+  CONFIG.tests.forEach((t,i)=>{ const li=el('li'); li.innerHTML=`"${t.text}" — ${t.name} <button data-i="${i}" class="btn alt small" style="float:right">remover</button>`; ul.appendChild(li); });
+}
+function paintHoursAdmin(){
+  const wrap=$('#hoursAdmin'); wrap.innerHTML='';
+  const days=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  days.forEach((d,i)=>{
+    const box=el('div'); const o=CONFIG.hours[i]?.open||''; const c=CONFIG.hours[i]?.close||'';
+    box.innerHTML=`<div class="small muted">${d}</div>
+      <div class="grid-2c"><input data-day="${i}" data-k="open" class="input" placeholder="abertura" value="${o}">
+      <input data-day="${i}" data-k="close" class="input" placeholder="fechamento" value="${c}"></div>`;
+    wrap.appendChild(box);
   });
 }
-init();
+/* ========= Paletas ========= */
+const PRESETS = [
+  {name:'Oceano',brand:'#22d3ee',brand2:'#0ea5e9',bg:'#0b0f1a',card:'#0f172a'},
+  {name:'Dourado',brand:'#f7c948',brand2:'#f59e0b',bg:'#0b0b0b',card:'#151515'},
+  {name:'Violeta',brand:'#a78bfa',brand2:'#7c3aed',bg:'#0a0720',card:'#151239'},
+  {name:'Esmeralda',brand:'#34d399',brand2:'#059669',bg:'#061612',card:'#0f1f1b'},
+  {name:'Carmim',brand:'#fb7185',brand2:'#ef4444',bg:'#12070a',card:'#241016'}
+];
+function renderPalettes(){ const row=$('#palettePresets'); PRESETS.forEach(p=>{ const sw=el('div','color-swatch'); sw.title=p.name; sw.style.background=`linear-gradient(135deg, ${p.brand}, ${p.brand2})`; sw.onclick=()=>{CONFIG.colors={...p}; setTheme(CONFIG.colors); saveLocal(false);}; row.appendChild(sw); });}
+renderPalettes();
 
-/* ==== Validações simples ==== */
-function showError(msg){ const e=$('#formError'); e.textContent=msg; e.classList.remove('hidden'); setTimeout(()=>e.classList.add('hidden'), 6000); }
-function validDateTime(dStr,tStr){
-  if(!dStr||!tStr) return false;
-  const dt = new Date(`${dStr}T${tStr}:00`);
-  const now = new Date();
-  return dt.getTime() >= now.getTime();
+/* ========= Eventos do Builder ========= */
+$('#builderToggle').onclick=()=>$('#builder').classList.add('open');
+$('#closeBuilder').onclick=()=>$('#builder').classList.remove('open');
+
+// identidade
+$('#iBusiness').oninput=e=>{CONFIG.brand=e.target.value; renderHeader();}
+$('#iProfession').oninput=e=>{CONFIG.profession=e.target.value; renderHeader();}
+$('#iAbout').oninput=e=>{CONFIG.about=e.target.value; renderHeader();}
+$('#iTag').oninput=e=>{CONFIG.tagline=e.target.value; renderHeader();}
+$('#iLogo').onchange= e=>{
+  const f=e.target.files?.[0]; if(!f) return;
+  const r=new FileReader(); r.onload=ev=>{CONFIG.logoData=ev.target.result; renderHeader(); saveLocal(false);}; r.readAsDataURL(f);
+};
+// cores
+['cBrand','cBrand2','cBg','cCard'].forEach(id=>{$('#'+id).oninput=e=>{CONFIG.colors[id.replace('c','').toLowerCase()]=e.target.value; setTheme(CONFIG.colors); saveLocal(false);};});
+
+// contato
+$('#iWhatsE164').oninput=e=>{CONFIG.whatsappE164=e.target.value.replace(/\D/g,''); renderHeader();}
+$('#iWhatsPretty').oninput=e=>{CONFIG.whatsappPretty=e.target.value; renderHeader();}
+$('#iInstagram').oninput=e=>{CONFIG.instagram=e.target.value; renderHeader();}
+$('#iCity').oninput=e=>{CONFIG.city=e.target.value; renderHeader();}
+$('#iAddress').oninput=e=>{CONFIG.address=e.target.value; renderHeader();}
+$('#iTags').oninput=e=>{CONFIG.tags=e.target.value.split(',').map(s=>s.trim()).filter(Boolean); renderHeader();}
+
+// serviços
+$('#addService').onclick=()=>{ const v=$('#iService').value.trim(); if(!v) return; CONFIG.services.push(v); $('#iService').value=''; paintServicesAdmin(); renderServices(); saveLocal(false); };
+$('#servicesAdmin').onclick=e=>{ if(e.target.tagName==='BUTTON'){ const i=+e.target.dataset.i; CONFIG.services.splice(i,1); paintServicesAdmin(); renderServices(); saveLocal(false);} };
+// preços
+$('#pBasic').oninput=e=>{CONFIG.prices.basic.value=e.target.value; renderPrices();}
+$('#pPro').oninput=e=>{CONFIG.prices.pro.value=e.target.value; renderPrices();}
+$('#pPremium').oninput=e=>{CONFIG.prices.premium.value=e.target.value; renderPrices();}
+$('#pfBasic').oninput=e=>{CONFIG.prices.basic.features=e.target.value.split('\n').filter(Boolean); renderPrices();}
+$('#pfPro').oninput=e=>{CONFIG.prices.pro.features=e.target.value.split('\n').filter(Boolean); renderPrices();}
+$('#pfPremium').oninput=e=>{CONFIG.prices.premium.features=e.target.value.split('\n').filter(Boolean); renderPrices();}
+
+// galeria
+$('#addGallery').onclick=()=>{ const u=$('#iGalleryUrl').value.trim(); if(!u) return; CONFIG.gallery.push(u); $('#iGalleryUrl').value=''; paintGalleryAdmin(); renderGallery(); saveLocal(false); };
+$('#galleryAdmin').onclick=e=>{ if(e.target.tagName==='BUTTON'){ const i=+e.target.dataset.i; CONFIG.gallery.splice(i,1); paintGalleryAdmin(); renderGallery(); saveLocal(false);} };
+
+// depoimentos
+$('#addTest').onclick=()=>{ const n=$('#iTestName').value.trim(); const t=$('#iTestText').value.trim(); if(!n||!t) return; CONFIG.tests.push({name:n,text:t}); $('#iTestName').value=''; $('#iTestText').value=''; paintTestsAdmin(); renderTests(); saveLocal(false); };
+$('#testsAdmin').onclick=e=>{ if(e.target.tagName==='BUTTON'){ const i=+e.target.dataset.i; CONFIG.tests.splice(i,1); paintTestsAdmin(); renderTests(); saveLocal(false);} };
+
+// horários
+$('#hoursAdmin').oninput=e=>{
+  const day = e.target.dataset.day, k=e.target.dataset.k; if(day===undefined) return;
+  CONFIG.hours[day] = CONFIG.hours[day] || {open:"",close:""};
+  CONFIG.hours[day][k] = e.target.value.trim();
+  refreshStatus(); saveLocal(false);
+};
+
+/* ========= Ações gerais ========= */
+$('#ctaShare').onclick=async()=>{
+  const data={title:CONFIG.brand,text:'Meu cartão digital',url:location.href};
+  try{ if(navigator.share){ await navigator.share(data); } else { await navigator.clipboard.writeText(location.href); alert('Link copiado!'); } }catch(_){}
+};
+document.querySelectorAll('[data-plan]').forEach(b=>b.onclick=()=>{
+  const plan=b.getAttribute('data-plan'); window.open(waLink(`Olá! Tenho interesse no plano ${plan}.`),'_blank');
+});
+
+/* ========= Formulário ========= */
+function formValid(){
+  const n=$('#fName').value.trim(), f=$('#fPhone').value.trim(), d=$('#fDate').value, t=$('#fTime').value;
+  if(!n||!f||!d||!t) return "Preencha nome, telefone, data e hora.";
+  const dt=new Date(`${d}T${t}:00`); if(dt < new Date()) return "Escolha uma data/hora futura.";
+  return null;
 }
-
-/* ==== Compor mensagem WhatsApp ==== */
-function buildWAMessage(){
-  const nome = $('#formName').value.trim();
-  const phone = $('#formPhone').value.trim();
-  const service = $('#formService').value;
-  const date = $('#formDate').value;
-  const time = $('#formTime').value;
-  const msg = $('#formMsg').value.trim();
-
-  if(!nome) return showError('Informe seu nome.');
-  if(!phone) return showError('Informe seu telefone/WhatsApp.');
-  if(!date) return showError('Escolha a data.');
-  if(!time) return showError('Escolha o horário.');
-  if(!validDateTime(date,time)) return showError('A data/hora deve ser no futuro.');
-
-  const when = new Date(`${date}T${time}:00`);
-  const fmt = when.toLocaleString('pt-BR', {dateStyle:'full', timeStyle:'short'});
-  const text =
-`Olá! Me chamo ${nome}.
-Telefone: ${phone}
-Serviço: ${service}
-Data/Hora: ${fmt}
-Mensagem: ${msg || '—'}
-
-Enviado via Cartão Digital.`;
-  return encodeURIComponent(text);
-}
-
-/* ==== .ICS (arquivo de calendário) ==== */
-function downloadICS(){
-  const date = $('#formDate').value, time = $('#formTime').value;
-  const service = $('#formService').value;
-  const nome = $('#formName').value.trim() || 'Cliente';
-  if(!validDateTime(date,time)) return showError('Preencha data e hora futuras para gerar o .ics.');
-
-  // Criar início e fim (1h)
-  const start = new Date(`${date}T${time}:00`);
-  const end = new Date(start.getTime()+60*60*1000);
-  const toICS = d => d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-
-  const summary = `Atendimento: ${service}`;
-  const location = `${CONFIG.address}, ${CONFIG.city}`;
-  const desc = `Agendamento com ${CONFIG.professionalName || CONFIG.businessName}\nCliente: ${nome}\nWhatsApp: ${CONFIG.whatsappDisplay}`;
-  const ics =
-`BEGIN:VCALENDAR
+$('#btnWA').onclick=()=>{
+  const err=formValid(); if(err){ $('#formErr').textContent=err; $('#formErr').style.display='inline'; return;}
+  $('#formErr').style.display='none';
+  const msg=`Olá! Me chamo ${$('#fName').value.trim()}.\nTel/Whats: ${$('#fPhone').value.trim()}\nServiço: ${$('#fService').value}\nData/Hora: ${$('#fDate').value} ${$('#fTime').value}\nMensagem: ${$('#fMsg').value||'—'}`;
+  window.open(waLink(msg),'_blank');
+};
+$('#btnICS').onclick=()=>{
+  const err=formValid(); if(err){ $('#formErr').textContent=err; $('#formErr').style.display='inline'; return;}
+  const start=new Date(`${$('#fDate').value}T${$('#fTime').value}:00`);
+  const end=new Date(start.getTime()+60*60*1000);
+  const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const ics=`BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//CartaoDigital//PT-BR
+PRODID:-//Card//PT-BR
 BEGIN:VEVENT
-UID:${Date.now()}@cartao-digital
-DTSTAMP:${toICS(new Date())}
-DTSTART:${toICS(start)}
-DTEND:${toICS(end)}
-SUMMARY:${summary}
-LOCATION:${location}
-DESCRIPTION:${desc}
+UID:${Date.now()}@card
+DTSTAMP:${fmt(new Date())}
+DTSTART:${fmt(start)}
+DTEND:${fmt(end)}
+SUMMARY:Atendimento — ${$('#fService').value}
+LOCATION:${CONFIG.address}, ${CONFIG.city}
+DESCRIPTION:Agendado via Cartão Digital
 END:VEVENT
 END:VCALENDAR`;
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='agendamento.ics'; a.click(); URL.revokeObjectURL(a.href);
+};
 
-  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `agendamento-${date}-${time.replace(':','')}.ics`;
-  document.body.appendChild(a);
-  a.click();
-  URL.revokeObjectURL(a.href);
-  a.remove();
-}
+/* ========= Persistência ========= */
+function saveLocal(show=true){ localStorage.setItem(LS_KEY, JSON.stringify(CONFIG)); if(show) alert('Salvo no navegador!'); }
+$('#saveLocal').onclick=()=>saveLocal(true);
+$('#clearLocal').onclick=()=>{ if(confirm('Apagar dados salvos?')){ localStorage.removeItem(LS_KEY); location.reload(); }};
 
-/* ==== Ações do formulário ==== */
-$('#btnSendWA').addEventListener('click', ()=>{
-  const enc = buildWAMessage(); if(!enc) return;
-  const link = `https://wa.me/${CONFIG.whatsappE164}?text=${enc}`;
-  window.open(link,'_blank');
-});
-$('#btnICS').addEventListener('click', downloadICS);
-$('#btnClearForm').addEventListener('click', ()=>{
-  ['formName','formPhone','formMsg','formDate','formTime'].forEach(id=>{ const el=$('#'+id); if(el) el.value=''; });
-  $('#formService').selectedIndex = 0;
-});
+/* ========= Import/Export ========= */
+$('#exportJSON').onclick=()=>{
+  const blob=new Blob([JSON.stringify(CONFIG,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='config.json'; a.click(); URL.revokeObjectURL(a.href);
+};
+$('#importJSON').onclick=()=>{
+  const i=document.createElement('input'); i.type='file'; i.accept='application/json';
+  i.onchange=()=>{ const f=i.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ try{ CONFIG=JSON.parse(ev.target.result); applyAll(); saveLocal(false);}catch(e){alert('JSON inválido');}}; r.readAsText(f); };
+  i.click();
+};
+$('#exportHTML').onclick=()=>{
+  // clona o documento e injeta CONFIG atual
+  const tpl = document.documentElement.cloneNode(true);
+  // injeta script com CONFIG
+  const inj = document.createElement('script'); inj.type='application/json'; inj.id='EXPORTED_CONFIG';
+  inj.textContent = JSON.stringify(CONFIG);
+  tpl.querySelector('body').appendChild(inj);
+  const html='<!DOCTYPE html>\n'+tpl.outerHTML.replace(/id="builder".*?<\/aside>/s,''); // remove painel do builder
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='site-pronto.html'; a.click(); URL.revokeObjectURL(a.href);
+};
 
-/* ==== Ajustes finais ==== */
-document.addEventListener('visibilitychange', ()=>{ // atualiza status simples ao voltar
-  const st = isOpen(new Date());
-  $('#statusIcon').className = 'fa-solid fa-circle ' + (st.open ? 'ok' : 'bad');
-  $('#statusText').textContent = st.open ? 'Aberto agora' : 'Fechado agora';
-});
+/* ========= Inicialização ========= */
+function applyAll(){ setTheme(CONFIG.colors); renderHeader(); renderPrices(); renderServices(); renderGallery(); renderTests(); hydrateBuilder(); }
+(function boot(){
+  // se vier exportado com EXPORTED_CONFIG, usa
+  const exported=document.getElementById('EXPORTED_CONFIG');
+  if(exported){ try{ CONFIG = JSON.parse(exported.textContent);}catch(_){ } }
+  const fromLS=localStorage.getItem(LS_KEY); if(fromLS){ try{ CONFIG=Object.assign(CONFIG, JSON.parse(fromLS)); }catch(_){ } }
+  applyAll();
+  // builder abre na 1ª vez
+  if(!fromLS) document.getElementById('builder').classList.add('open');
+  // toggle aberto/fechado periódico
+  setInterval(refreshStatus, 60000);
+  // fechar painel com ESC
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') $('#builder').classList.remove('open'); });
+})();
 </script>
 </body>
 </html>
