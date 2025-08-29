@@ -1,139 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Pedro Charles — Faixa Preta de Jiu-Jitsu</title>
-<meta name="theme-color" content="#111111"/>
-<style>
-:root{
-  --bg:#0c0c0f;--card:#17171c;--text:#f6f7fb;
-  --muted:#9a9eaf;--brand:#D4AF37;--accent:#00d084;
-}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial}
-.wrap{max-width:1200px;margin:auto;padding:20px}
-h1,h2,h3{margin:0 0 10px}
-.center{text-align:center}
-.btn{display:inline-block;margin:8px;padding:14px 18px;border-radius:10px;font-weight:bold;text-decoration:none}
-.btn.whats{background:var(--brand);color:#000}
-.btn.map{background:#222;color:#fff}
-.hero{
-  background:linear-gradient(135deg,#1a1a1f,#101015);
-  border-radius:16px;padding:40px;text-align:center;margin-bottom:20px
-}
-.hero h1{font-size:32px;color:var(--brand)}
-.hero p{color:var(--muted);font-size:18px}
-.grid{display:grid;gap:14px}
-@media(min-width:768px){.grid2{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:repeat(3,1fr)}}
-.card{background:var(--card);border-radius:14px;padding:18px}
-.card h3{color:var(--brand)}
-.plan{background:#111;border-radius:12px;padding:14px;margin-top:10px}
-.plan .price{font-size:22px;font-weight:bold;color:var(--accent)}
-.carousel{position:relative;height:150px}
-.slide{position:absolute;opacity:0;transition:.5s;inset:0;padding:10px}
-.slide.active{opacity:1}
-.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-.gallery div{background:#222;height:150px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#aaa}
-.faq details{margin-bottom:10px;background:#14141b;padding:12px;border-radius:10px}
-input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#0f0f14;color:#fff}
-.footer{text-align:center;margin:30px 0;font-size:13px;color:var(--muted)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedro Wiggers - Jiu-Jitsu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
 </head>
-<body>
-<div class="wrap">
+<body class="font-[Montserrat] bg-gray-50 text-gray-900">
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1>Pedro Charles</h1>
-    <p>Faixa Preta de Jiu-Jitsu • Multi Campeão • Professor da Wiggers Academy</p>
-    <a class="btn whats" href="https://wa.me/5551991271598?text=Olá%20Pedro!%20Quero%20saber%20sobre%20as%20aulas.">💬 Falar no WhatsApp</a>
-    <a class="btn map" href="https://maps.google.com/?q=Wiggers%20Academy%20Poa">📍 Como chegar</a>
+  <!-- Hero -->
+  <header class="bg-gradient-to-r from-black to-gray-900 text-white py-16 text-center">
+    <img src="https://via.placeholder.com/180" alt="Pedro Wiggers" class="w-40 h-40 rounded-full mx-auto border-4 border-yellow-500 shadow-lg">
+    <h1 class="text-4xl font-bold mt-6">Pedro Wiggers</h1>
+    <p class="mt-3 text-lg">Faixa Preta de Jiu-Jitsu • Multi-Campeão • Professor Wiggers Academy</p>
+    <a href="#contato" class="mt-6 inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition">Agende uma Aula</a>
+  </header>
+
+  <!-- Sobre -->
+  <section id="sobre" class="py-16 px-6 md:px-20 bg-white">
+    <h2 class="text-3xl font-bold text-center mb-10">Sobre Mim</h2>
+    <div class="max-w-3xl mx-auto text-lg text-center leading-relaxed">
+      <p>Sou faixa preta de Jiu-Jitsu, competidor ativo e professor na <b>Wiggers Academy</b>. 
+      Dedico minha vida ao esporte e à formação de novos atletas, ajudando pessoas a alcançarem disciplina, confiança e resultados dentro e fora do tatame.</p>
+    </div>
   </section>
 
-  <!-- SOBRE -->
-  <section class="card">
-    <h2>Sobre o Professor</h2>
-    <p>Pedro Charles é faixa preta de Jiu-Jitsu, multi campeão em torneios nacionais e internacionais. 
-       Mais de 10 anos de experiência no tatame e centenas de alunos formados. 
-       Atualmente professor da <b>Wiggers Academy</b>, oferece aulas em grupo e particulares para todas as idades.</p>
+  <!-- Serviços -->
+  <section id="servicos" class="py-16 px-6 md:px-20 bg-gray-100">
+    <h2 class="text-3xl font-bold text-center mb-10">Serviços</h2>
+    <div class="grid md:grid-cols-3 gap-8 text-center">
+      <div class="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="font-bold text-xl mb-3">Aulas Particulares</h3>
+        <p>Treinamento personalizado focado no seu objetivo e evolução no Jiu-Jitsu.</p>
+      </div>
+      <div class="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="font-bold text-xl mb-3">Treinos em Grupo</h3>
+        <p>Turmas em diferentes níveis, ambiente de aprendizado, disciplina e amizade.</p>
+      </div>
+      <div class="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="font-bold text-xl mb-3">Preparação para Campeonatos</h3>
+        <p>Estratégias e treinos intensivos para atletas que buscam alto desempenho.</p>
+      </div>
+    </div>
   </section>
 
-  <!-- BENEFÍCIOS -->
-  <h2 class="center" style="margin:25px 0 10px">Por que treinar com Pedro?</h2>
-  <div class="grid grid3">
-    <div class="card"><h3>🥋 Evolução Rápida</h3><p>Método prático testado em campeonatos.</p></div>
-    <div class="card"><h3>💪 Condicionamento</h3><p>Treinos intensos que melhoram força e resistência.</p></div>
-    <div class="card"><h3>🛡 Defesa Pessoal</h3><p>Aprenda a se proteger e ganhar confiança.</p></div>
-    <div class="card"><h3>🔥 Queima Calórica</h3><p>Perda de peso de forma divertida e saudável.</p></div>
-    <div class="card"><h3>🎯 Treino Competitivo</h3><p>Preparação estratégica para campeonatos.</p></div>
-    <div class="card"><h3>🤝 Comunidade</h3><p>Faça parte da família Wiggers Academy.</p></div>
-  </div>
+  <!-- Galeria -->
+  <section id="galeria" class="py-16 px-6 md:px-20 bg-white">
+    <h2 class="text-3xl font-bold text-center mb-10">Galeria</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <img src="https://via.placeholder.com/300" class="rounded-lg shadow">
+      <img src="https://via.placeholder.com/300" class="rounded-lg shadow">
+      <img src="https://via.placeholder.com/300" class="rounded-lg shadow">
+      <img src="https://via.placeholder.com/300" class="rounded-lg shadow">
+    </div>
+  </section>
 
-  <!-- PACOTES -->
-  <h2 style="margin:25px 0 10px">Pacotes de Aulas</h2>
-  <div class="grid grid3">
-    <div class="plan"><h3>🎟 Aula Experimental</h3><div class="price">Grátis*</div>
-      <a class="btn whats" href="https://wa.me/5551991271598?text=Olá%20Pedro!%20Quero%20fazer%20a%20aula%20experimental.">Agendar</a></div>
-    <div class="plan"><h3>👤 Aula Particular</h3><div class="price">Sob consulta</div>
-      <a class="btn whats" href="https://wa.me/5551991271598?text=Olá%20Pedro!%20Quero%20saber%20sobre%20as%20aulas%20particulares.">Reservar</a></div>
-    <div class="plan"><h3>🏆 Plano Performance</h3><div class="price">Sob consulta</div>
-      <a class="btn whats" href="https://wa.me/5551991271598?text=Olá%20Pedro!%20Tenho%20interesse%20no%20plano%20Performance.">Quero Performance</a></div>
-  </div>
+  <!-- Depoimentos -->
+  <section id="depoimentos" class="py-16 px-6 md:px-20 bg-gray-100">
+    <h2 class="text-3xl font-bold text-center mb-10">Depoimentos</h2>
+    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow">
+        <p>"O professor Pedro mudou meu jeito de ver o Jiu-Jitsu. Excelente mestre e amigo!"</p>
+        <p class="mt-3 font-semibold">– Aluno João</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow">
+        <p>"Treinar com o Pedro me trouxe mais confiança e preparo físico. Recomendo muito!"</p>
+        <p class="mt-3 font-semibold">– Aluna Maria</p>
+      </div>
+    </div>
+  </section>
 
-  <!-- DEPOIMENTOS -->
-  <h2 style="margin:25px 0 10px">O que dizem os alunos</h2>
-  <div class="card carousel" id="carrossel">
-    <div class="slide active">“Nunca tinha feito Jiu-Jitsu, em 2 meses já me sinto confiante.” — Ana</div>
-    <div class="slide">“Treino particular focado, evolução rápida e prática.” — Lucas</div>
-    <div class="slide">“Aulas dinâmicas, excelente didática do professor Pedro.” — Marcelo</div>
-  </div>
+  <!-- Contato -->
+  <section id="contato" class="py-16 px-6 md:px-20 bg-white">
+    <h2 class="text-3xl font-bold text-center mb-10">Contato</h2>
+    <div class="text-center space-y-6">
+      <p class="text-lg">📍 Rua das Oliveiras, 175</p>
+      <a href="https://wa.me/5551991271598" class="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition">
+        Fale no WhatsApp
+      </a>
+      <p>Siga no Instagram: <a href="https://instagram.com/pedrowiggers" class="text-blue-600 hover:underline">@pedrowiggers</a></p>
+    </div>
+    <!-- Google Maps -->
+    <div class="mt-10 max-w-3xl mx-auto">
+      <iframe src="https://www.google.com/maps?q=Rua+das+Oliveiras+175&output=embed" 
+              width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </section>
 
-  <!-- GALERIA -->
-  <h2 style="margin:25px 0 10px">Galeria</h2>
-  <div class="gallery">
-    <div>📸 Foto 1</div>
-    <div>📸 Foto 2</div>
-    <div>📸 Foto 3</div>
-    <div>📸 Foto 4</div>
-  </div>
+  <!-- Rodapé -->
+  <footer class="bg-black text-gray-300 text-center py-6 mt-10">
+    <p>&copy; 2025 Pedro Wiggers - Wiggers Academy. Todos os direitos reservados.</p>
+  </footer>
 
-  <!-- FAQ -->
-  <h2 style="margin:25px 0 10px">Perguntas Frequentes</h2>
-  <div class="faq">
-    <details open><summary>Preciso de experiência?</summary><p>Não, os treinos são adaptados para iniciantes e avançados.</p></details>
-    <details><summary>Qual a idade mínima?</summary><p>A partir de 6 anos (Kids) e sem limite para adultos.</p></details>
-    <details><summary>Onde são as aulas?</summary><p>Na Wiggers Academy (Porto Alegre) ou em local particular combinado.</p></details>
-  </div>
-
-  <!-- FORMULÁRIO -->
-  <h2 style="margin:25px 0 10px">Agende sua Aula</h2>
-  <div class="card">
-    <label>Nome:</label><input id="fNome" placeholder="Seu nome"/>
-    <label style="margin-top:10px">Objetivo:</label><textarea id="fObj" placeholder="Ex.: condicionamento, defesa pessoal, competir"></textarea>
-    <a class="btn whats" style="margin-top:10px" id="btnEnviar">🚀 Enviar no WhatsApp</a>
-  </div>
-
-  <!-- QR -->
-  <h2 style="margin:25px 0 10px">Escaneie o QR e fale direto</h2>
-  <div class="card center">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://wa.me/5551991271598&size=200x200" alt="QR WhatsApp"/>
-  </div>
-
-  <div class="footer">© <span id="ano"></span> Pedro Charles • Wiggers Academy</div>
-</div>
-
-<script>
-document.getElementById("ano").textContent=new Date().getFullYear();
-// Carrossel de depoimentos
-const slides=document.querySelectorAll(".slide");let i=0;
-setInterval(()=>{slides[i].classList.remove("active");i=(i+1)%slides.length;slides[i].classList.add("active");},4000);
-// Formulário -> WhatsApp
-document.getElementById("btnEnviar").addEventListener("click",()=>{
-  const nome=document.getElementById("fNome").value||"—";
-  const obj=document.getElementById("fObj").value||"—";
-  const msg=`Olá Pedro! Me chamo ${nome} e tenho interesse nas aulas. Objetivo: ${obj}`;
-  window.open(`https://wa.me/5551991271598?text=${encodeURIComponent(msg)}`,"_blank");
-});
-</script>
 </body>
 </html>
