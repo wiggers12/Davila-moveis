@@ -1,100 +1,434 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pedro Wiggers - Jiu-Jitsu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    html { scroll-behavior: smooth; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cartão Digital Profissional</title>
+<meta name="description" content="Encontre serviços profissionais de qualidade. Agende pelo WhatsApp, veja depoimentos, preços e localização."/>
+<meta name="theme-color" content="#0f1115"/>
+<meta property="og:title" content="Cartão Digital Profissional"/>
+<meta property="og:description" content="Agende serviços, veja preços, portfólio e localização."/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content=""/>
+<meta name="color-scheme" content="dark light">
+<style>
+:root{
+  --bg:#0f1115;--card:#151822;--soft:#1a1f2b;--text:#e9ecf1;--muted:#aab0bf;
+  --brand:#5dd0b3;--accent:#f7c948;--ok:#2bd98c;--bad:#ff6464;--border:#222838;
+}
+*{box-sizing:border-box}html,body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+body{background:var(--bg);color:var(--text)}
+a{color:inherit;text-decoration:none}
+.container{max-width:1100px;margin:auto;padding:20px}
+.hero{position:relative;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:linear-gradient(120deg,#121521,var(--card))}
+.hero-inner{display:grid;gap:18px;padding:24px}
+@media(min-width:860px){.hero-inner{grid-template-columns:1.2fr 1fr}}
+.badge{display:inline-flex;align-items:center;gap:10px;padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:#121521}
+.dot{width:8px;height:8px;border-radius:50%}
+h1{margin:0;font-size:clamp(26px,4vw,36px)}
+.subtitle{margin:.3rem 0 0;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,#1a1f2b,#121521);cursor:pointer;font-weight:700}
+.btn.brand{background:linear-gradient(180deg,#3fbfa0,#2d8c79);border-color:#4ad0b2;color:#041612}
+.btn.alt{background:#151a24}
+.btn.full{width:100%;justify-content:center}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px}
+.card h3{margin:0 0 10px}
+.grid2{display:grid;gap:14px}@media(min-width:860px){.grid2{grid-template-columns:1fr 1fr}}
+.grid3{display:grid;gap:14px}@media(min-width:980px){.grid3{grid-template-columns:repeat(3,1fr)}}
+.pill{display:inline-block;padding:6px 10px;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:12px}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.item{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:12px}
+.price{font-weight:800;font-size:22px;color:var(--accent)}
+.kv{display:flex;justify-content:space-between;gap:10px}
+.gallery{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}@media(min-width:720px){.gallery{grid-template-columns:repeat(3,1fr)}}
+.gallery img{width:100%;height:180px;object-fit:cover;border-radius:12px;border:1px solid var(--border);background:#0b0e14}
+.small{font-size:12px;color:var(--muted)}
+.footer{margin-top:20px;text-align:center;color:var(--muted);font-size:13px}
+.switch{display:flex;align-items:center;gap:8px}
+hr{border:0;border-top:1px solid var(--border);margin:14px 0}
+.sticky-cta{position:fixed;left:0;right:0;bottom:12px;display:flex;justify-content:center;pointer-events:none;z-index:9}
+.sticky-cta .btn{pointer-events:auto;box-shadow:0 10px 30px #0007}
+.light{--bg:#f7f8fb;--card:#ffffff;--soft:#f3f5fa;--text:#0e1320;--muted:#5a6272;--brand:#0ea5e9;--accent:#9b6bff;--ok:#069668;--bad:#d92828;--border:#e6e8ef}
+label{display:block;margin:.25rem 0 .35rem}
+input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--soft);color:var(--text);outline:none}
+textarea{min-height:110px;resize:vertical}
+</style>
 </head>
-<body class="font-[Montserrat] bg-gray-50 text-gray-900">
+<body>
+<div class="container">
 
-  <!-- Hero -->
-  <header class="bg-gradient-to-r from-black to-gray-900 text-white py-16 text-center">
-    <img src="https://via.placeholder.com/180" alt="Pedro Wiggers" class="w-40 h-40 rounded-full mx-auto border-4 border-yellow-500 shadow-lg">
-    <h1 class="text-4xl font-bold mt-6">Pedro Wiggers</h1>
-    <p class="mt-3 text-lg">Faixa Preta de Jiu-Jitsu • Multi-Campeão • Professor Wiggers Academy</p>
-    <a href="#contato" class="mt-6 inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition">Agende uma Aula</a>
-  </header>
-
-  <!-- Sobre -->
-  <section id="sobre" class="py-16 px-6 md:px-20 bg-white">
-    <h2 class="text-3xl font-bold text-center mb-10">Sobre Mim</h2>
-    <div class="max-w-3xl mx-auto text-lg text-center leading-relaxed">
-      <p>Sou faixa preta de Jiu-Jitsu, competidor ativo e professor na <b>Wiggers Academy</b>. 
-      Dedico minha vida ao esporte e à formação de novos atletas, ajudando pessoas a alcançarem disciplina, confiança e resultados dentro e fora do tatame.</p>
-    </div>
-  </section>
-
-  <!-- Serviços -->
-  <section id="servicos" class="py-16 px-6 md:px-20 bg-gray-100">
-    <h2 class="text-3xl font-bold text-center mb-10">Serviços</h2>
-    <div class="grid md:grid-cols-3 gap-8 text-center">
-      <div class="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
-        <h3 class="font-bold text-xl mb-3">Aulas Particulares</h3>
-        <p>Treinamento personalizado focado no seu objetivo e evolução no Jiu-Jitsu.</p>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1 id="heroTitle">Profissional</h1>
+        <p class="subtitle" id="heroSubtitle">Especialista • Serviços de qualidade • Atendimento rápido</p>
+        <div class="badge" style="margin-top:10px">
+          <span class="dot" id="statusDot"></span>
+          <span id="statusText">Carregando status...</span>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <a class="btn brand" id="ctaWhats">💬 Falar no WhatsApp</a>
+          <a class="btn alt" id="ctaMaps">📍 Como chegar</a>
+          <a class="btn alt" id="ctaShare">🔗 Compartilhar</a>
+        </div>
+        <div style="margin-top:8px" class="small">Tempo médio de resposta: <b id="sla">~5 min</b></div>
       </div>
-      <div class="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
-        <h3 class="font-bold text-xl mb-3">Treinos em Grupo</h3>
-        <p>Turmas em diferentes níveis, ambiente de aprendizado, disciplina e amizade.</p>
-      </div>
-      <div class="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
-        <h3 class="font-bold text-xl mb-3">Preparação para Campeonatos</h3>
-        <p>Estratégias e treinos intensivos para atletas que buscam alto desempenho.</p>
-      </div>
-    </div>
-  </section>
 
-  <!-- Galeria -->
-  <section id="galeria" class="py-16 px-6 md:px-20 bg-white">
-    <h2 class="text-3xl font-bold text-center mb-10">Galeria</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <img src="https://via.placeholder.com/300" class="rounded-lg shadow">
-      <img src="https://via.placeholder.com/300" class="rounded-lg shadow">
-      <img src="https://via.placeholder.com/300" class="rounded-lg shadow">
-      <img src="https://via.placeholder.com/300" class="rounded-lg shadow">
-    </div>
-  </section>
-
-  <!-- Depoimentos -->
-  <section id="depoimentos" class="py-16 px-6 md:px-20 bg-gray-100">
-    <h2 class="text-3xl font-bold text-center mb-10">Depoimentos</h2>
-    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-      <div class="bg-white p-6 rounded-lg shadow">
-        <p>"O professor Pedro mudou meu jeito de ver o Jiu-Jitsu. Excelente mestre e amigo!"</p>
-        <p class="mt-3 font-semibold">– Aluno João</p>
-      </div>
-      <div class="bg-white p-6 rounded-lg shadow">
-        <p>"Treinar com o Pedro me trouxe mais confiança e preparo físico. Recomendo muito!"</p>
-        <p class="mt-3 font-semibold">– Aluna Maria</p>
+      <div class="card">
+        <h3>Informações Rápidas</h3>
+        <div class="row" id="quickTags"></div>
+        <hr/>
+        <div class="grid2">
+          <div class="item">
+            <div class="kv"><b>WhatsApp</b><span id="whatsPretty"></span></div>
+          </div>
+          <div class="item">
+            <div class="kv"><b>Endereço</b><span id="addressLine"></span></div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px"><span class="pill" id="industryTag">Profissional</span><span class="pill" id="cityTag">Cidade</span></div>
       </div>
     </div>
   </section>
 
-  <!-- Contato -->
-  <section id="contato" class="py-16 px-6 md:px-20 bg-white">
-    <h2 class="text-3xl font-bold text-center mb-10">Contato</h2>
-    <div class="text-center space-y-6">
-      <p class="text-lg">📍 Rua das Oliveiras, 175</p>
-      <a href="https://wa.me/5551991271598" class="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition">
-        Fale no WhatsApp
-      </a>
-      <p>Siga no Instagram: <a href="https://instagram.com/pedrowiggers" class="text-blue-600 hover:underline">@pedrowiggers</a></p>
+  <!-- SOBRE & SERVIÇOS -->
+  <section class="grid2" style="margin-top:16px">
+    <div class="card">
+      <h3>Sobre</h3>
+      <p id="aboutText">Atendo com qualidade e compromisso, ajudando você a alcançar seus objetivos com um serviço profissional e transparente.</p>
+      <div style="margin-top:10px" class="switch">
+        <input type="checkbox" id="themeToggle" aria-label="Alterar tema claro/escuro">
+        <label for="themeToggle" class="small">Tema claro</label>
+      </div>
     </div>
-    <!-- Google Maps -->
-    <div class="mt-10 max-w-3xl mx-auto">
-      <iframe src="https://www.google.com/maps?q=Rua+das+Oliveiras+175&output=embed" 
-              width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    <div class="card">
+      <h3>Serviços</h3>
+      <ul class="list" id="servicesList"></ul>
     </div>
   </section>
 
-  <!-- Rodapé -->
-  <footer class="bg-black text-gray-300 text-center py-6 mt-10">
-    <p>&copy; 2025 Pedro Wiggers - Wiggers Academy. Todos os direitos reservados.</p>
-  </footer>
+  <!-- PLANOS / PREÇOS -->
+  <section class="grid3" style="margin-top:14px">
+    <div class="card">
+      <h3>Plano Básico</h3>
+      <div class="price" id="priceBasic">R$ —</div>
+      <ul class="small" id="featBasic" style="margin-top:8px"></ul>
+      <div class="row" style="margin-top:10px"><a class="btn brand full" data-plan="Básico">Quero esse</a></div>
+    </div>
+    <div class="card">
+      <h3>Plano Profissional</h3>
+      <div class="price" id="pricePro">R$ —</div>
+      <ul class="small" id="featPro" style="margin-top:8px"></ul>
+      <div class="row" style="margin-top:10px"><a class="btn brand full" data-plan="Profissional">Quero esse</a></div>
+    </div>
+    <div class="card">
+      <h3>Plano Premium</h3>
+      <div class="price" id="pricePremium">R$ —</div>
+      <ul class="small" id="featPremium" style="margin-top:8px"></ul>
+      <div class="row" style="margin-top:10px"><a class="btn brand full" data-plan="Premium">Quero esse</a></div>
+    </div>
+  </section>
 
+  <!-- GALERIA -->
+  <section class="card" style="margin-top:14px">
+    <h3>Galeria / Portfólio</h3>
+    <div class="gallery" id="gallery"></div>
+    <p class="small" style="margin-top:8px">Dica: troque as imagens no CONFIG por fotos reais do trabalho.</p>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section class="card" style="margin-top:14px">
+    <h3>Depoimentos</h3>
+    <div class="list" id="testimonials"></div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="card" style="margin-top:14px">
+    <h3>Perguntas Frequentes</h3>
+    <div id="faqList"></div>
+  </section>
+
+  <!-- FORMULÁRIO (WhatsApp) -->
+  <section class="card" style="margin-top:14px">
+    <h3>Agendar / Solicitar Orçamento</h3>
+    <div class="grid2">
+      <div>
+        <label>Seu nome</label><input id="fName" placeholder="Seu nome" />
+      </div>
+      <div>
+        <label>Serviço desejado</label>
+        <select id="fService"></select>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <label>Mensagem</label>
+      <textarea id="fMsg" placeholder="Conte rapidamente seu objetivo, prazo, bairro..."></textarea>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <a class="btn brand" id="btnSend">🚀 Enviar pelo WhatsApp</a>
+      <a class="btn alt" id="btnClear">Limpar</a>
+    </div>
+    <p class="small" style="margin-top:8px">Ao clicar em enviar, abriremos seu WhatsApp com a mensagem preenchida.</p>
+  </section>
+
+  <!-- MAPA -->
+  <section class="card" style="margin-top:14px">
+    <h3>Localização</h3>
+    <div class="small" id="fullAddress"></div>
+    <div style="margin-top:10px">
+      <iframe id="mapFrame" width="100%" height="300" style="border:1px solid var(--border);border-radius:12px" loading="lazy" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <div class="footer">© <span id="year"></span> <span id="bizNameFoot"></span> • Criado com cartão digital universal</div>
+
+  <!-- CTA STICKY -->
+  <div class="sticky-cta"><a class="btn brand" id="stickyWhats">💬 Falar agora</a></div>
+</div>
+
+<script>
+/* =========================
+   CONFIG — personalize aqui
+   ========================= */
+const CONFIG = {
+  businessName: "Seu Nome / Sua Marca",
+  professionalName: "Nome do Profissional",
+  profession: "Profissão (ex.: Personal Trainer, Advogado, Cabeleireira, Eletricista)",
+  city: "Porto Alegre, RS",
+  address: "Rua das Oliveiras, 175",        // endereço textual
+  whatsappE164: "5551999999999",            // formato internacional (55 + DDD + número)
+  whatsappDisplay: "(51) 99999-9999",
+  instagram: "https://instagram.com/seuusuario",
+  website: "",                               // opcional
+  email: "",                                 // opcional (apenas exibição)
+  timezone: "America/Sao_Paulo",
+  // horários (0=Dom,...6=Sáb) — null = fechado
+  hours: {
+    0: null,
+    1: {open:"09:00", close:"18:00"},
+    2: {open:"09:00", close:"18:00"},
+    3: {open:"09:00", close:"18:00"},
+    4: {open:"09:00", close:"18:00"},
+    5: {open:"09:00", close:"18:00"},
+    6: {open:"10:00", close:"14:00"}
+  },
+  // textos
+  about: "Atendimento profissional, pontual e transparente. Solicite orçamento sem compromisso.",
+  quickTags: ["Atendimento humanizado","Orçamento rápido","Pagamento no PIX/Cartão","Atende domiciliar","Nota fiscal"],
+  services: [
+    "Serviço 1 (ex.: Avaliação inicial / Diagnóstico)",
+    "Serviço 2 (ex.: Sessão/Visita)",
+    "Serviço 3 (ex.: Plano Mensal)",
+    "Serviço 4 (ex.: Consultoria Online)"
+  ],
+  prices: {
+    basic: { value: "R$ 149", features: ["Atendimento pontual","Suporte por WhatsApp"] },
+    pro: { value: "R$ 299", features: ["Tudo do Básico","Entrega em até 48h","1 revisão"] },
+    premium: { value: "R$ 599", features: ["Tudo do Pro","Atendimento prioritário","Suporte estendido"] }
+  },
+  testimonials: [
+    { name:"Ana", text:"Excelente atendimento! Resolveu meu problema muito rápido." },
+    { name:"Lucas", text:"Profissional atencioso e competente. Recomendo!" },
+    { name:"Marina", text:"Fiquei muito satisfeita com o resultado. Voltarei a contratar." }
+  ],
+  faq: [
+    { q:"Como funciona o agendamento?", a:"Você envia uma mensagem pelo WhatsApp, combinamos dia/horário e pronto." },
+    { q:"Quais as formas de pagamento?", a:"PIX, cartão (link) e dinheiro." },
+    { q:"Atende fora da cidade?", a:"Sim, consulte taxa de deslocamento." }
+  ],
+  gallery: [
+    // troque por URLs reais (JPG/PNG) ou use caminho local
+    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1515165562835-c3b8c1a9d6d3?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=1200&auto=format&fit=crop"
+  ],
+  slaLabel: "~30 min",
+  theme: "dark" // "dark" ou "light"
+};
+
+/* ================
+   Utilidades gerais
+   ================ */
+const $ = s => document.querySelector(s);
+const dayNames = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+
+function parseHM(hm){ const [h,m]=hm.split(':').map(Number); return {h,m}; }
+function withHM(base, hm){ const d=new Date(base); const {h,m}=parseHM(hm); d.setHours(h,m,0,0); return d; }
+function nowTZ(){ return new Date(); } // simplificado (o horário local do usuário será usado)
+
+function isOpen(now){
+  const idx = now.getDay();
+  const rule = CONFIG.hours[idx];
+  if(!rule) return {open:false, today:idx, rule:null};
+  const start = withHM(new Date(now), rule.open);
+  const end   = withHM(new Date(now), rule.close);
+  return {open: now>=start && now<=end, today:idx, rule};
+}
+function nextOpenText(now){
+  const st = isOpen(now);
+  if(st.rule && st.open){ return `Hoje fechamos às ${CONFIG.hours[st.today].close}.`; }
+  for(let add=0; add<7; add++){
+    const probe = new Date(now); probe.setDate(probe.getDate()+add);
+    const idx = probe.getDay(); const rule = CONFIG.hours[idx];
+    if(rule){
+      if(add===0 && now < withHM(probe, rule.open)){ return `Abrimos hoje às ${rule.open}.`; }
+      return `Próxima abertura: ${dayNames[idx]} às ${rule.open}.`;
+    }
+  }
+  return "";
+}
+
+/* ==================
+   Montagem de conteúdo
+   ================== */
+function init(){
+  // tema
+  if(CONFIG.theme === "light") document.body.classList.add('light');
+
+  // hero
+  $('#heroTitle').textContent = `${CONFIG.professionalName || CONFIG.businessName} — ${CONFIG.profession}`;
+  $('#heroSubtitle').textContent = `${CONFIG.quickTags[0] || 'Serviços profissionais'} • ${CONFIG.city}`;
+  $('#sla').textContent = CONFIG.slaLabel;
+
+  // status aberto/fechado
+  const st = isOpen(nowTZ());
+  $('#statusDot').style.background = st.open ? 'var(--ok)' : 'var(--bad)';
+  $('#statusText').textContent = st.open ? 'Aberto agora' : 'Fechado agora';
+  const next = nextOpenText(nowTZ());
+  if(next){ const span = document.createElement('div'); span.className='small'; span.textContent=next; $('#statusText').parentElement.appendChild(span); }
+
+  // quick tags
+  const qtWrap = document.getElementById('quickTags');
+  CONFIG.quickTags.slice(0,4).forEach(t => {
+    const s = document.createElement('span'); s.className='pill'; s.textContent=t; qtWrap.appendChild(s);
+  });
+
+  // infos rápidas
+  $('#whatsPretty').textContent = CONFIG.whatsappDisplay;
+  $('#addressLine').textContent = CONFIG.address;
+  $('#industryTag').textContent = CONFIG.profession;
+  $('#cityTag').textContent = CONFIG.city;
+  $('#aboutText').textContent = CONFIG.about;
+  $('#bizNameFoot').textContent = CONFIG.businessName || CONFIG.professionalName;
+  $('#year').textContent = new Date().getFullYear();
+
+  // serviços
+  const ul = document.getElementById('servicesList');
+  CONFIG.services.forEach(s=>{
+    const li = document.createElement('li'); li.className='item'; li.textContent = s; ul.appendChild(li);
+  });
+
+  // planos
+  $('#priceBasic').textContent = CONFIG.prices.basic.value;
+  $('#pricePro').textContent = CONFIG.prices.pro.value;
+  $('#pricePremium').textContent = CONFIG.prices.premium.value;
+  CONFIG.prices.basic.features.forEach(f=>{ const li=document.createElement('li'); li.textContent=`• ${f}`; $('#featBasic').appendChild(li); });
+  CONFIG.prices.pro.features.forEach(f=>{ const li=document.createElement('li'); li.textContent=`• ${f}`; $('#featPro').appendChild(li); });
+  CONFIG.prices.premium.features.forEach(f=>{ const li=document.createElement('li'); li.textContent=`• ${f}`; $('#featPremium').appendChild(li); });
+
+  // galeria
+  const g = document.getElementById('gallery');
+  CONFIG.gallery.forEach(src=>{
+    const img = document.createElement('img'); img.loading='lazy'; img.alt='Portfólio'; img.src=src; g.appendChild(img);
+  });
+
+  // depoimentos
+  const tWrap = document.getElementById('testimonials');
+  CONFIG.testimonials.forEach(t=>{
+    const div = document.createElement('div'); div.className='item'; div.innerHTML = `<div>"${t.text}"</div><div class="small" style="margin-top:6px">— ${t.name}</div>`; tWrap.appendChild(div);
+  });
+
+  // FAQ
+  const faq = document.getElementById('faqList');
+  CONFIG.faq.forEach(f=>{
+    const det = document.createElement('details');
+    const sum = document.createElement('summary'); sum.textContent = f.q; sum.style.cursor='pointer'; sum.style.fontWeight='700';
+    const p = document.createElement('p'); p.textContent = f.a; p.style.margin='8px 0 0';
+    det.appendChild(sum); det.appendChild(p); faq.appendChild(det);
+  });
+
+  // selects
+  const sel = document.getElementById('fService');
+  CONFIG.services.forEach(s=>{ const o=document.createElement('option'); o.textContent=s; sel.appendChild(o); });
+
+  // links
+  const waMsg = encodeURIComponent(`Olá! Vim pelo seu cartão digital.\nGostaria de saber sobre: ${CONFIG.services[0] || 'um serviço'}.\nPodemos conversar?`);
+  const waBase = `https://wa.me/${CONFIG.whatsappE164}`;
+  const waLink = `${waBase}?text=${waMsg}`;
+  document.getElementById('ctaWhats').href = waLink;
+  document.getElementById('stickyWhats').href = waLink;
+
+  document.getElementById('ctaMaps').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(CONFIG.address)}`;
+  document.getElementById('ctaShare').onclick = async ()=>{
+    const shareData = { title: CONFIG.businessName || CONFIG.professionalName, text: `Contato do(a) ${CONFIG.professionalName}`, url: location.href };
+    try {
+      if(navigator.share){ await navigator.share(shareData); }
+      else{ await navigator.clipboard.writeText(shareData.url); alert("Link copiado. Envie no WhatsApp!"); }
+    } catch(e){}
+  };
+
+  // mapa
+  document.getElementById('fullAddress').textContent = `${CONFIG.address} — ${CONFIG.city}`;
+  document.getElementById('mapFrame').src = `https://www.google.com/maps?q=${encodeURIComponent(CONFIG.address + ', ' + CONFIG.city)}&output=embed`;
+
+  // botões de planos -> WhatsApp
+  document.querySelectorAll('[data-plan]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const plan = b.getAttribute('data-plan');
+      const msg = encodeURIComponent(`Olá! Tenho interesse no plano ${plan}.`);
+      window.open(`${waBase}?text=${msg}`,'_blank');
+    });
+  });
+
+  // form -> WhatsApp
+  document.getElementById('btnSend').onclick = ()=>{
+    const nome = document.getElementById('fName').value.trim() || '—';
+    const service = document.getElementById('fService').value;
+    const msg = (document.getElementById('fMsg').value || '').trim() || '—';
+    const final = encodeURIComponent(
+`Olá! Me chamo ${nome}.
+Serviço desejado: ${service}
+Mensagem: ${msg}
+Podemos agendar?`);
+    window.open(`${waBase}?text=${final}`,'_blank');
+  };
+  document.getElementById('btnClear').onclick = ()=>{ ['fName','fMsg'].forEach(id=>document.getElementById(id).value=""); };
+
+  // tema toggle
+  document.getElementById('themeToggle').checked = document.body.classList.contains('light');
+  document.getElementById('themeToggle').addEventListener('change', (e)=>{
+    document.body.classList.toggle('light', e.target.checked);
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', e.target.checked ? '#ffffff' : '#0f1115');
+  });
+
+  // status refresh
+  setInterval(()=>{
+    const st = isOpen(nowTZ());
+    $('#statusDot').style.background = st.open ? 'var(--ok)' : 'var(--bad)';
+    $('#statusText').firstChild && ($('#statusText').textContent = st.open ? 'Aberto agora' : 'Fechado agora');
+  }, 60000);
+}
+init();
+
+/* ===============
+   JSON-LD (SEO)
+   =============== */
+const ld = {
+  "@context":"https://schema.org",
+  "@type":"LocalBusiness",
+  "name": CONFIG.businessName || CONFIG.professionalName,
+  "description": CONFIG.about,
+  "address": {"@type":"PostalAddress","streetAddress":CONFIG.address,"addressLocality":CONFIG.city},
+  "telephone": CONFIG.whatsappDisplay,
+  "url": CONFIG.website || location.href,
+  "sameAs": [CONFIG.instagram].filter(Boolean)
+};
+const script = document.createElement('script'); script.type='application/ld+json'; script.textContent = JSON.stringify(ld); document.head.appendChild(script);
+</script>
 </body>
 </html>
