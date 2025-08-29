@@ -1,163 +1,139 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>D’avila Móveis - Móveis Sob Medida</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-  <link rel="icon" type="image/jpeg" href="logo.jpg">
-
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-    body { background: #fdfdfd; color: #333; line-height: 1.6; scroll-behavior: smooth; }
-
-    header { background: #1a1a1a; color: white; text-align: center; padding: 40px 20px; }
-    header h1 { font-size: 2.5rem; }
-
-    nav { position: sticky; top: 0; background: #262626; display: flex; justify-content: center; padding: 10px; z-index: 999; }
-    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: 600; transition: color 0.3s; }
-    nav a:hover { color: #ffc107; }
-
-    .hero { background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover no-repeat; height: 400px;
-      display: flex; justify-content: center; align-items: center; color: white; text-shadow: 2px 2px 6px black; text-align: center; }
-    .hero h2 { font-size: 2.5rem; }
-
-    section { padding: 60px 20px; max-width: 1200px; margin: auto; }
-
-    .highlight, .form-card {
-      background: #fffef5; padding: 30px; margin-bottom: 40px;
-      border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-
-    .highlight h3 { color: #cc9900; margin-bottom: 15px; }
-
-    .swiper { width: 100%; padding-top: 20px; padding-bottom: 40px; }
-    .swiper-slide img { width: 100%; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-
-    .form-card h2 { margin-bottom: 20px; text-align: center; }
-    form { display: flex; flex-direction: column; gap: 15px; }
-    form input, form textarea {
-      padding: 15px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;
-    }
-
-    .btn { background: #ffc107; color: #333; font-weight: bold; padding: 15px; text-align: center;
-      border-radius: 6px; cursor: pointer; border: none; transition: background 0.3s; }
-    .btn:hover { background: #e0a800; }
-
-    .video { text-align: center; }
-    .video video { width: 100%; max-width: 720px; border-radius: 10px; }
-
-    footer {
-      background: #1a1a1a; color: white; text-align: center; padding: 30px 20px; margin-top: 60px;
-    }
-
-    .floating-btns {
-      position: fixed; right: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000;
-    }
-    .floating-btns a {
-      background: #25D366; color: white; font-size: 1.5rem; padding: 12px; border-radius: 50%; text-align: center;
-      text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-    .floating-btns .instagram { background: #E1306C; }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Pedro Charles — Faixa Preta de Jiu-Jitsu</title>
+<meta name="theme-color" content="#111111"/>
+<style>
+:root{
+  --bg:#0c0c0f;--card:#17171c;--text:#f6f7fb;
+  --muted:#9a9eaf;--brand:#D4AF37;--accent:#00d084;
+}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial}
+.wrap{max-width:1200px;margin:auto;padding:20px}
+h1,h2,h3{margin:0 0 10px}
+.center{text-align:center}
+.btn{display:inline-block;margin:8px;padding:14px 18px;border-radius:10px;font-weight:bold;text-decoration:none}
+.btn.whats{background:var(--brand);color:#000}
+.btn.map{background:#222;color:#fff}
+.hero{
+  background:linear-gradient(135deg,#1a1a1f,#101015);
+  border-radius:16px;padding:40px;text-align:center;margin-bottom:20px
+}
+.hero h1{font-size:32px;color:var(--brand)}
+.hero p{color:var(--muted);font-size:18px}
+.grid{display:grid;gap:14px}
+@media(min-width:768px){.grid2{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border-radius:14px;padding:18px}
+.card h3{color:var(--brand)}
+.plan{background:#111;border-radius:12px;padding:14px;margin-top:10px}
+.plan .price{font-size:22px;font-weight:bold;color:var(--accent)}
+.carousel{position:relative;height:150px}
+.slide{position:absolute;opacity:0;transition:.5s;inset:0;padding:10px}
+.slide.active{opacity:1}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.gallery div{background:#222;height:150px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#aaa}
+.faq details{margin-bottom:10px;background:#14141b;padding:12px;border-radius:10px}
+input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#0f0f14;color:#fff}
+.footer{text-align:center;margin:30px 0;font-size:13px;color:var(--muted)}
+</style>
 </head>
 <body>
+<div class="wrap">
 
-  <header>
-    <img src="logo.jpg" alt="Logo D'Avila Móveis" style="max-width:160px; margin-bottom:20px;">
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Pedro Charles</h1>
+    <p>Faixa Preta de Jiu-Jitsu • Multi Campeão • Professor da Wiggers Academy</p>
+    <a class="btn whats" href="https://wa.me/5551991271598?text=Olá%20Pedro!%20Quero%20saber%20sobre%20as%20aulas.">💬 Falar no WhatsApp</a>
+    <a class="btn map" href="https://maps.google.com/?q=Wiggers%20Academy%20Poa">📍 Como chegar</a>
+  </section>
 
-    <h1>D’avila Móveis</h1>
-    <p>Soluções inteligentes em móveis planejados</p>
-  </header>
+  <!-- SOBRE -->
+  <section class="card">
+    <h2>Sobre o Professor</h2>
+    <p>Pedro Charles é faixa preta de Jiu-Jitsu, multi campeão em torneios nacionais e internacionais. 
+       Mais de 10 anos de experiência no tatame e centenas de alunos formados. 
+       Atualmente professor da <b>Wiggers Academy</b>, oferece aulas em grupo e particulares para todas as idades.</p>
+  </section>
 
-  <nav>
-    <a href="#servicos">Serviços</a>
-    <a href="#galeria">Galeria</a>
-    <a href="#video">Vídeo</a>
-    <a href="#contato">Contato</a>
-  </nav>
-
-  <div class="hero">
-    <h2>Transformamos MDF em projetos únicos</h2>
+  <!-- BENEFÍCIOS -->
+  <h2 class="center" style="margin:25px 0 10px">Por que treinar com Pedro?</h2>
+  <div class="grid grid3">
+    <div class="card"><h3>🥋 Evolução Rápida</h3><p>Método prático testado em campeonatos.</p></div>
+    <div class="card"><h3>💪 Condicionamento</h3><p>Treinos intensos que melhoram força e resistência.</p></div>
+    <div class="card"><h3>🛡 Defesa Pessoal</h3><p>Aprenda a se proteger e ganhar confiança.</p></div>
+    <div class="card"><h3>🔥 Queima Calórica</h3><p>Perda de peso de forma divertida e saudável.</p></div>
+    <div class="card"><h3>🎯 Treino Competitivo</h3><p>Preparação estratégica para campeonatos.</p></div>
+    <div class="card"><h3>🤝 Comunidade</h3><p>Faça parte da família Wiggers Academy.</p></div>
   </div>
 
-  <section id="servicos" class="highlight" data-sr>
-    <h3>Nossos Serviços</h3>
-    <ul>
-      <li>Cozinhas planejadas com acabamentos premium</li>
-      <li>Closets e guarda-roupas sob medida</li>
-      <li>Home office funcional e elegante</li>
-      <li>Painéis e estantes para sala</li>
-      <li>Banheiros personalizados</li>
-    </ul>
-  </section>
-
-  <section id="galeria">
-    <h2 style="text-align:center; margin-bottom:20px;">Galeria</h2>
-    <div class="swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide"><img src="fotos1.jpg" alt="Projeto 1" /></div>
-        <div class="swiper-slide"><img src="fotos2.jpg" alt="Projeto 2" /></div>
-        <div class="swiper-slide"><img src="https://source.unsplash.com/300x200/?kitchen" alt="Extra 1" /></div>
-        <div class="swiper-slide"><img src="https://source.unsplash.com/300x200/?closet" alt="Extra 2" /></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="video" class="video" data-sr>
-    <h2>Conheça nosso trabalho</h2>
-    <video controls>
-      <source src="video.de.trabalho.mp4" type="video/mp4">
-    </video>
-  </section>
-
-  <section id="contato" class="form-card" data-sr>
-    <h2>Entre em Contato</h2>
-    <form id="contact-form">
-      <input type="text" name="user_name" placeholder="Seu nome" required />
-      <input type="email" name="user_email" placeholder="Seu e-mail" required />
-      <textarea name="message" rows="5" placeholder="Sua mensagem" required></textarea>
-      <button class="btn" type="submit">Enviar</button>
-    </form>
-    <p style="text-align:center; margin-top:10px;">
-      Ou fale direto no <a href="https://wa.me/5551985709778">WhatsApp</a>
-    </p>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 D’avila Móveis | Desenvolvido por Dionatan Wiggers</p>
-    <p><a href="https://www.instagram.com/davilamoveissobmedida" style="color:#ffc107;">@davilamoveissobmedida</a></p>
-  </footer>
-
-  <div class="floating-btns">
-    <a href="https://wa.me/5551985709778" title="WhatsApp">💬</a>
-    <a href="https://www.instagram.com/davilamoveissobmedida" class="instagram" title="Instagram">📸</a>
+  <!-- PACOTES -->
+  <h2 style="margin:25px 0 10px">Pacotes de Aulas</h2>
+  <div class="grid grid3">
+    <div class="plan"><h3>🎟 Aula Experimental</h3><div class="price">Grátis*</div>
+      <a class="btn whats" href="https://wa.me/5551991271598?text=Olá%20Pedro!%20Quero%20fazer%20a%20aula%20experimental.">Agendar</a></div>
+    <div class="plan"><h3>👤 Aula Particular</h3><div class="price">Sob consulta</div>
+      <a class="btn whats" href="https://wa.me/5551991271598?text=Olá%20Pedro!%20Quero%20saber%20sobre%20as%20aulas%20particulares.">Reservar</a></div>
+    <div class="plan"><h3>🏆 Plano Performance</h3><div class="price">Sob consulta</div>
+      <a class="btn whats" href="https://wa.me/5551991271598?text=Olá%20Pedro!%20Tenho%20interesse%20no%20plano%20Performance.">Quero Performance</a></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/scrollreveal"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script>
-    ScrollReveal().reveal('[data-sr]', { delay: 200, distance: '20px', duration: 800, easing: 'ease-out', origin: 'bottom' });
+  <!-- DEPOIMENTOS -->
+  <h2 style="margin:25px 0 10px">O que dizem os alunos</h2>
+  <div class="card carousel" id="carrossel">
+    <div class="slide active">“Nunca tinha feito Jiu-Jitsu, em 2 meses já me sinto confiante.” — Ana</div>
+    <div class="slide">“Treino particular focado, evolução rápida e prática.” — Lucas</div>
+    <div class="slide">“Aulas dinâmicas, excelente didática do professor Pedro.” — Marcelo</div>
+  </div>
 
-    const swiper = new Swiper('.swiper', {
-      loop: true,
-      autoplay: { delay: 3000 },
-      slidesPerView: 1,
-      spaceBetween: 20,
-      breakpoints: { 768: { slidesPerView: 2 } }
-    });
+  <!-- GALERIA -->
+  <h2 style="margin:25px 0 10px">Galeria</h2>
+  <div class="gallery">
+    <div>📸 Foto 1</div>
+    <div>📸 Foto 2</div>
+    <div>📸 Foto 3</div>
+    <div>📸 Foto 4</div>
+  </div>
 
-    emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
-        .then(() => alert('Mensagem enviada com sucesso!'))
-        .catch(() => alert('Erro ao enviar mensagem.'));
-    });
-  </script>
+  <!-- FAQ -->
+  <h2 style="margin:25px 0 10px">Perguntas Frequentes</h2>
+  <div class="faq">
+    <details open><summary>Preciso de experiência?</summary><p>Não, os treinos são adaptados para iniciantes e avançados.</p></details>
+    <details><summary>Qual a idade mínima?</summary><p>A partir de 6 anos (Kids) e sem limite para adultos.</p></details>
+    <details><summary>Onde são as aulas?</summary><p>Na Wiggers Academy (Porto Alegre) ou em local particular combinado.</p></details>
+  </div>
+
+  <!-- FORMULÁRIO -->
+  <h2 style="margin:25px 0 10px">Agende sua Aula</h2>
+  <div class="card">
+    <label>Nome:</label><input id="fNome" placeholder="Seu nome"/>
+    <label style="margin-top:10px">Objetivo:</label><textarea id="fObj" placeholder="Ex.: condicionamento, defesa pessoal, competir"></textarea>
+    <a class="btn whats" style="margin-top:10px" id="btnEnviar">🚀 Enviar no WhatsApp</a>
+  </div>
+
+  <!-- QR -->
+  <h2 style="margin:25px 0 10px">Escaneie o QR e fale direto</h2>
+  <div class="card center">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://wa.me/5551991271598&size=200x200" alt="QR WhatsApp"/>
+  </div>
+
+  <div class="footer">© <span id="ano"></span> Pedro Charles • Wiggers Academy</div>
+</div>
+
+<script>
+document.getElementById("ano").textContent=new Date().getFullYear();
+// Carrossel de depoimentos
+const slides=document.querySelectorAll(".slide");let i=0;
+setInterval(()=>{slides[i].classList.remove("active");i=(i+1)%slides.length;slides[i].classList.add("active");},4000);
+// Formulário -> WhatsApp
+document.getElementById("btnEnviar").addEventListener("click",()=>{
+  const nome=document.getElementById("fNome").value||"—";
+  const obj=document.getElementById("fObj").value||"—";
+  const msg=`Olá Pedro! Me chamo ${nome} e tenho interesse nas aulas. Objetivo: ${obj}`;
+  window.open(`https://wa.me/5551991271598?text=${encodeURIComponent(msg)}`,"_blank");
+});
+</script>
 </body>
 </html>
