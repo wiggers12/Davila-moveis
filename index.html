@@ -1,117 +1,488 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profissional Premium</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Montserrat', sans-serif; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cartão Digital Profissional — Agendamento Online</title>
+<meta name="description" content="Página premium para profissionais. Agendamento online com WhatsApp, galeria, depoimentos, preços e mapa."/>
+<meta name="theme-color" content="#0b0f1a"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{--ring:#22d3ee}
+  html{scroll-behavior:smooth}
+  .card{background:#0f172a; border:1px solid #19243b}
+  .soft{background:#0b1221}
+  .ring-focus:focus{box-shadow:0 0 0 4px var(--ring)/30%}
+  .grid-auto{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 1rem;border-radius:.8rem;font-weight:700}
+  .btn-brand{background:linear-gradient(180deg,#22d3ee,#0ea5e9);color:#05222a}
+  .btn-ghost{background:#0a1426;border:1px solid #16243d;color:#cbd5e1}
+  .btn-full{justify-content:center;width:100%}
+  .badge{display:inline-flex;gap:.5rem;align-items:center;border:1px solid #1f2c45;border-radius:999px;padding:.4rem .7rem;background:#0a1426}
+  .muted{color:#9aa7bd}
+  .ok{color:#34d399}.bad{color:#fb7185}
+  .floating{position:fixed;right:16px;bottom:16px;z-index:40}
+  .shadow-soft{box-shadow:0 12px 40px #0006}
+  .input{width:100%;padding:.9rem 1rem;border-radius:.7rem;border:1px solid #1f2c45;background:#0a1426;color:#e2e8f0;outline:none}
+  .input::placeholder{color:#64748b}
+  .label{display:block;margin:.4rem 0 .35rem;color:#cbd5e1;font-weight:600}
+  .hint{font-size:.8rem;color:#93a3be}
+  .pill{border:1px solid #1f2c45;border-radius:999px;padding:.35rem .65rem;color:#a8b4ca;font-size:.8rem}
+</style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-[#0b0f1a] text-slate-100">
 
-  <!-- Hero -->
-  <header class="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white">
-    <div class="max-w-6xl mx-auto px-6 py-16 text-center">
-      <h1 class="text-4xl md:text-6xl font-bold">Mostre seu talento para o mundo</h1>
-      <p class="mt-4 text-lg md:text-xl text-gray-300">
-        Crie sua presença digital premium e conquiste mais clientes com estilo e profissionalismo.
-      </p>
-      <a href="https://wa.me/5551991271598" target="_blank"
-         class="mt-6 inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg shadow-lg">
-        Fale no WhatsApp
-      </a>
+<!-- =========================
+     CONFIG (edite aqui)
+========================= -->
+<script>
+const CONFIG = {
+  businessName: "Seu Negócio / Sua Marca",
+  professionalName: "Profissional",
+  profession: "Serviços Profissionais",
+  city: "Porto Alegre, RS",
+  address: "Rua das Oliveiras, 175",
+  instagram: "https://instagram.com/pedrowiggers",
+  whatsappE164: "5551991271598",      // (55 + DDD + número)
+  whatsappDisplay: "(51) 99127-1598",
+  quickTags: ["Atendimento humanizado","Orçamento rápido","Pagamento no PIX/Cartão","Nota fiscal"],
+  about: "Atendimento profissional, pontual e transparente. Solicite orçamento sem compromisso.",
+  services: [
+    "Corte Premium e Barba (Barbearia)",
+    "Plano Mensal (Academia / Personal)",
+    "Colorimetria / Make / Unhas (Salão)",
+    "Consultoria / Sessão Individual"
+  ],
+  prices: {
+    basic: { value: "R$ 149", features: ["Atendimento pontual","Suporte por WhatsApp"] },
+    pro: { value: "R$ 299", features: ["Tudo do Básico","Entrega em até 48h","1 revisão"] },
+    premium: { value: "R$ 599", features: ["Tudo do Pro","Prioridade","Suporte estendido"] }
+  },
+  testimonials: [
+    { name:"Ana", text:"Excelente atendimento! Resultado acima do esperado." },
+    { name:"Lucas", text:"Profissional atencioso e competente. Recomendo!" },
+    { name:"Marina", text:"Meu negócio ganhou outra cara com esse cartão digital." }
+  ],
+  gallery: [
+    "https://images.unsplash.com/photo-1599351431409-3b5ef9f9470f?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1571019613576-2b21cbb63f8d?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600334129128-8c6c6a7c2f1b?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1515165562835-c3b8c1a9d6d3?q=80&w=1200&auto=format&fit=crop"
+  ],
+  // horário de funcionamento (0=Dom...6=Sáb) — null = fechado
+  hours: {
+    0: null,
+    1: {open:"09:00", close:"19:00"},
+    2: {open:"09:00", close:"19:00"},
+    3: {open:"09:00", close:"19:00"},
+    4: {open:"09:00", close:"19:00"},
+    5: {open:"09:00", close:"19:00"},
+    6: {open:"09:00", close:"14:00"}
+  },
+  timezone: "America/Sao_Paulo"
+};
+</script>
+
+<!-- =========================
+     HERO
+========================= -->
+<section class="max-w-6xl mx-auto px-5 pt-10">
+  <div class="card rounded-2xl p-6 md:p-8 shadow-soft">
+    <div class="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+      <div>
+        <h1 id="heroTitle" class="text-2xl md:text-4xl font-extrabold leading-tight"></h1>
+        <p id="heroSubtitle" class="mt-2 text-slate-300"></p>
+        <div class="mt-3 badge">
+          <i id="statusIcon" class="fa-solid fa-circle ok"></i>
+          <span id="statusText">Carregando...</span>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2" id="quickTags"></div>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a id="ctaWhats" class="btn btn-brand shadow-soft"><i class="fab fa-whatsapp"></i> Falar no WhatsApp</a>
+          <a id="ctaMaps" class="btn btn-ghost"><i class="fa-solid fa-map-location-dot"></i> Como chegar</a>
+          <button id="ctaShare" class="btn btn-ghost"><i class="fa-solid fa-share-nodes"></i> Compartilhar</button>
+        </div>
+        <p class="muted mt-2">Tempo médio de resposta: <b id="sla">~15 min</b></p>
+      </div>
+      <div class="soft rounded-xl p-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-3 card rounded-xl">
+            <div class="text-sm muted">WhatsApp</div>
+            <div id="whatsPretty" class="font-bold"></div>
+          </div>
+          <div class="p-3 card rounded-xl">
+            <div class="text-sm muted">Endereço</div>
+            <div id="addressLine" class="font-bold"></div>
+          </div>
+          <div class="p-3 card rounded-xl">
+            <div class="text-sm muted">Profissão</div>
+            <div id="professionLine" class="font-bold"></div>
+          </div>
+          <div class="p-3 card rounded-xl">
+            <div class="text-sm muted">Cidade</div>
+            <div id="cityLine" class="font-bold"></div>
+          </div>
+        </div>
+      </div>
     </div>
-  </header>
+  </div>
+</section>
 
-  <!-- Sobre -->
-  <section class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10 items-center">
+<!-- =========================
+     SOBRE + SERVIÇOS
+========================= -->
+<section class="max-w-6xl mx-auto px-5 mt-6 grid-auto">
+  <div class="card rounded-2xl p-6">
+    <h2 class="text-xl font-extrabold">Sobre</h2>
+    <p id="aboutText" class="mt-2 muted"></p>
+  </div>
+  <div class="card rounded-2xl p-6">
+    <h2 class="text-xl font-extrabold">Serviços</h2>
+    <ul id="servicesList" class="mt-3 space-y-2"></ul>
+  </div>
+</section>
+
+<!-- =========================
+     PLANOS / PREÇOS
+========================= -->
+<section class="max-w-6xl mx-auto px-5 mt-6 grid-auto">
+  <div class="card rounded-2xl p-6">
+    <h3 class="text-lg font-bold">Plano Básico</h3>
+    <div id="priceBasic" class="text-2xl font-extrabold mt-1"></div>
+    <ul id="featBasic" class="mt-3 space-y-1 muted"></ul>
+    <a class="btn btn-brand btn-full mt-4" data-plan="Básico"><i class="fab fa-whatsapp"></i> Quero esse</a>
+  </div>
+  <div class="card rounded-2xl p-6">
+    <h3 class="text-lg font-bold">Plano Profissional</h3>
+    <div id="pricePro" class="text-2xl font-extrabold mt-1"></div>
+    <ul id="featPro" class="mt-3 space-y-1 muted"></ul>
+    <a class="btn btn-brand btn-full mt-4" data-plan="Profissional"><i class="fab fa-whatsapp"></i> Quero esse</a>
+  </div>
+  <div class="card rounded-2xl p-6">
+    <h3 class="text-lg font-bold">Plano Premium</h3>
+    <div id="pricePremium" class="text-2xl font-extrabold mt-1"></div>
+    <ul id="featPremium" class="mt-3 space-y-1 muted"></ul>
+    <a class="btn btn-brand btn-full mt-4" data-plan="Premium"><i class="fab fa-whatsapp"></i> Quero esse</a>
+  </div>
+</section>
+
+<!-- =========================
+     GALERIA
+========================= -->
+<section class="max-w-6xl mx-auto px-5 mt-6 card rounded-2xl p-6">
+  <h2 class="text-xl font-extrabold">Galeria / Portfólio</h2>
+  <div id="gallery" class="mt-3 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+  <p class="muted mt-2 text-sm">Dica: troque as imagens no CONFIG por fotos reais do seu trabalho.</p>
+</section>
+
+<!-- =========================
+     DEPOIMENTOS
+========================= -->
+<section class="max-w-6xl mx-auto px-5 mt-6 card rounded-2xl p-6">
+  <h2 class="text-xl font-extrabold">Depoimentos</h2>
+  <div id="testimonials" class="mt-3 grid-auto"></div>
+</section>
+
+<!-- =========================
+     FAQ
+========================= -->
+<section class="max-w-6xl mx-auto px-5 mt-6 card rounded-2xl p-6">
+  <h2 class="text-xl font-extrabold">Perguntas Frequentes</h2>
+  <div id="faqList" class="mt-3 space-y-2"></div>
+</section>
+
+<!-- =========================
+     AGENDAMENTO ONLINE
+========================= -->
+<section id="agendar" class="max-w-6xl mx-auto px-5 mt-6 card rounded-2xl p-6">
+  <h2 class="text-xl font-extrabold">Agendar / Solicitar Aula ou Serviço</h2>
+  <p class="muted text-sm">Preencha os dados abaixo. Você poderá enviar pelo WhatsApp e opcionalmente baixar o compromisso no seu calendário (.ics).</p>
+  <div class="grid md:grid-cols-2 gap-3 mt-3">
     <div>
-      <h2 class="text-3xl font-bold mb-4">Sobre Nós</h2>
-      <p class="text-gray-600">
-        Somos especialistas em transformar a imagem de profissionais em marcas digitais de alto impacto.
-        Seja você barbeiro, cabeleireiro, tatuador, instrutor de academia ou professor de Jiu-Jitsu —
-        criamos o site perfeito para você conquistar clientes e ter mais visibilidade online.
-      </p>
+      <label class="label">Seu nome</label>
+      <input id="formName" class="input ring-focus" placeholder="Ex.: Ana Souza">
     </div>
-    <img src="https://source.unsplash.com/600x400/?barber,fitness" alt="Profissional" class="rounded-lg shadow-lg">
-  </section>
+    <div>
+      <label class="label">Telefone / WhatsApp</label>
+      <input id="formPhone" class="input ring-focus" placeholder="(DDD) 9xxxx-xxxx">
+    </div>
+    <div>
+      <label class="label">Serviço</label>
+      <select id="formService" class="input ring-focus"></select>
+    </div>
+    <div>
+      <label class="label">Data</label>
+      <input id="formDate" type="date" class="input ring-focus">
+      <div class="hint">Horário local do Brasil.</div>
+    </div>
+    <div>
+      <label class="label">Hora</label>
+      <input id="formTime" type="time" class="input ring-focus" step="900">
+      <div class="hint">Intervalo de 15 minutos.</div>
+    </div>
+    <div>
+      <label class="label">Mensagem (opcional)</label>
+      <input id="formMsg" class="input ring-focus" placeholder="Ex.: objetivo, bairro, preferências...">
+    </div>
+  </div>
+  <div class="flex flex-wrap gap-3 mt-4">
+    <button id="btnSendWA" class="btn btn-brand"><i class="fab fa-whatsapp"></i> Enviar no WhatsApp</button>
+    <button id="btnICS" class="btn btn-ghost"><i class="fa-regular fa-calendar-plus"></i> Baixar .ics</button>
+    <button id="btnClearForm" class="btn btn-ghost"><i class="fa-solid fa-eraser"></i> Limpar</button>
+  </div>
+  <p id="formError" class="mt-3 text-rose-400 hidden"></p>
+</section>
 
-  <!-- Serviços -->
-  <section class="bg-gray-100 py-16">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-12">Serviços para Profissionais</h2>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="p-6 bg-white rounded-lg shadow hover:shadow-xl">
-          <img src="https://source.unsplash.com/200x200/?barbershop" class="w-full rounded mb-4" alt="Barbearia">
-          <h3 class="font-bold text-xl mb-2">Barbearias</h3>
-          <p class="text-gray-600">Mostre seus cortes, estilos e portfólio de forma premium.</p>
-        </div>
-        <div class="p-6 bg-white rounded-lg shadow hover:shadow-xl">
-          <img src="https://source.unsplash.com/200x200/?gym" class="w-full rounded mb-4" alt="Academia">
-          <h3 class="font-bold text-xl mb-2">Academias</h3>
-          <p class="text-gray-600">Divulgue suas aulas, horários e planos para novos alunos.</p>
-        </div>
-        <div class="p-6 bg-white rounded-lg shadow hover:shadow-xl">
-          <img src="https://source.unsplash.com/200x200/?makeup" class="w-full rounded mb-4" alt="Beleza">
-          <h3 class="font-bold text-xl mb-2">Beleza & Estética</h3>
-          <p class="text-gray-600">Mostre seus trabalhos em unhas, cabelo e maquiagem.</p>
-        </div>
+<!-- =========================
+     MAPA / CONTATO
+========================= -->
+<section id="contato" class="max-w-6xl mx-auto px-5 mt-6 grid-auto">
+  <div class="card rounded-2xl p-6">
+    <h2 class="text-xl font-extrabold">Localização & Contatos</h2>
+    <div class="mt-2 grid md:grid-cols-2 gap-4">
+      <div>
+        <div class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-sky-400"></i><b>Endereço</b></div>
+        <div id="fullAddress" class="mt-1"></div>
+        <div class="flex items-center gap-2 mt-3"><i class="fab fa-instagram text-pink-400"></i><a id="instaLink" class="underline">Instagram</a></div>
+        <div class="flex items-center gap-2 mt-2"><i class="fab fa-whatsapp text-green-400"></i><a id="waLink" class="underline">WhatsApp</a></div>
+      </div>
+      <div>
+        <iframe id="mapFrame" width="100%" height="240" class="rounded-xl border border-[#1f2c45]" style="background:#0a1426" loading="lazy" allowfullscreen></iframe>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Portfólio -->
-  <section class="max-w-6xl mx-auto px-6 py-16">
-    <h2 class="text-3xl font-bold text-center mb-10">Portfólio em Destaque</h2>
-    <div class="grid md:grid-cols-3 gap-6">
-      <img src="https://source.unsplash.com/400x400/?haircut" class="rounded-lg shadow-lg" alt="Foto 1">
-      <img src="https://source.unsplash.com/400x400/?tattoo" class="rounded-lg shadow-lg" alt="Foto 2">
-      <img src="https://source.unsplash.com/400x400/?fitness" class="rounded-lg shadow-lg" alt="Foto 3">
-    </div>
-  </section>
+<!-- =========================
+     RODAPÉ
+========================= -->
+<footer class="max-w-6xl mx-auto px-5 mt-6 mb-24">
+  <div class="text-center muted">
+    © <span id="year"></span> <span id="brandFoot"></span> — Cartão Digital Premium
+  </div>
+</footer>
 
-  <!-- Depoimentos -->
-  <section class="bg-gray-900 text-white py-16">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-12">O que dizem nossos clientes</h2>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-          <p>"Meu salão ficou com cara de grife! Clientes adoraram."</p>
-          <span class="block mt-4 font-bold">Ana Paula - Cabeleireira</span>
-        </div>
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-          <p>"Agora tenho muito mais alunos, meu site é meu cartão de visita."</p>
-          <span class="block mt-4 font-bold">João Pedro - Personal Trainer</span>
-        </div>
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-          <p>"Minha barbearia dobrou a clientela depois do site. Top demais!"</p>
-          <span class="block mt-4 font-bold">Carlos - Barbeiro</span>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- Botão flutuante WhatsApp -->
+<a id="floatWA" class="floating btn btn-brand shadow-soft"><i class="fab fa-whatsapp"></i></a>
 
-  <!-- CTA -->
-  <section class="text-center py-16">
-    <h2 class="text-3xl font-bold mb-4">Quer transformar seu negócio?</h2>
-    <p class="text-gray-600 mb-6">Entre em contato agora mesmo e comece a divulgar seus serviços de forma premium.</p>
-    <a href="https://wa.me/5551991271598" target="_blank"
-       class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
-      Falar no WhatsApp
-    </a>
-  </section>
+<script>
+/* ==== Utilitários simples ==== */
+const $ = s => document.querySelector(s);
+const dayNames = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+function parseHM(hm){if(!hm) return null; const [h,m]=hm.split(':').map(Number); return {h,m};}
+function setMinDateToday(input){const d=new Date(); const iso=d.toISOString().slice(0,10); input.min=iso;}
+function toLocalISO(date){const z=date.getTimezoneOffset()*60000; return new Date(date - z).toISOString().slice(0,16);}
 
-  <!-- Rodapé -->
-  <footer class="bg-gray-950 text-gray-400 py-8 text-center">
-    <p>📍 Rua das Oliveiras, 175</p>
-    <p>📸 Instagram: <a href="https://instagram.com/pedrowiggers" class="text-yellow-400 hover:underline">@pedrowiggers</a></p>
-    <p class="mt-2">&copy; 2025 Profissional Premium. Todos os direitos reservados.</p>
-  </footer>
+/* ==== Status de funcionamento ==== */
+function isOpen(now){
+  const idx = now.getDay();
+  const rule = CONFIG.hours[idx];
+  if(!rule) return {open:false, today:idx, rule:null};
+  const [oh,om] = CONFIG.hours[idx].open.split(':').map(Number);
+  const [ch,cm] = CONFIG.hours[idx].close.split(':').map(Number);
+  const start = new Date(now); start.setHours(oh,om,0,0);
+  const end   = new Date(now); end.setHours(ch,cm,0,0);
+  return {open: now>=start && now<=end, today:idx, rule};
+}
 
+/* ==== Montagem dinâmica ==== */
+function init() {
+  // Hero
+  $('#heroTitle').textContent = `${CONFIG.professionalName || CONFIG.businessName} — ${CONFIG.profession}`;
+  $('#heroSubtitle').textContent = `${CONFIG.city}`;
+  $('#whatsPretty').textContent = CONFIG.whatsappDisplay;
+  $('#addressLine').textContent = CONFIG.address;
+  $('#professionLine').textContent = CONFIG.profession;
+  $('#cityLine').textContent = CONFIG.city;
+  $('#aboutText').textContent = CONFIG.about;
+  $('#brandFoot').textContent = CONFIG.businessName || CONFIG.professionalName;
+  $('#year').textContent = new Date().getFullYear();
+
+  // Status
+  const st = isOpen(new Date());
+  $('#statusIcon').className = 'fa-solid fa-circle ' + (st.open ? 'ok' : 'bad');
+  $('#statusText').textContent = st.open ? 'Aberto agora' : 'Fechado agora';
+
+  // Tags
+  CONFIG.quickTags.slice(0,6).forEach(t=>{
+    const s = document.createElement('span'); s.className='pill'; s.textContent=t; $('#quickTags').appendChild(s);
+  });
+
+  // Links
+  const waMsgDefault = encodeURIComponent(`Olá! Vim pelo cartão digital e quero saber sobre: ${CONFIG.services[0] || 'um serviço'}.`);
+  const waBase = `https://wa.me/${CONFIG.whatsappE164}`;
+  const waLink = `${waBase}?text=${waMsgDefault}`;
+  $('#ctaWhats').href = waLink;
+  $('#floatWA').href = waLink;
+  $('#waLink').href = waLink;
+  $('#instaLink').href = CONFIG.instagram;
+
+  // Maps
+  $('#fullAddress').textContent = `${CONFIG.address} — ${CONFIG.city}`;
+  $('#mapFrame').src = `https://www.google.com/maps?q=${encodeURIComponent(CONFIG.address+', '+CONFIG.city)}&output=embed`;
+
+  // Services
+  CONFIG.services.forEach(s=>{
+    const li=document.createElement('li');
+    li.innerHTML = `<span class="pill">${s}</span>`;
+    $('#servicesList').appendChild(li);
+  });
+
+  // Prices
+  $('#priceBasic').textContent = CONFIG.prices.basic.value;
+  $('#pricePro').textContent = CONFIG.prices.pro.value;
+  $('#pricePremium').textContent = CONFIG.prices.premium.value;
+  CONFIG.prices.basic.features.forEach(f=>{ const li=document.createElement('li'); li.textContent='• '+f; $('#featBasic').appendChild(li); });
+  CONFIG.prices.pro.features.forEach(f=>{ const li=document.createElement('li'); li.textContent='• '+f; $('#featPro').appendChild(li); });
+  CONFIG.prices.premium.features.forEach(f=>{ const li=document.createElement('li'); li.textContent='• '+f; $('#featPremium').appendChild(li); });
+
+  // Gallery
+  CONFIG.gallery.forEach(src=>{
+    const img=document.createElement('img'); img.src=src; img.alt='Portfólio'; img.className='rounded-xl border border-[#1f2c45]'; $('#gallery').appendChild(img);
+  });
+
+  // Testimonials
+  CONFIG.testimonials.forEach(t=>{
+    const d=document.createElement('div'); d.className='card rounded-xl p-4';
+    d.innerHTML = `<div>"${t.text}"</div><div class="muted mt-2">— ${t.name}</div>`;
+    $('#testimonials').appendChild(d);
+  });
+
+  // FAQ (exemplos)
+  const FAQ = [
+    {q:'Como funciona o agendamento?', a:'Você escolhe data/horário, envia pelo WhatsApp e confirmamos a disponibilidade.'},
+    {q:'Quais formas de pagamento?', a:'PIX, cartão (link) e dinheiro.'},
+    {q:'Posso reagendar?', a:'Sim, avise com 12h de antecedência para tentarmos remanejar.'}
+  ];
+  FAQ.forEach(f=>{
+    const det=document.createElement('details'); det.className='soft rounded-lg p-3 border border-[#1f2c45]';
+    const sum=document.createElement('summary'); sum.textContent=f.q; sum.className='cursor-pointer font-semibold';
+    const p=document.createElement('p'); p.textContent=f.a; p.className='muted mt-2';
+    det.appendChild(sum); det.appendChild(p); $('#faqList').appendChild(det);
+  });
+
+  // Agendamento: popular serviços
+  CONFIG.services.forEach(s=>{ const o=document.createElement('option'); o.textContent=s; $('#formService').appendChild(o); });
+  setMinDateToday($('#formDate'));
+
+  // Compartilhar
+  $('#ctaShare').onclick = async ()=>{
+    const data = { title: CONFIG.businessName || CONFIG.professionalName, text: 'Cartão Digital Profissional', url: location.href };
+    try{
+      if(navigator.share){ await navigator.share(data); }
+      else { await navigator.clipboard.writeText(location.href); alert('Link copiado!'); }
+    }catch(e){}
+  };
+
+  // Botões de planos -> WhatsApp
+  document.querySelectorAll('[data-plan]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const plan = b.getAttribute('data-plan');
+      const msg = encodeURIComponent(`Olá! Tenho interesse no plano ${plan}. Podemos conversar?`);
+      window.open(`${waBase}?text=${msg}`,'_blank');
+    });
+  });
+}
+init();
+
+/* ==== Validações simples ==== */
+function showError(msg){ const e=$('#formError'); e.textContent=msg; e.classList.remove('hidden'); setTimeout(()=>e.classList.add('hidden'), 6000); }
+function validDateTime(dStr,tStr){
+  if(!dStr||!tStr) return false;
+  const dt = new Date(`${dStr}T${tStr}:00`);
+  const now = new Date();
+  return dt.getTime() >= now.getTime();
+}
+
+/* ==== Compor mensagem WhatsApp ==== */
+function buildWAMessage(){
+  const nome = $('#formName').value.trim();
+  const phone = $('#formPhone').value.trim();
+  const service = $('#formService').value;
+  const date = $('#formDate').value;
+  const time = $('#formTime').value;
+  const msg = $('#formMsg').value.trim();
+
+  if(!nome) return showError('Informe seu nome.');
+  if(!phone) return showError('Informe seu telefone/WhatsApp.');
+  if(!date) return showError('Escolha a data.');
+  if(!time) return showError('Escolha o horário.');
+  if(!validDateTime(date,time)) return showError('A data/hora deve ser no futuro.');
+
+  const when = new Date(`${date}T${time}:00`);
+  const fmt = when.toLocaleString('pt-BR', {dateStyle:'full', timeStyle:'short'});
+  const text =
+`Olá! Me chamo ${nome}.
+Telefone: ${phone}
+Serviço: ${service}
+Data/Hora: ${fmt}
+Mensagem: ${msg || '—'}
+
+Enviado via Cartão Digital.`;
+  return encodeURIComponent(text);
+}
+
+/* ==== .ICS (arquivo de calendário) ==== */
+function downloadICS(){
+  const date = $('#formDate').value, time = $('#formTime').value;
+  const service = $('#formService').value;
+  const nome = $('#formName').value.trim() || 'Cliente';
+  if(!validDateTime(date,time)) return showError('Preencha data e hora futuras para gerar o .ics.');
+
+  // Criar início e fim (1h)
+  const start = new Date(`${date}T${time}:00`);
+  const end = new Date(start.getTime()+60*60*1000);
+  const toICS = d => d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+
+  const summary = `Atendimento: ${service}`;
+  const location = `${CONFIG.address}, ${CONFIG.city}`;
+  const desc = `Agendamento com ${CONFIG.professionalName || CONFIG.businessName}\nCliente: ${nome}\nWhatsApp: ${CONFIG.whatsappDisplay}`;
+  const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//CartaoDigital//PT-BR
+BEGIN:VEVENT
+UID:${Date.now()}@cartao-digital
+DTSTAMP:${toICS(new Date())}
+DTSTART:${toICS(start)}
+DTEND:${toICS(end)}
+SUMMARY:${summary}
+LOCATION:${location}
+DESCRIPTION:${desc}
+END:VEVENT
+END:VCALENDAR`;
+
+  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `agendamento-${date}-${time.replace(':','')}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  URL.revokeObjectURL(a.href);
+  a.remove();
+}
+
+/* ==== Ações do formulário ==== */
+$('#btnSendWA').addEventListener('click', ()=>{
+  const enc = buildWAMessage(); if(!enc) return;
+  const link = `https://wa.me/${CONFIG.whatsappE164}?text=${enc}`;
+  window.open(link,'_blank');
+});
+$('#btnICS').addEventListener('click', downloadICS);
+$('#btnClearForm').addEventListener('click', ()=>{
+  ['formName','formPhone','formMsg','formDate','formTime'].forEach(id=>{ const el=$('#'+id); if(el) el.value=''; });
+  $('#formService').selectedIndex = 0;
+});
+
+/* ==== Ajustes finais ==== */
+document.addEventListener('visibilitychange', ()=>{ // atualiza status simples ao voltar
+  const st = isOpen(new Date());
+  $('#statusIcon').className = 'fa-solid fa-circle ' + (st.open ? 'ok' : 'bad');
+  $('#statusText').textContent = st.open ? 'Aberto agora' : 'Fechado agora';
+});
+</script>
 </body>
 </html>
