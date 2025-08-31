@@ -1,609 +1,202 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Cartão Digital — Construtor</title>
-<meta name="theme-color" content="#0b0f1a"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<style>
-:root{
-  --bg:#0b0f1a;--card:#0f172a;--soft:#0a1426;--text:#e6edf7;--muted:#9aa7bd;
-  --ring:#22d3ee;--border:#1b2740;--brand:#22d3ee;--brand2:#0ea5e9;--accent:#f7c948;
-}
-*{box-sizing:border-box}
-html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
-body{background:var(--bg);color:var(--text)}
-a{color:inherit;text-decoration:none}
-.container{max-width:1180px;margin:auto;padding:18px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
-.soft{background:var(--soft);border:1px solid var(--border);border-radius:12px}
-.grid{display:grid;gap:14px}
-@media(min-width:900px){.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:repeat(3,1fr)}}
-h1,h2,h3{margin:.1rem 0 .6rem}
-.muted{color:var(--muted)}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-weight:700;background:#0a1426;color:#cfe3ff}
-.btn.brand{background:linear-gradient(180deg,var(--brand),var(--brand2));color:#05222a;border-color:#29d3f1}
-.btn.alt{background:#0d1730}
-.badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--border);background:#0a1426;border-radius:999px;padding:.35rem .6rem}
-.small{font-size:12px}
-.pill{border:1px solid var(--border);border-radius:999px;padding:.3rem .6rem;color:var(--muted);font-size:12px}
-.input,select,textarea{width:100%;padding:.8rem;border-radius:10px;border:1px solid var(--border);background:#0a1426;color:#e6edf7;outline:none}
-textarea{min-height:100px;resize:vertical}
-.label{display:block;margin:.35rem 0 .3rem;font-weight:700}
-.gallery{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
-@media(min-width:700px){.gallery{grid-template-columns:repeat(3,1fr)}}
-.gallery img{width:100%;height:180px;object-fit:cover;border-radius:10px;border:1px solid var(--border);background:#0b0f1a}
-.kv{display:flex;justify-content:space-between;gap:8px}
-.footer{margin:18px 0;text-align:center;color:var(--muted);font-size:13px}
-.ok{color:#34d399}.bad{color:#fb7185}
-/* painél (builder) */
-#builderToggle{position:fixed;left:16px;bottom:16px;z-index:50}
-#builder{position:fixed;inset:0 0 0 auto;width:min(480px,100%);background:#0a1224;color:#e6edf7;border-left:1px solid var(--border);transform:translateX(100%);transition:.3s;z-index:60;overflow:auto}
-#builder.open{transform:translateX(0)}
-.builder-h{position:sticky;top:0;background:#091227;border-bottom:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
-.section{padding:12px 14px;border-bottom:1px dashed #15223b}
-.section h3{margin:.2rem 0 .6rem}
-.grid-2c{display:grid;gap:10px;grid-template-columns:1fr 1fr}
-.color-swatch{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);cursor:pointer}
-.logo{width:92px;height:92px;border-radius:12px;border:1px solid var(--border);background:#0b0f1a;display:grid;place-items:center;overflow:hidden}
-.logo img{width:100%;height:100%;object-fit:contain}
-hr{border:0;border-top:1px solid var(--border);margin:10px 0}
-.sticky-cta{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;gap:10px;flex-direction:column}
-.hidden{display:none}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f4f4f4; --text:#2c3e50; --card:#fff; --primary:#3498db; --danger:#e74c3c; --success:#2ecc71;
+    }
+    body.dark {
+      --bg:#1e272e; --text:#ecf0f1; --card:#2c3e50;
+    }
+    body { font-family:'Poppins',sans-serif; margin:0; background:var(--bg); color:var(--text); transition:.3s; }
+    header { background:var(--text); color:#fff; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+    header h1 { margin:0; font-size:20px; }
+    .cart-icon { cursor:pointer; font-size:18px; position:relative; }
+    .cart-count { background:red; color:#fff; border-radius:50%; padding:3px 7px; font-size:12px; position:absolute; top:-8px; right:-10px; }
+    .btn-theme { background:var(--primary); border:none; color:#fff; padding:8px 12px; border-radius:6px; cursor:pointer; }
+
+    .container { max-width:1200px; margin:20px auto; padding:0 15px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:20px; }
+
+    .card { background:var(--card); border-radius:10px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,0.1); transition:.2s; cursor:pointer; position:relative; }
+    .card:hover { transform:translateY(-5px); }
+    .card img { width:100%; height:150px; object-fit:cover; transition:.3s; }
+    .card-info { padding:10px; text-align:center; }
+    .card-info h3 { font-size:15px; margin:5px 0; }
+    .card-info p { font-weight:600; color:var(--primary); }
+
+    .skeleton { background:linear-gradient(90deg,#ccc,#eee,#ccc); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:8px; }
+    @keyframes shimmer { 0%{background-position:-200% 0;} 100%{background-position:200% 0;} }
+
+    .modal, .cart { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:1000; }
+    .modal-content, .cart-content { background:var(--card); padding:20px; border-radius:10px; width:95%; max-width:500px; max-height:90vh; overflow-y:auto; animation:fadeIn .3s; color:var(--text); }
+    @keyframes fadeIn { from{opacity:0;transform:scale(.9);} to{opacity:1;transform:scale(1);} }
+
+    .modal-content img { width:100%; border-radius:8px; }
+    .modal-content h2 { margin:15px 0 5px; }
+    .price { font-size:20px; font-weight:700; color:var(--primary); margin:5px 0; }
+    .btn { display:inline-block; margin-top:10px; padding:10px 15px; border:none; border-radius:6px; font-weight:600; cursor:pointer; transition:.2s; }
+    .btn-primary { background:var(--primary); color:#fff; }
+    .btn-whats { background:#25D366; color:#fff; }
+    .btn-close { background:var(--danger); color:#fff; float:right; }
+
+    .cart-content h2 { margin-top:0; }
+    .cart-item { display:flex; justify-content:space-between; align-items:center; margin:10px 0; }
+    .cart-item button { margin-left:5px; }
+    .checkout { margin-top:15px; }
+    .checkout select, .checkout button { width:100%; padding:10px; margin-top:10px; border-radius:6px; }
+
+    @media(max-width:600px){
+      .card img { height:120px; }
+      header h1 { font-size:18px; }
+    }
+
+    /* animação produto voando */
+    .fly-img { position:fixed; width:80px; height:80px; object-fit:cover; border-radius:8px; z-index:2000; pointer-events:none; animation:fly .7s ease forwards; }
+    @keyframes fly { to { transform:translate(var(--x),var(--y)) scale(.2); opacity:.5; } }
+  </style>
 </head>
 <body>
 
-<div class="container">
-  <!-- HERO -->
-  <section class="card">
-    <div class="row" style="align-items:center;justify-content:space-between">
-      <div class="row" style="align-items:center">
-        <div class="logo" id="logoBox"><span class="muted">LOGO</span></div>
-        <div style="margin-left:12px">
-          <h1 id="heroTitle">Sua Marca — Profissão</h1>
-          <div class="muted" id="heroSubtitle">Cidade • Qualidade • Atendimento rápido</div>
-          <div class="badge" style="margin-top:8px">
-            <i id="statusIcon" class="fa-solid fa-circle bad"></i>
-            <span id="statusText">Fechado agora</span>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <a id="ctaWhats" class="btn brand"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-        <a id="ctaMaps" class="btn alt"><i class="fa-solid fa-map-location-dot"></i> Como chegar</a>
-        <button id="ctaShare" class="btn alt"><i class="fa-solid fa-share-nodes"></i> Compartilhar</button>
-      </div>
-    </div>
-  </section>
+<header>
+  <h1>🛍️ Catálogo Premium</h1>
+  <div>
+    <button class="btn-theme" onclick="toggleTheme()">🌙</button>
+    <span class="cart-icon" onclick="openCart()">🛒 <span class="cart-count" id="cart-count">0</span></span>
+  </div>
+</header>
 
-  <!-- INFO RÁPIDA -->
-  <section class="grid grid-3" style="margin-top:12px">
-    <div class="card"><div class="muted small">WhatsApp</div><div id="whatsPretty" style="font-weight:800"></div></div>
-    <div class="card"><div class="muted small">Endereço</div><div id="addressLine" style="font-weight:800"></div></div>
-    <div class="card"><div class="muted small">Cidade</div><div id="cityLine" style="font-weight:800"></div></div>
-  </section>
+<main class="container">
+  <div class="grid" id="product-grid">
+    <!-- skeletons -->
+    <div class="card skeleton" style="height:200px;"></div>
+    <div class="card skeleton" style="height:200px;"></div>
+    <div class="card skeleton" style="height:200px;"></div>
+  </div>
+</main>
 
-  <!-- SOBRE + SERVIÇOS -->
-  <section class="grid grid-2" style="margin-top:12px">
-    <div class="card">
-      <h2>Sobre</h2>
-      <p id="aboutText" class="muted">Conte a sua história, diferenciais, missão e o que o cliente pode esperar do seu atendimento.</p>
-      <div class="row" id="quickTags" style="margin-top:10px"></div>
-    </div>
-    <div class="card">
-      <h2>Serviços</h2>
-      <ul id="servicesList" class="muted" style="padding-left:16px"></ul>
-    </div>
-  </section>
-
-  <!-- PLANOS -->
-  <section class="grid grid-3" style="margin-top:12px">
-    <div class="card">
-      <h3>Plano Básico</h3>
-      <div class="muted">Preço</div><div id="priceBasic" style="font-weight:800">R$ —</div>
-      <ul id="featBasic" class="muted" style="margin-top:8px;padding-left:16px"></ul>
-      <a class="btn brand" data-plan="Básico" style="margin-top:10px"><i class="fab fa-whatsapp"></i> Quero esse</a>
-    </div>
-    <div class="card">
-      <h3>Plano Profissional</h3>
-      <div class="muted">Preço</div><div id="pricePro" style="font-weight:800">R$ —</div>
-      <ul id="featPro" class="muted" style="margin-top:8px;padding-left:16px"></ul>
-      <a class="btn brand" data-plan="Profissional" style="margin-top:10px"><i class="fab fa-whatsapp"></i> Quero esse</a>
-    </div>
-    <div class="card">
-      <h3>Plano Premium</h3>
-      <div class="muted">Preço</div><div id="pricePremium" style="font-weight:800">R$ —</div>
-      <ul id="featPremium" class="muted" style="margin-top:8px;padding-left:16px"></ul>
-      <a class="btn brand" data-plan="Premium" style="margin-top:10px"><i class="fab fa-whatsapp"></i> Quero esse</a>
-    </div>
-  </section>
-
-  <!-- GALERIA -->
-  <section class="card" style="margin-top:12px">
-    <h2>Galeria</h2>
-    <div class="gallery" id="gallery"></div>
-  </section>
-
-  <!-- DEPOIMENTOS -->
-  <section class="card" style="margin-top:12px">
-    <h2>Depoimentos</h2>
-    <div id="testimonials" class="grid"></div>
-  </section>
-
-  <!-- AGENDAMENTO -->
-  <section id="agendar" class="card" style="margin-top:12px">
-    <h2>Agendar / Solicitar Orçamento</h2>
-    <div class="grid grid-2">
-      <div>
-        <label class="label">Seu nome</label>
-        <input id="fName" class="input" placeholder="Ex.: Ana Silva">
-      </div>
-      <div>
-        <label class="label">Seu WhatsApp</label>
-        <input id="fPhone" class="input" placeholder="(DDD) 9xxxx-xxxx">
-      </div>
-      <div>
-        <label class="label">Serviço</label>
-        <select id="fService" class="input"></select>
-      </div>
-      <div>
-        <label class="label">Data</label>
-        <input id="fDate" type="date" class="input">
-      </div>
-      <div>
-        <label class="label">Hora</label>
-        <input id="fTime" type="time" step="900" class="input">
-      </div>
-      <div>
-        <label class="label">Mensagem (opcional)</label>
-        <input id="fMsg" class="input" placeholder="Objetivo, bairro, preferências...">
-      </div>
-    </div>
-    <div class="row" style="margin-top:10px">
-      <button id="btnWA" class="btn brand"><i class="fab fa-whatsapp"></i> Enviar no WhatsApp</button>
-      <button id="btnICS" class="btn alt"><i class="fa-regular fa-calendar-plus"></i> Baixar evento (.ics)</button>
-      <span id="formErr" class="small bad" style="display:none"></span>
-    </div>
-  </section>
-
-  <!-- MAPA & CONTATOS -->
-  <section class="grid grid-2" style="margin-top:12px">
-    <div class="card">
-      <h2>Localização & Contatos</h2>
-      <p id="fullAddress" class="muted"></p>
-      <div class="row" style="margin-top:8px">
-        <a id="instaLink" class="pill" target="_blank">Instagram</a>
-        <a id="waLink" class="pill" target="_blank">WhatsApp</a>
-      </div>
-    </div>
-    <div class="card">
-      <iframe id="mapFrame" width="100%" height="260" style="border:1px solid var(--border);border-radius:12px;background:#0b0f1a" loading="lazy"></iframe>
-    </div>
-  </section>
-
-  <div class="footer">© <span id="year"></span> <span id="footBrand">Sua Marca</span> — Cartão Digital</div>
+<!-- Modal Produto -->
+<div class="modal" id="product-modal">
+  <div class="modal-content">
+    <button class="btn btn-close" onclick="closeModal()">X</button>
+    <img id="modal-img" src="">
+    <h2 id="modal-title"></h2>
+    <p class="price" id="modal-price"></p>
+    <p id="modal-desc"></p>
+    <button class="btn btn-primary" onclick="addToCart()">Adicionar ao Carrinho</button>
+    <button class="btn btn-whats" id="btnWhats">Comprar no WhatsApp</button>
+    <a class="btn btn-primary" id="btnSite" target="_blank">Comprar no Site</a>
+  </div>
 </div>
 
-<!-- BOTÕES FLUTUANTES -->
-<div class="sticky-cta">
-  <a id="floatWA" class="btn brand"><i class="fab fa-whatsapp"></i> Falar agora</a>
-  <button id="builderToggle" class="btn alt"><i class="fa-solid fa-wrench"></i> Personalizar</button>
+<!-- Carrinho -->
+<div class="cart" id="cart-modal">
+  <div class="cart-content">
+    <button class="btn btn-close" onclick="closeCart()">X</button>
+    <h2>Meu Carrinho</h2>
+    <div id="cart-items"></div>
+    <h3>Total: R$ <span id="cart-total">0.00</span></h3>
+    <div class="checkout">
+      <label>Forma de pagamento:</label>
+      <select id="payment-method">
+        <option>Pix</option>
+        <option>Cartão de Crédito</option>
+        <option>Boleto</option>
+      </select>
+      <button class="btn btn-primary" onclick="checkout()">Finalizar Compra</button>
+    </div>
+  </div>
 </div>
-
-<!-- PAINEL DO USUÁRIO (BUILDER) -->
-<aside id="builder">
-  <div class="builder-h">
-    <strong>Personalizar Página</strong>
-    <div class="row">
-      <button id="exportJSON" class="btn alt small">Exportar JSON</button>
-      <button id="importJSON" class="btn alt small">Importar JSON</button>
-      <button id="exportHTML" class="btn brand small">Exportar HTML</button>
-      <button id="closeBuilder" class="btn alt small">Fechar</button>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Identidade</h3>
-    <div class="grid-2c">
-      <div>
-        <label class="label">Nome / Marca</label>
-        <input id="iBusiness" class="input" placeholder="Minha Marca">
-      </div>
-      <div>
-        <label class="label">Profissão</label>
-        <input id="iProfession" class="input" placeholder="Ex.: Barbearia, Academia, Salão, Clínica...">
-      </div>
-    </div>
-    <label class="label">Sobre</label>
-    <textarea id="iAbout" class="input" placeholder="Conte rapidamente quem você é e seu diferencial."></textarea>
-    <div class="row" style="margin-top:8px;align-items:center">
-      <div class="logo" id="logoBoxCfg"><span class="muted">LOGO</span></div>
-      <div>
-        <label class="label">Enviar logo</label>
-        <input id="iLogo" type="file" accept="image/*" class="input">
-        <div class="small muted">PNG ou JPG. Usamos a imagem como marca no topo.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Cores</h3>
-    <div class="row" id="palettePresets">
-      <!-- presets gerados via JS -->
-    </div>
-    <div class="grid-2c" style="margin-top:8px">
-      <div>
-        <label class="label">Cor Primária</label>
-        <input id="cBrand" type="color" class="input" value="#22d3ee">
-      </div>
-      <div>
-        <label class="label">Cor Secundária</label>
-        <input id="cBrand2" type="color" class="input" value="#0ea5e9">
-      </div>
-      <div>
-        <label class="label">Fundo</label>
-        <input id="cBg" type="color" class="input" value="#0b0f1a">
-      </div>
-      <div>
-        <label class="label">Cartões</label>
-        <input id="cCard" type="color" class="input" value="#0f172a">
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Contato & Endereço</h3>
-    <div class="grid-2c">
-      <div>
-        <label class="label">WhatsApp (E.164)</label>
-        <input id="iWhatsE164" class="input" placeholder="Ex.: 5551991271598">
-      </div>
-      <div>
-        <label class="label">WhatsApp (exibição)</label>
-        <input id="iWhatsPretty" class="input" placeholder="(51) 99127-1598">
-      </div>
-      <div>
-        <label class="label">Instagram (URL)</label>
-        <input id="iInstagram" class="input" placeholder="https://instagram.com/seuuser">
-      </div>
-      <div>
-        <label class="label">Cidade / UF</label>
-        <input id="iCity" class="input" placeholder="Porto Alegre, RS">
-      </div>
-      <div class="grid-2c" style="grid-column:1/-1">
-        <div>
-          <label class="label">Endereço</label>
-          <input id="iAddress" class="input" placeholder="Rua das Oliveiras, 175">
-        </div>
-        <div>
-          <label class="label">Tagline (curta)</label>
-          <input id="iTag" class="input" placeholder="Qualidade • Agilidade • Confiança">
-        </div>
-      </div>
-      <div>
-        <label class="label">Chips (separe por vírgula)</label>
-        <input id="iTags" class="input" placeholder="Orçamento rápido, PIX e Cartão, Nota fiscal">
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Serviços</h3>
-    <div class="row">
-      <input id="iService" class="input" placeholder="Ex.: Corte Premium"/>
-      <button id="addService" class="btn brand small">Adicionar</button>
-    </div>
-    <ul id="servicesAdmin" class="small" style="margin-top:8px"></ul>
-    <hr>
-    <h3>Planos & Preços</h3>
-    <div class="grid-2c">
-      <div><label class="label">Básico (R$)</label><input id="pBasic" class="input" placeholder="149"></div>
-      <div><label class="label">Profissional (R$)</label><input id="pPro" class="input" placeholder="299"></div>
-      <div><label class="label">Premium (R$)</label><input id="pPremium" class="input" placeholder="599"></div>
-    </div>
-    <div class="small muted" style="margin-top:6px">Recursos (cada linha = 1 item)</div>
-    <div class="grid-3" style="display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr">
-      <textarea id="pfBasic" class="input" placeholder="Atendimento pontual&#10;Suporte por WhatsApp"></textarea>
-      <textarea id="pfPro" class="input" placeholder="Tudo do Básico&#10;Entrega em 48h&#10;1 revisão"></textarea>
-      <textarea id="pfPremium" class="input" placeholder="Tudo do Pro&#10;Prioridade&#10;Suporte estendido"></textarea>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>Galeria</h3>
-    <div class="row">
-      <input id="iGalleryUrl" class="input" placeholder="URL da imagem (https://...)">
-      <button id="addGallery" class="btn brand small">Adicionar</button>
-    </div>
-    <ul id="galleryAdmin" class="small" style="margin-top:8px"></ul>
-  </div>
-
-  <div class="section">
-    <h3>Depoimentos</h3>
-    <div class="grid-2c">
-      <input id="iTestName" class="input" placeholder="Nome do cliente">
-      <input id="iTestText" class="input" placeholder="Depoimento curto">
-    </div>
-    <div class="row" style="margin-top:8px">
-      <button id="addTest" class="btn brand small">Adicionar</button>
-    </div>
-    <ul id="testsAdmin" class="small" style="margin-top:8px"></ul>
-  </div>
-
-  <div class="section">
-    <h3>Horários de Funcionamento</h3>
-    <div class="small muted">Deixe vazio para “fechado”. Formato HH:MM.</div>
-    <div id="hoursAdmin" class="grid-2c" style="margin-top:8px"></div>
-  </div>
-
-  <div class="section">
-    <div class="row">
-      <button id="saveLocal" class="btn brand"><i class="fa-solid fa-floppy-disk"></i> Salvar (navegador)</button>
-      <button id="clearLocal" class="btn alt"><i class="fa-solid fa-trash"></i> Limpar dados</button>
-    </div>
-    <div class="small muted" style="margin-top:6px">Os dados ficam salvos no seu navegador (localStorage).</div>
-  </div>
-</aside>
 
 <script>
-/* ========= Estado & defaults ========= */
-const LS_KEY = "builder_config_v1";
-let CONFIG = {
-  brand:"Sua Marca", profession:"Profissão", about:"Atendimento profissional.",
-  city:"Porto Alegre, RS", address:"Rua das Oliveiras, 175",
-  whatsappE164:"5551991271598", whatsappPretty:"(51) 99127-1598",
-  instagram:"https://instagram.com/pedrowiggers",
-  tagline:"Qualidade • Agilidade • Confiança",
-  tags:["Orçamento rápido","PIX e Cartão","Nota fiscal"],
-  services:["Serviço 1","Serviço 2","Serviço 3"],
-  prices:{ basic:{value:"149", features:["Atendimento pontual","Suporte WhatsApp"]},
-           pro:{value:"299", features:["Tudo do Básico","Entrega 48h","1 revisão"]},
-           premium:{value:"599", features:["Tudo do Pro","Prioridade","Suporte estendido"]} },
-  gallery:[],
-  tests:[{name:"Ana",text:"Excelente!"}],
-  logoData:null,
-  colors:{brand:"#22d3ee",brand2:"#0ea5e9",bg:"#0b0f1a",card:"#0f172a"},
-  hours:{
-    0:{open:"",close:""},1:{open:"09:00",close:"19:00"},2:{open:"09:00",close:"19:00"},
-    3:{open:"09:00",close:"19:00"},4:{open:"09:00",close:"19:00"},5:{open:"09:00",close:"19:00"},
-    6:{open:"09:00",close:"14:00"}
-  }
-};
-
-/* ========= Helpers ========= */
-const $ = s=>document.querySelector(s);
-const el = (t,cls,txt)=>{const e=document.createElement(t); if(cls) e.className=cls; if(txt) e.textContent=txt; return e;}
-function setTheme(c){document.documentElement.style.setProperty('--brand',c.brand);document.documentElement.style.setProperty('--brand2',c.brand2);document.documentElement.style.setProperty('--bg',c.bg);document.documentElement.style.setProperty('--card',c.card);}
-function statusOpen(now=new Date()){
-  const d=now.getDay(); const h=CONFIG.hours[d]; if(!h||!h.open||!h.close) return {open:false};
-  const [oh,om]=h.open.split(':').map(Number); const [ch,cm]=h.close.split(':').map(Number);
-  const s=new Date(now); s.setHours(oh||0,om||0,0,0); const e=new Date(now); e.setHours(ch||0,cm||0,0,0);
-  return {open: now>=s && now<=e};
-}
-function refreshStatus(){ const st=statusOpen(); $('#statusIcon').className='fa-solid fa-circle '+(st.open?'ok':'bad'); $('#statusText').textContent=st.open?'Aberto agora':'Fechado agora'; }
-function waLink(msg){return `https://wa.me/${CONFIG.whatsappE164}?text=${encodeURIComponent(msg)}`;}
-function renderChips(container,tags){container.innerHTML=''; tags.forEach(t=>{const s=el('span','pill',t); container.appendChild(s);});}
-function renderListUL(container,items){container.innerHTML=''; items.forEach(i=>{const li=el('li',null,'• '+i); container.appendChild(li);});}
-function renderPrices(){ $('#priceBasic').textContent=`R$ ${CONFIG.prices.basic.value}`; $('#pricePro').textContent=`R$ ${CONFIG.prices.pro.value}`; $('#pricePremium').textContent=`R$ ${CONFIG.prices.premium.value}`;
-  renderListUL($('#featBasic'),CONFIG.prices.basic.features);
-  renderListUL($('#featPro'),CONFIG.prices.pro.features);
-  renderListUL($('#featPremium'),CONFIG.prices.premium.features);
-}
-function renderGallery(){ const g=$('#gallery'); g.innerHTML=''; CONFIG.gallery.forEach((src,i)=>{const img=el('img'); img.src=src; img.alt='img'+i; g.appendChild(img);}); }
-function renderTests(){ const t=$('#testimonials'); t.innerHTML=''; CONFIG.tests.forEach(v=>{const c=el('div','soft'); c.style.padding='12px'; c.innerHTML=`<div>"${v.text}"</div><div class="small muted" style="margin-top:6px">— ${v.name}</div>`; t.appendChild(c);}); }
-function renderServices(){ renderListUL($('#servicesList'),CONFIG.services); const sel=$('#fService'); sel.innerHTML=''; CONFIG.services.forEach(s=>{const o=el('option'); o.textContent=s; sel.appendChild(o);}); }
-function renderHeader(){
-  $('#heroTitle').textContent=`${CONFIG.brand} — ${CONFIG.profession}`;
-  $('#heroSubtitle').textContent=CONFIG.tagline||CONFIG.city;
-  $('#whatsPretty').textContent=CONFIG.whatsappPretty;
-  $('#addressLine').textContent=CONFIG.address;
-  $('#cityLine').textContent=CONFIG.city;
-  $('#aboutText').textContent=CONFIG.about;
-  $('#fullAddress').textContent=`${CONFIG.address} — ${CONFIG.city}`;
-  $('#instaLink').href=CONFIG.instagram||'#';
-  $('#waLink').href=waLink(`Olá! Vim pelo cartão digital e queria informações.`);
-  $('#ctaWhats').href=$('#floatWA').href=waLink(`Olá! Vim pelo cartão digital e quero falar com você.`);
-  $('#ctaMaps').href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(CONFIG.address+', '+CONFIG.city)}`;
-  renderChips($('#quickTags'),CONFIG.tags||[]);
-  $('#footBrand').textContent=CONFIG.brand;
-  $('#mapFrame').src=`https://www.google.com/maps?q=${encodeURIComponent(CONFIG.address+', '+CONFIG.city)}&output=embed`;
-  if(CONFIG.logoData){ $('#logoBox').innerHTML=''; const img=new Image(); img.src=CONFIG.logoData; $('#logoBox').appendChild(img); $('#logoBoxCfg').innerHTML=''; $('#logoBoxCfg').appendChild(img.cloneNode());}
-  setTheme(CONFIG.colors);
-  refreshStatus();
-}
-function hydrateBuilder(){
-  $('#iBusiness').value=CONFIG.brand; $('#iProfession').value=CONFIG.profession; $('#iAbout').value=CONFIG.about;
-  $('#iWhatsE164').value=CONFIG.whatsappE164; $('#iWhatsPretty').value=CONFIG.whatsappPretty; $('#iInstagram').value=CONFIG.instagram;
-  $('#iCity').value=CONFIG.city; $('#iAddress').value=CONFIG.address; $('#iTag').value=CONFIG.tagline; $('#iTags').value=(CONFIG.tags||[]).join(', ');
-  $('#cBrand').value=CONFIG.colors.brand; $('#cBrand2').value=CONFIG.colors.brand2; $('#cBg').value=CONFIG.colors.bg; $('#cCard').value=CONFIG.colors.card;
-  // services admin
-  paintServicesAdmin();
-  // prices
-  $('#pBasic').value=CONFIG.prices.basic.value; $('#pPro').value=CONFIG.prices.pro.value; $('#pPremium').value=CONFIG.prices.premium.value;
-  $('#pfBasic').value=(CONFIG.prices.basic.features||[]).join('\n');
-  $('#pfPro').value=(CONFIG.prices.pro.features||[]).join('\n');
-  $('#pfPremium').value=(CONFIG.prices.premium.features||[]).join('\n');
-  // gallery admin
-  paintGalleryAdmin();
-  // tests admin
-  paintTestsAdmin();
-  // hours admin
-  paintHoursAdmin();
-}
-function paintServicesAdmin(){
-  const ul=$('#servicesAdmin'); ul.innerHTML='';
-  CONFIG.services.forEach((s,i)=>{ const li=el('li'); li.innerHTML=`${s} <button data-i="${i}" class="btn alt small" style="float:right">remover</button>`; ul.appendChild(li); });
-}
-function paintGalleryAdmin(){
-  const ul=$('#galleryAdmin'); ul.innerHTML='';
-  CONFIG.gallery.forEach((u,i)=>{ const li=el('li'); li.innerHTML=`${u} <button data-i="${i}" class="btn alt small" style="float:right">remover</button>`; ul.appendChild(li); });
-}
-function paintTestsAdmin(){
-  const ul=$('#testsAdmin'); ul.innerHTML='';
-  CONFIG.tests.forEach((t,i)=>{ const li=el('li'); li.innerHTML=`"${t.text}" — ${t.name} <button data-i="${i}" class="btn alt small" style="float:right">remover</button>`; ul.appendChild(li); });
-}
-function paintHoursAdmin(){
-  const wrap=$('#hoursAdmin'); wrap.innerHTML='';
-  const days=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  days.forEach((d,i)=>{
-    const box=el('div'); const o=CONFIG.hours[i]?.open||''; const c=CONFIG.hours[i]?.close||'';
-    box.innerHTML=`<div class="small muted">${d}</div>
-      <div class="grid-2c"><input data-day="${i}" data-k="open" class="input" placeholder="abertura" value="${o}">
-      <input data-day="${i}" data-k="close" class="input" placeholder="fechamento" value="${c}"></div>`;
-    wrap.appendChild(box);
-  });
-}
-/* ========= Paletas ========= */
-const PRESETS = [
-  {name:'Oceano',brand:'#22d3ee',brand2:'#0ea5e9',bg:'#0b0f1a',card:'#0f172a'},
-  {name:'Dourado',brand:'#f7c948',brand2:'#f59e0b',bg:'#0b0b0b',card:'#151515'},
-  {name:'Violeta',brand:'#a78bfa',brand2:'#7c3aed',bg:'#0a0720',card:'#151239'},
-  {name:'Esmeralda',brand:'#34d399',brand2:'#059669',bg:'#061612',card:'#0f1f1b'},
-  {name:'Carmim',brand:'#fb7185',brand2:'#ef4444',bg:'#12070a',card:'#241016'}
+const products = [
+  {id:1,nome:"Camisa Polo",valor:89.90,descricao:"Camisa confortável de algodão.",imagemUrl:"https://picsum.photos/id/1011/400/300",site:"https://exemplo.com/camisa",whatsapp:"https://wa.me/5511999999999"},
+  {id:2,nome:"Tênis Esportivo",valor:199.90,descricao:"Leve e resistente para corrida.",imagemUrl:"https://picsum.photos/id/21/400/300",site:"https://exemplo.com/tenis",whatsapp:"https://wa.me/5511999999999"},
+  {id:3,nome:"Bolsa Feminina",valor:149.90,descricao:"Elegante e prática.",imagemUrl:"https://picsum.photos/id/1080/400/300",site:"https://exemplo.com/bolsa",whatsapp:"https://wa.me/5511999999999"}
 ];
-function renderPalettes(){ const row=$('#palettePresets'); PRESETS.forEach(p=>{ const sw=el('div','color-swatch'); sw.title=p.name; sw.style.background=`linear-gradient(135deg, ${p.brand}, ${p.brand2})`; sw.onclick=()=>{CONFIG.colors={...p}; setTheme(CONFIG.colors); saveLocal(false);}; row.appendChild(sw); });}
-renderPalettes();
 
-/* ========= Eventos do Builder ========= */
-$('#builderToggle').onclick=()=>$('#builder').classList.add('open');
-$('#closeBuilder').onclick=()=>$('#builder').classList.remove('open');
+let selectedProduct=null;
+let cart=[];
 
-// identidade
-$('#iBusiness').oninput=e=>{CONFIG.brand=e.target.value; renderHeader();}
-$('#iProfession').oninput=e=>{CONFIG.profession=e.target.value; renderHeader();}
-$('#iAbout').oninput=e=>{CONFIG.about=e.target.value; renderHeader();}
-$('#iTag').oninput=e=>{CONFIG.tagline=e.target.value; renderHeader();}
-$('#iLogo').onchange= e=>{
-  const f=e.target.files?.[0]; if(!f) return;
-  const r=new FileReader(); r.onload=ev=>{CONFIG.logoData=ev.target.result; renderHeader(); saveLocal(false);}; r.readAsDataURL(f);
-};
-// cores
-['cBrand','cBrand2','cBg','cCard'].forEach(id=>{$('#'+id).oninput=e=>{CONFIG.colors[id.replace('c','').toLowerCase()]=e.target.value; setTheme(CONFIG.colors); saveLocal(false);};});
+setTimeout(renderCatalog,1000); // simula carregamento
 
-// contato
-$('#iWhatsE164').oninput=e=>{CONFIG.whatsappE164=e.target.value.replace(/\D/g,''); renderHeader();}
-$('#iWhatsPretty').oninput=e=>{CONFIG.whatsappPretty=e.target.value; renderHeader();}
-$('#iInstagram').oninput=e=>{CONFIG.instagram=e.target.value; renderHeader();}
-$('#iCity').oninput=e=>{CONFIG.city=e.target.value; renderHeader();}
-$('#iAddress').oninput=e=>{CONFIG.address=e.target.value; renderHeader();}
-$('#iTags').oninput=e=>{CONFIG.tags=e.target.value.split(',').map(s=>s.trim()).filter(Boolean); renderHeader();}
-
-// serviços
-$('#addService').onclick=()=>{ const v=$('#iService').value.trim(); if(!v) return; CONFIG.services.push(v); $('#iService').value=''; paintServicesAdmin(); renderServices(); saveLocal(false); };
-$('#servicesAdmin').onclick=e=>{ if(e.target.tagName==='BUTTON'){ const i=+e.target.dataset.i; CONFIG.services.splice(i,1); paintServicesAdmin(); renderServices(); saveLocal(false);} };
-// preços
-$('#pBasic').oninput=e=>{CONFIG.prices.basic.value=e.target.value; renderPrices();}
-$('#pPro').oninput=e=>{CONFIG.prices.pro.value=e.target.value; renderPrices();}
-$('#pPremium').oninput=e=>{CONFIG.prices.premium.value=e.target.value; renderPrices();}
-$('#pfBasic').oninput=e=>{CONFIG.prices.basic.features=e.target.value.split('\n').filter(Boolean); renderPrices();}
-$('#pfPro').oninput=e=>{CONFIG.prices.pro.features=e.target.value.split('\n').filter(Boolean); renderPrices();}
-$('#pfPremium').oninput=e=>{CONFIG.prices.premium.features=e.target.value.split('\n').filter(Boolean); renderPrices();}
-
-// galeria
-$('#addGallery').onclick=()=>{ const u=$('#iGalleryUrl').value.trim(); if(!u) return; CONFIG.gallery.push(u); $('#iGalleryUrl').value=''; paintGalleryAdmin(); renderGallery(); saveLocal(false); };
-$('#galleryAdmin').onclick=e=>{ if(e.target.tagName==='BUTTON'){ const i=+e.target.dataset.i; CONFIG.gallery.splice(i,1); paintGalleryAdmin(); renderGallery(); saveLocal(false);} };
-
-// depoimentos
-$('#addTest').onclick=()=>{ const n=$('#iTestName').value.trim(); const t=$('#iTestText').value.trim(); if(!n||!t) return; CONFIG.tests.push({name:n,text:t}); $('#iTestName').value=''; $('#iTestText').value=''; paintTestsAdmin(); renderTests(); saveLocal(false); };
-$('#testsAdmin').onclick=e=>{ if(e.target.tagName==='BUTTON'){ const i=+e.target.dataset.i; CONFIG.tests.splice(i,1); paintTestsAdmin(); renderTests(); saveLocal(false);} };
-
-// horários
-$('#hoursAdmin').oninput=e=>{
-  const day = e.target.dataset.day, k=e.target.dataset.k; if(day===undefined) return;
-  CONFIG.hours[day] = CONFIG.hours[day] || {open:"",close:""};
-  CONFIG.hours[day][k] = e.target.value.trim();
-  refreshStatus(); saveLocal(false);
-};
-
-/* ========= Ações gerais ========= */
-$('#ctaShare').onclick=async()=>{
-  const data={title:CONFIG.brand,text:'Meu cartão digital',url:location.href};
-  try{ if(navigator.share){ await navigator.share(data); } else { await navigator.clipboard.writeText(location.href); alert('Link copiado!'); } }catch(_){}
-};
-document.querySelectorAll('[data-plan]').forEach(b=>b.onclick=()=>{
-  const plan=b.getAttribute('data-plan'); window.open(waLink(`Olá! Tenho interesse no plano ${plan}.`),'_blank');
-});
-
-/* ========= Formulário ========= */
-function formValid(){
-  const n=$('#fName').value.trim(), f=$('#fPhone').value.trim(), d=$('#fDate').value, t=$('#fTime').value;
-  if(!n||!f||!d||!t) return "Preencha nome, telefone, data e hora.";
-  const dt=new Date(`${d}T${t}:00`); if(dt < new Date()) return "Escolha uma data/hora futura.";
-  return null;
+function renderCatalog(){
+  const grid=document.getElementById("product-grid");
+  grid.innerHTML=products.map(p=>`
+    <div class="card" onclick="showProduct(${p.id},event)">
+      <img src="${p.imagemUrl}">
+      <div class="card-info">
+        <h3>${p.nome}</h3>
+        <p>R$ ${p.valor.toFixed(2)}</p>
+      </div>
+    </div>
+  `).join("");
 }
-$('#btnWA').onclick=()=>{
-  const err=formValid(); if(err){ $('#formErr').textContent=err; $('#formErr').style.display='inline'; return;}
-  $('#formErr').style.display='none';
-  const msg=`Olá! Me chamo ${$('#fName').value.trim()}.\nTel/Whats: ${$('#fPhone').value.trim()}\nServiço: ${$('#fService').value}\nData/Hora: ${$('#fDate').value} ${$('#fTime').value}\nMensagem: ${$('#fMsg').value||'—'}`;
-  window.open(waLink(msg),'_blank');
-};
-$('#btnICS').onclick=()=>{
-  const err=formValid(); if(err){ $('#formErr').textContent=err; $('#formErr').style.display='inline'; return;}
-  const start=new Date(`${$('#fDate').value}T${$('#fTime').value}:00`);
-  const end=new Date(start.getTime()+60*60*1000);
-  const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-  const ics=`BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Card//PT-BR
-BEGIN:VEVENT
-UID:${Date.now()}@card
-DTSTAMP:${fmt(new Date())}
-DTSTART:${fmt(start)}
-DTEND:${fmt(end)}
-SUMMARY:Atendimento — ${$('#fService').value}
-LOCATION:${CONFIG.address}, ${CONFIG.city}
-DESCRIPTION:Agendado via Cartão Digital
-END:VEVENT
-END:VCALENDAR`;
-  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}); const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download='agendamento.ics'; a.click(); URL.revokeObjectURL(a.href);
-};
 
-/* ========= Persistência ========= */
-function saveLocal(show=true){ localStorage.setItem(LS_KEY, JSON.stringify(CONFIG)); if(show) alert('Salvo no navegador!'); }
-$('#saveLocal').onclick=()=>saveLocal(true);
-$('#clearLocal').onclick=()=>{ if(confirm('Apagar dados salvos?')){ localStorage.removeItem(LS_KEY); location.reload(); }};
+function showProduct(id,ev){
+  selectedProduct=products.find(p=>p.id===id);
+  document.getElementById("modal-img").src=selectedProduct.imagemUrl;
+  document.getElementById("modal-title").innerText=selectedProduct.nome;
+  document.getElementById("modal-price").innerText="R$ "+selectedProduct.valor.toFixed(2);
+  document.getElementById("modal-desc").innerText=selectedProduct.descricao;
+  document.getElementById("btnWhats").onclick=()=>window.open(selectedProduct.whatsapp,"_blank");
+  document.getElementById("btnSite").href=selectedProduct.site;
+  document.getElementById("product-modal").style.display="flex";
+}
+function closeModal(){ document.getElementById("product-modal").style.display="none"; }
 
-/* ========= Import/Export ========= */
-$('#exportJSON').onclick=()=>{
-  const blob=new Blob([JSON.stringify(CONFIG,null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='config.json'; a.click(); URL.revokeObjectURL(a.href);
-};
-$('#importJSON').onclick=()=>{
-  const i=document.createElement('input'); i.type='file'; i.accept='application/json';
-  i.onchange=()=>{ const f=i.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ try{ CONFIG=JSON.parse(ev.target.result); applyAll(); saveLocal(false);}catch(e){alert('JSON inválido');}}; r.readAsText(f); };
-  i.click();
-};
-$('#exportHTML').onclick=()=>{
-  // clona o documento e injeta CONFIG atual
-  const tpl = document.documentElement.cloneNode(true);
-  // injeta script com CONFIG
-  const inj = document.createElement('script'); inj.type='application/json'; inj.id='EXPORTED_CONFIG';
-  inj.textContent = JSON.stringify(CONFIG);
-  tpl.querySelector('body').appendChild(inj);
-  const html='<!DOCTYPE html>\n'+tpl.outerHTML.replace(/id="builder".*?<\/aside>/s,''); // remove painel do builder
-  const blob=new Blob([html],{type:'text/html;charset=utf-8'}); const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download='site-pronto.html'; a.click(); URL.revokeObjectURL(a.href);
-};
+function addToCart(){
+  const existing=cart.find(i=>i.id===selectedProduct.id);
+  if(existing){ existing.qtd++; } else { cart.push({...selectedProduct,qtd:1}); }
+  flyToCart(selectedProduct.imagemUrl);
+  updateCart(); closeModal();
+}
 
-/* ========= Inicialização ========= */
-function applyAll(){ setTheme(CONFIG.colors); renderHeader(); renderPrices(); renderServices(); renderGallery(); renderTests(); hydrateBuilder(); }
-(function boot(){
-  // se vier exportado com EXPORTED_CONFIG, usa
-  const exported=document.getElementById('EXPORTED_CONFIG');
-  if(exported){ try{ CONFIG = JSON.parse(exported.textContent);}catch(_){ } }
-  const fromLS=localStorage.getItem(LS_KEY); if(fromLS){ try{ CONFIG=Object.assign(CONFIG, JSON.parse(fromLS)); }catch(_){ } }
-  applyAll();
-  // builder abre na 1ª vez
-  if(!fromLS) document.getElementById('builder').classList.add('open');
-  // toggle aberto/fechado periódico
-  setInterval(refreshStatus, 60000);
-  // fechar painel com ESC
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape') $('#builder').classList.remove('open'); });
-})();
+function flyToCart(imgUrl){
+  const img=document.createElement("img");
+  img.src=imgUrl; img.className="fly-img";
+  const cartIcon=document.querySelector(".cart-icon").getBoundingClientRect();
+  img.style.left=cartIcon.left+"px"; img.style.top=cartIcon.top+"px";
+  img.style.setProperty("--x",cartIcon.x-window.innerWidth/2+"px");
+  img.style.setProperty("--y",cartIcon.y-window.innerHeight/2+"px");
+  document.body.appendChild(img);
+  setTimeout(()=>img.remove(),700);
+}
+
+function openCart(){ document.getElementById("cart-modal").style.display="flex"; updateCart(); }
+function closeCart(){ document.getElementById("cart-modal").style.display="none"; }
+
+function updateCart(){
+  const container=document.getElementById("cart-items");
+  container.innerHTML="";
+  let total=0;
+  cart.forEach((item,i)=>{
+    total+=item.valor*item.qtd;
+    container.innerHTML+=`
+      <div class="cart-item">
+        ${item.nome} x${item.qtd} - R$ ${(item.valor*item.qtd).toFixed(2)}
+        <button onclick="changeQtd(${i},1)">+</button>
+        <button onclick="changeQtd(${i},-1)">-</button>
+        <button onclick="removeItem(${i})">🗑️</button>
+      </div>
+    `;
+  });
+  document.getElementById("cart-count").innerText=cart.length;
+  document.getElementById("cart-total").innerText=total.toFixed(2);
+}
+function changeQtd(i,d){ cart[i].qtd+=d; if(cart[i].qtd<=0) cart.splice(i,1); updateCart(); }
+function removeItem(i){ cart.splice(i,1); updateCart(); }
+
+function checkout(){
+  const method=document.getElementById("payment-method").value;
+  alert("✅ Pedido confirmado via "+method+"! (simulação)");
+  cart=[]; updateCart(); closeCart();
+}
+function toggleTheme(){ document.body.classList.toggle("dark"); }
 </script>
 </body>
 </html>
