@@ -10,56 +10,69 @@
     body { background:#f9f9f9; color:#333; display:flex; flex-direction:column; min-height:100vh; }
     main { flex:1; }
 
-    /* Cabeçalho melhorado */
+    /* Cabeçalho clean */
     header {
-      background: linear-gradient(90deg, #ffcc00, #ff9800);
-      padding: 12px 20px;
+      background:#fff;
+      color:#333;
+      padding:15px 20px;
       display:flex;
       justify-content:space-between;
       align-items:center;
       position:sticky;
       top:0;
       z-index:1000;
-      box-shadow:0 2px 6px rgba(0,0,0,0.2);
+      border-bottom:1px solid #eee;
+      box-shadow:0 2px 4px rgba(0,0,0,0.05);
     }
-    header .logo { display:flex; align-items:center; gap:10px; font-weight:700; font-size:18px; color:#fff; }
-    header .logo img { width:32px; }
-    header nav a { margin:0 8px; font-size:20px; color:#fff; text-decoration:none; transition:0.2s; }
-    header nav a:hover { opacity:0.8; }
+    header .logo span {
+      font-size:20px;
+      font-weight:700;
+      letter-spacing:-0.5px;
+    }
+    header nav a {
+      margin:0 12px;
+      color:#333;
+      font-size:15px;
+      font-weight:500;
+      text-decoration:none;
+      transition:0.2s;
+    }
+    header nav a:hover {
+      color:#007bff;
+    }
 
     /* Barra de pesquisa */
     .search-bar { display:flex; justify-content:center; margin:10px 15px; }
     .search-bar input { width:100%; max-width:400px; padding:10px; border-radius:6px; border:1px solid #ccc; }
 
-    /* Cards menores */
     .catalogo { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:15px; padding:15px; }
     .card { background:#fff; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:10px; cursor:pointer; transition:.2s; position:relative; }
     .card:hover { transform:translateY(-3px); }
     .card img { width:100%; height:100px; object-fit:cover; border-radius:8px; }
-    .card h3 { font-size:14px; margin:6px 0 4px; }
+    .card h3 { font-size:14px; margin:8px 0 5px; font-weight:600; }
     .card p { color:#27ae60; font-weight:600; margin:2px 0; font-size:14px; }
     .fav-btn { position:absolute; top:8px; right:8px; background:#fff; border:none; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; }
     .fav-btn.active { color:red; }
-    .stars { color:#f1c40f; font-size:12px; margin-top:4px; }
+    .stars { color:#f1c40f; font-size:13px; margin-top:4px; }
 
     /* Modal produto */
     .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
     .modal-content { background:#fff; border-radius:10px; padding:20px; max-width:500px; width:95%; max-height:90%; overflow-y:auto; }
     .modal-content img { width:100%; border-radius:8px; margin-bottom:10px; }
     .thumbs { display:flex; gap:10px; margin-top:10px; }
-    .thumbs img { width:50px; height:50px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
-    .thumbs img:hover { border:2px solid #ffcc00; }
+    .thumbs img { width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
+    .thumbs img:hover { border:2px solid #007bff; }
     .btn { display:inline-block; margin:10px 5px 0; padding:10px 15px; border:none; border-radius:6px; font-weight:600; cursor:pointer; text-align:center; }
     .btn-whats { background:#25d366; color:#fff; }
     .btn-site { background:#3498db; color:#fff; }
     .btn-cart { background:#ff9800; color:#fff; }
 
     /* Carrinho */
-    #cart-btn { position:fixed; bottom:80px; right:20px; background:#ff9800; color:#fff; border:none; border-radius:50%; width:60px; height:60px; font-size:22px; cursor:pointer; }
+    #cart-btn { position:fixed; bottom:80px; right:20px; background:#ff9800; color:#fff; border:none; border-radius:50%; width:60px; height:60px; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
     #cart-count { position:absolute; top:-5px; right:-5px; background:red; color:#fff; border-radius:50%; font-size:14px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; }
     #cart-modal .modal-content { max-width:400px; }
     .cart-item { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-    .cart-item img { width:40px; height:40px; border-radius:6px; object-fit:cover; }
+    .cart-item img { width:50px; height:50px; border-radius:6px; object-fit:cover; }
     .cart-total { font-weight:700; margin-top:15px; }
 
     /* Checkout */
@@ -74,16 +87,12 @@
   </style>
 </head>
 <body>
-  <!-- Cabeçalho -->
   <header>
-    <div class="logo">
-      <img src="https://img.icons8.com/emoji/48/shopping-bags.png" alt="Logo">
-      <span>Catálogo de Produtos</span>
-    </div>
+    <div class="logo"><span>Meu Catálogo</span></div>
     <nav>
-      <a href="#">🏠</a>
-      <a href="#">⭐</a>
-      <a href="#cart-modal">🛒</a>
+      <a href="#">Início</a>
+      <a href="#">Favoritos</a>
+      <a href="#cart-modal">Carrinho</a>
     </nav>
   </header>
 
@@ -93,7 +102,6 @@
   </div>
 
   <main>
-    <!-- Lista de produtos -->
     <div class="catalogo" id="catalogo"></div>
   </main>
 
@@ -119,8 +127,6 @@
       <h2>🛒 Seu Carrinho</h2>
       <div id="cart-items"></div>
       <p class="cart-total">Total: R$ <span id="cart-total">0.00</span></p>
-
-      <!-- Checkout -->
       <div class="checkout">
         <label for="pay">Forma de Pagamento</label>
         <select id="pay">
@@ -132,35 +138,25 @@
         <button class="btn btn-whats" onclick="checkoutWhats()">Finalizar no WhatsApp</button>
         <button class="btn btn-site" onclick="checkoutCatalog()">Pagar Agora</button>
       </div>
-
       <button class="btn" onclick="closeCart()">Fechar</button>
     </div>
   </div>
 
   <!-- Botão carrinho -->
-  <button id="cart-btn">
-    🛒
-    <span id="cart-count">0</span>
-  </button>
+  <button id="cart-btn">🛒<span id="cart-count">0</span></button>
 
   <!-- Rodapé -->
   <footer>
     <p>© 2025 Meu Catálogo. Todos os direitos reservados.</p>
-    <p>
-      <a href="https://wa.me/5551998378751" target="_blank">WhatsApp</a> | 
-      <a href="#">Instagram</a> | 
-      <a href="#">Facebook</a>
-    </p>
+    <p><a href="https://wa.me/5551998378751" target="_blank">WhatsApp</a> | <a href="#">Instagram</a> | <a href="#">Facebook</a></p>
   </footer>
 
   <script>
-    // Produtos exemplo
     const produtos = [
       {id:1,nome:"Camiseta Premium",preco:89.90,desc:"Camiseta 100% algodão com várias cores.",imagens:["https://picsum.photos/400?1","https://picsum.photos/400?2"],avaliacao:4.5},
       {id:2,nome:"Tênis Esportivo",preco:299.90,desc:"Tênis leve e confortável para corrida.",imagens:["https://picsum.photos/400?3","https://picsum.photos/400?4"],avaliacao:4.8},
       {id:3,nome:"Relógio Smart",preco:499.90,desc:"Smartwatch com monitor de saúde.",imagens:["https://picsum.photos/400?5","https://picsum.photos/400?6"],avaliacao:4.2}
     ];
-
     const catalogo=document.getElementById("catalogo");
     const modal=document.getElementById("productModal");
     const cartModal=document.getElementById("cart-modal");
@@ -170,10 +166,7 @@
     const cartTotalEl=document.getElementById("cart-total");
     const paySelect=document.getElementById("pay");
     const extra=document.getElementById("extra");
-
     let cart=[]; let selectedProduct=null; let favoritos=[];
-
-    // Render catálogo
     function renderCatalogo(lista){
       catalogo.innerHTML="";
       lista.forEach(p=>{
@@ -190,21 +183,17 @@
       });
     }
     renderCatalogo(produtos);
-
-    // Filtro pesquisa
     function filtrarProdutos(){
       const termo=document.getElementById("search").value.toLowerCase();
       const filtrados=produtos.filter(p=>p.nome.toLowerCase().includes(termo) || p.desc.toLowerCase().includes(termo));
       renderCatalogo(filtrados);
     }
-
     function renderStars(nota){
       const full=Math.floor(nota);
       const half=nota%1>=0.5?1:0;
       let stars="★".repeat(full)+(half?"½":"");
       return stars+" ☆".repeat(5-full-half);
     }
-
     function toggleFav(e,id){
       e.stopPropagation();
       const btn=e.target;
@@ -216,7 +205,6 @@
         btn.classList.add("active");
       }
     }
-
     function openProduct(prod){
       selectedProduct=prod;
       modal.style.display="flex";
@@ -236,16 +224,11 @@
       document.getElementById("addCart").onclick=()=>addToCart(prod);
     }
     function closeModal(){ modal.style.display="none"; }
-
     function addToCart(prod){
-      cart.push(prod);
-      updateCart();
-      closeModal();
+      cart.push(prod); updateCart(); closeModal();
     }
-
     function updateCart(){
-      cartItemsEl.innerHTML="";
-      let total=0;
+      cartItemsEl.innerHTML=""; let total=0;
       cart.forEach(item=>{
         total+=item.preco;
         const el=document.createElement("div");
@@ -256,28 +239,19 @@
       cartTotalEl.innerText=total.toFixed(2);
       cartCount.innerText=cart.length;
     }
-
     cartBtn.onclick=()=>cartModal.style.display="flex";
     function closeCart(){ cartModal.style.display="none"; }
-
-    // Finalizar pelo WhatsApp
     function checkoutWhats(){
       let msg="Olá, quero finalizar minha compra:\n";
       cart.forEach(i=>msg+=`- ${i.nome} R$${i.preco.toFixed(2)}\n`);
       msg+=`Total: R$ ${cart.reduce((a,b)=>a+b.preco,0).toFixed(2)}`;
       window.open("https://wa.me/5551998378751?text="+encodeURIComponent(msg));
     }
-
-    // Simulação de pagamento interno
     function checkoutCatalog(){
       const metodo=paySelect.value;
-      if(metodo==="pix"){
-        extra.innerHTML="<p>⚡ Use o Pix para pagar: chave <b>pix@empresa.com</b></p>";
-      } else if(metodo==="card"){
-        extra.innerHTML="<p>💳 Pagamento via cartão ainda em integração.</p>";
-      } else {
-        extra.innerHTML="<p>📄 Boleto gerado! Pague até a data de vencimento.</p>";
-      }
+      if(metodo==="pix"){ extra.innerHTML="<p>⚡ Use o Pix para pagar: chave <b>pix@empresa.com</b></p>"; }
+      else if(metodo==="card"){ extra.innerHTML="<p>💳 Pagamento via cartão ainda em integração.</p>"; }
+      else { extra.innerHTML="<p>📄 Boleto gerado! Pague até a data de vencimento.</p>"; }
     }
   </script>
 </body>
