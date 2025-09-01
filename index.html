@@ -3,177 +3,254 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catálogo Profissional</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Catálogo de Produtos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary:#3498db; --secondary:#2ecc71; --danger:#e74c3c;
-      --dark:#2c3e50; --light:#ecf0f1;
-    }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
-    body{background:#f9f9f9;color:var(--dark);display:flex;flex-direction:column;min-height:100vh;}
-    header{background:var(--dark);color:#fff;padding:15px;text-align:center;position:sticky;top:0;z-index:1000}
-    header h1{margin:0;font-size:22px}
-    .search-bar{width:100%;padding:12px;margin:15px auto;max-width:700px;border:1px solid #ddd;border-radius:6px;font-size:16px}
-    .category-bar{display:flex;overflow-x:auto;gap:10px;padding:10px;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,0.05)}
-    .category-bar button{flex:0 0 auto;padding:8px 16px;border:none;border-radius:20px;background:#eee;cursor:pointer;font-weight:500}
-    .category-bar button.active{background:var(--primary);color:#fff}
-    main{flex:1;padding:20px;max-width:1200px;margin:auto}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
-    .card{background:#fff;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.05);overflow:hidden;cursor:pointer;transition:.2s}
-    .card:hover{transform:translateY(-3px)}
-    .card img{width:100%;height:160px;object-fit:cover}
-    .card .info{padding:10px;text-align:center}
-    .card h3{font-size:16px;margin-bottom:5px}
-    .card p{color:var(--primary);font-weight:600;margin:0}
-    /* Modal */
-    .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;opacity:0;visibility:hidden;transition:.3s}
-    .modal.active{opacity:1;visibility:visible}
-    .modal-content{background:#fff;border-radius:8px;padding:20px;max-width:700px;width:95%;max-height:90vh;overflow-y:auto;animation:fadeIn .3s}
-    @keyframes fadeIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-    .modal-content img{width:100%;border-radius:6px;margin-bottom:10px;cursor:zoom-in}
-    .gallery{display:flex;gap:10px;overflow-x:auto;margin-bottom:15px}
-    .gallery img{width:80px;height:80px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent}
-    .gallery img.active{border-color:var(--primary)}
-    .price{font-size:20px;color:var(--primary);font-weight:700;margin:10px 0}
-    .btn{padding:10px 15px;border:none;border-radius:6px;cursor:pointer;font-weight:600}
-    .btn-primary{background:var(--primary);color:#fff}
-    .btn-success{background:var(--secondary);color:#fff}
-    .btn-danger{background:var(--danger);color:#fff}
-    .btn-whatsapp{background:#25d366;color:#fff}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+    * { box-sizing: border-box; margin:0; padding:0; font-family:"Poppins", sans-serif; }
+    body { background:#f9f9f9; color:#333; display:flex; flex-direction:column; min-height:100vh; }
+    header { background:#ffcc00; padding:15px; text-align:center; font-weight:700; font-size:20px; position:relative; }
+    main { flex:1; }
+
+    /* Barra de pesquisa */
+    .search-bar { display:flex; justify-content:center; margin:10px 15px; }
+    .search-bar input { width:100%; max-width:400px; padding:10px; border-radius:6px; border:1px solid #ccc; }
+
+    .catalogo { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:15px; padding:15px; }
+    .card { background:#fff; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:10px; cursor:pointer; transition:.2s; position:relative; }
+    .card:hover { transform:translateY(-3px); }
+    .card img { width:100%; height:120px; object-fit:cover; border-radius:8px; }
+    .card h3 { font-size:15px; margin:8px 0 5px; }
+    .card p { color:#27ae60; font-weight:600; margin:2px 0; }
+    .fav-btn { position:absolute; top:8px; right:8px; background:#fff; border:none; border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; }
+    .fav-btn.active { color:red; }
+    .stars { color:#f1c40f; font-size:14px; margin-top:4px; }
+
+    /* Modal produto */
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
+    .modal-content { background:#fff; border-radius:10px; padding:20px; max-width:500px; width:95%; max-height:90%; overflow-y:auto; }
+    .modal-content img { width:100%; border-radius:8px; margin-bottom:10px; }
+    .thumbs { display:flex; gap:10px; margin-top:10px; }
+    .thumbs img { width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
+    .thumbs img:hover { border:2px solid #ffcc00; }
+    .btn { display:inline-block; margin:10px 5px 0; padding:10px 15px; border:none; border-radius:6px; font-weight:600; cursor:pointer; text-align:center; }
+    .btn-whats { background:#25d366; color:#fff; }
+    .btn-site { background:#3498db; color:#fff; }
+    .btn-cart { background:#ff9800; color:#fff; }
+
     /* Carrinho */
-    #cart{position:fixed;top:0;right:-400px;width:350px;height:100%;background:#fff;box-shadow:-2px 0 10px rgba(0,0,0,.2);z-index:3000;padding:20px;transition:.3s;display:flex;flex-direction:column}
-    #cart.active{right:0}
-    #cart h2{margin-bottom:10px}
-    .cart-items{flex:1;overflow-y:auto}
-    .cart-item{display:flex;align-items:center;justify-content:space-between;margin:10px 0}
-    .cart-item img{width:50px;height:50px;object-fit:cover;border-radius:4px}
-    .cart-total{font-weight:700;margin-top:10px;font-size:18px}
-    /* Toast */
-    #toast{position:fixed;bottom:20px;right:20px;z-index:4000}
-    .toast{background:var(--dark);color:#fff;padding:12px 16px;border-radius:6px;margin-top:10px;animation:slideIn .4s,fadeOut .4s 4s forwards}
-    @keyframes slideIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
-    @keyframes fadeOut{to{opacity:0;transform:translateX(100%)}}
-    footer{background:var(--dark);color:#fff;padding:20px;text-align:center;margin-top:auto}
+    #cart-btn { position:fixed; bottom:80px; right:20px; background:#ff9800; color:#fff; border:none; border-radius:50%; width:60px; height:60px; font-size:22px; cursor:pointer; }
+    #cart-count { position:absolute; top:-5px; right:-5px; background:red; color:#fff; border-radius:50%; font-size:14px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; }
+    #cart-modal .modal-content { max-width:400px; }
+    .cart-item { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .cart-item img { width:50px; height:50px; border-radius:6px; object-fit:cover; }
+    .cart-total { font-weight:700; margin-top:15px; }
+
+    /* Checkout */
+    .checkout { margin-top:20px; }
+    .checkout label { display:block; margin:10px 0 5px; font-weight:600; }
+    .checkout select, .checkout input { width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; }
+
+    /* Rodapé */
+    footer { background:#2c3e50; color:#fff; padding:20px; text-align:center; margin-top:auto; }
+    footer p { margin:5px 0; }
+    footer a { color:#ffcc00; text-decoration:none; margin:0 5px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🛍️ Catálogo Online</h1>
-    <input type="text" id="search" class="search-bar" placeholder="🔎 Buscar produto...">
-  </header>
+  <header>🛍️ Catálogo de Produtos</header>
 
-  <div class="category-bar" id="category-bar"></div>
-
-  <main>
-    <div class="grid" id="product-grid"></div>
-  </main>
-
-  <div id="cart">
-    <h2>Carrinho</h2>
-    <div class="cart-items" id="cart-items"></div>
-    <div class="cart-total" id="cart-total">Total: R$ 0,00</div>
-    <button class="btn btn-success" onclick="checkout()">Finalizar Compra</button>
-    <button class="btn btn-danger" onclick="toggleCart()">Fechar</button>
+  <!-- Barra de pesquisa -->
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="🔎 Buscar produtos..." oninput="filtrarProdutos()">
   </div>
 
-  <div id="toast"></div>
+  <main>
+    <!-- Lista de produtos -->
+    <div class="catalogo" id="catalogo"></div>
+  </main>
 
+  <!-- Modal produto -->
+  <div class="modal" id="productModal">
+    <div class="modal-content">
+      <h2 id="prodTitle"></h2>
+      <div class="stars" id="prodStars"></div>
+      <img id="mainImg" src="">
+      <div class="thumbs" id="thumbs"></div>
+      <p id="prodDesc"></p>
+      <p id="prodPrice" style="color:#27ae60;font-weight:700;font-size:18px;"></p>
+      <button class="btn btn-whats" id="buyWhats">Comprar no WhatsApp</button>
+      <button class="btn btn-site" id="buySite">Comprar no Site</button>
+      <button class="btn btn-cart" id="addCart">Adicionar ao Carrinho</button>
+      <button class="btn" onclick="closeModal()">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Modal carrinho -->
+  <div class="modal" id="cart-modal">
+    <div class="modal-content">
+      <h2>🛒 Seu Carrinho</h2>
+      <div id="cart-items"></div>
+      <p class="cart-total">Total: R$ <span id="cart-total">0.00</span></p>
+
+      <!-- Checkout -->
+      <div class="checkout">
+        <label for="pay">Forma de Pagamento</label>
+        <select id="pay">
+          <option value="pix">Pix</option>
+          <option value="card">Cartão de Crédito</option>
+          <option value="boleto">Boleto</option>
+        </select>
+        <div id="extra"></div>
+        <button class="btn btn-whats" onclick="checkoutWhats()">Finalizar no WhatsApp</button>
+        <button class="btn btn-site" onclick="checkoutCatalog()">Pagar Agora</button>
+      </div>
+
+      <button class="btn" onclick="closeCart()">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Botão carrinho -->
+  <button id="cart-btn">
+    🛒
+    <span id="cart-count">0</span>
+  </button>
+
+  <!-- Rodapé -->
   <footer>
-    <p>© 2025 Seu Catálogo • <a href="#" style="color:#25d366">WhatsApp</a> • <a href="#">Política de Privacidade</a></p>
+    <p>© 2025 Meu Catálogo. Todos os direitos reservados.</p>
+    <p>
+      <a href="https://wa.me/5551998378751" target="_blank">WhatsApp</a> | 
+      <a href="#">Instagram</a> | 
+      <a href="#">Facebook</a>
+    </p>
   </footer>
 
   <script>
-    const products=[
-      {id:1,nome:"Camiseta Básica",valor:59.90,categoria:"Roupas",imagem:"https://via.placeholder.com/400x300/3498db/fff?text=Camiseta",galeria:["https://via.placeholder.com/400x300/2ecc71/fff?text=Verde","https://via.placeholder.com/400x300/e74c3c/fff?text=Vermelha"]},
-      {id:2,nome:"Tênis Esportivo",valor:199.90,categoria:"Calçados",imagem:"https://via.placeholder.com/400x300/2c3e50/fff?text=Tênis",galeria:["https://via.placeholder.com/400x300/34495e/fff?text=Cinza"]},
-      {id:3,nome:"Bolsa Feminina",valor:149.90,categoria:"Acessórios",imagem:"https://via.placeholder.com/400x300/e67e22/fff?text=Bolsa",galeria:["https://via.placeholder.com/400x300/f39c12/fff?text=Amarela"]}
+    // Produtos exemplo
+    const produtos = [
+      {id:1,nome:"Camiseta Premium",preco:89.90,desc:"Camiseta 100% algodão com várias cores.",imagens:["https://picsum.photos/400?1","https://picsum.photos/400?2"],avaliacao:4.5},
+      {id:2,nome:"Tênis Esportivo",preco:299.90,desc:"Tênis leve e confortável para corrida.",imagens:["https://picsum.photos/400?3","https://picsum.photos/400?4"],avaliacao:4.8},
+      {id:3,nome:"Relógio Smart",preco:499.90,desc:"Smartwatch com monitor de saúde.",imagens:["https://picsum.photos/400?5","https://picsum.photos/400?6"],avaliacao:4.2}
     ];
-    let cart=JSON.parse(localStorage.getItem("cart")||"[]");
-    let selectedCategory="Todos";
 
-    function renderCategories(){
-      const cats=["Todos",...new Set(products.map(p=>p.categoria))];
-      document.getElementById("category-bar").innerHTML=cats.map(c=>`<button class="${c===selectedCategory?"active":""}" onclick="filterCategory('${c}')">${c}</button>`).join("");
+    const catalogo=document.getElementById("catalogo");
+    const modal=document.getElementById("productModal");
+    const cartModal=document.getElementById("cart-modal");
+    const cartBtn=document.getElementById("cart-btn");
+    const cartCount=document.getElementById("cart-count");
+    const cartItemsEl=document.getElementById("cart-items");
+    const cartTotalEl=document.getElementById("cart-total");
+    const paySelect=document.getElementById("pay");
+    const extra=document.getElementById("extra");
+
+    let cart=[]; let selectedProduct=null; let favoritos=[];
+
+    // Render catálogo
+    function renderCatalogo(lista){
+      catalogo.innerHTML="";
+      lista.forEach(p=>{
+        const card=document.createElement("div");
+        card.className="card";
+        card.innerHTML=`
+          <button class="fav-btn" onclick="toggleFav(event,${p.id})">❤</button>
+          <img src="${p.imagens[0]}">
+          <h3>${p.nome}</h3>
+          <p>R$ ${p.preco.toFixed(2)}</p>
+          <div class="stars">${renderStars(p.avaliacao)}</div>`;
+        card.onclick=()=>openProduct(p);
+        catalogo.appendChild(card);
+      });
     }
-    function filterCategory(cat){selectedCategory=cat;renderCategories();renderProducts();}
-    function renderProducts(){
-      const grid=document.getElementById("product-grid");
-      const search=document.getElementById("search").value.toLowerCase();
-      const filtered=products.filter(p=>(selectedCategory==="Todos"||p.categoria===selectedCategory)&&(p.nome.toLowerCase().includes(search)));
-      grid.innerHTML=filtered.map(p=>`
-        <div class="card" onclick="openModal(${p.id})">
-          <img src="${p.imagem}" alt="${p.nome}">
-          <div class="info">
-            <h3>${p.nome}</h3>
-            <p>R$ ${p.valor.toFixed(2)}</p>
-          </div>
-        </div>`).join("")||"<p>Nenhum produto encontrado.</p>";
+    renderCatalogo(produtos);
+
+    // Filtro pesquisa
+    function filtrarProdutos(){
+      const termo=document.getElementById("search").value.toLowerCase();
+      const filtrados=produtos.filter(p=>p.nome.toLowerCase().includes(termo) || p.desc.toLowerCase().includes(termo));
+      renderCatalogo(filtrados);
     }
-    function openModal(id){
-      const p=products.find(x=>x.id===id);
-      let galleryHtml="";
-      if(p.galeria&&p.galeria.length){
-        galleryHtml=`<div class="gallery">${p.galeria.map((g,i)=>`<img src="${g}" class="${i===0?"active":""}" onclick="setMainImage(this,'${g}')">`).join("")}</div>`;
+
+    function renderStars(nota){
+      const full=Math.floor(nota);
+      const half=nota%1>=0.5?1:0;
+      let stars="★".repeat(full)+(half?"½":"");
+      return stars+" ☆".repeat(5-full-half);
+    }
+
+    function toggleFav(e,id){
+      e.stopPropagation();
+      const btn=e.target;
+      if(favoritos.includes(id)){
+        favoritos=favoritos.filter(f=>f!==id);
+        btn.classList.remove("active");
+      } else {
+        favoritos.push(id);
+        btn.classList.add("active");
       }
-      const modal=document.createElement("div");
-      modal.className="modal active";
-      modal.innerHTML=`
-        <div class="modal-content">
-          <img id="main-img" src="${p.imagem}" alt="${p.nome}" onclick="zoomImage('${p.imagem}')">
-          ${galleryHtml}
-          <h2>${p.nome}</h2>
-          <div class="price">R$ ${p.valor.toFixed(2)}</div>
-          <div class="actions">
-            <button class="btn btn-primary" onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
-            <a href="https://wa.me/5511999999999?text=Olá! Tenho interesse em ${encodeURIComponent(p.nome)}" target="_blank" class="btn btn-whatsapp">Comprar no WhatsApp</a>
-          </div>
-          <button class="btn btn-danger" onclick="this.closest('.modal').remove()">Fechar</button>
-        </div>`;
-      document.body.appendChild(modal);
     }
-    function setMainImage(el,url){
-      document.getElementById("main-img").src=url;
-      el.parentElement.querySelectorAll("img").forEach(i=>i.classList.remove("active"));
-      el.classList.add("active");
+
+    function openProduct(prod){
+      selectedProduct=prod;
+      modal.style.display="flex";
+      document.getElementById("prodTitle").innerText=prod.nome;
+      document.getElementById("prodStars").innerHTML=renderStars(prod.avaliacao);
+      document.getElementById("mainImg").src=prod.imagens[0];
+      document.getElementById("prodDesc").innerText=prod.desc;
+      document.getElementById("prodPrice").innerText="R$ "+prod.preco.toFixed(2);
+      const thumbs=document.getElementById("thumbs"); thumbs.innerHTML="";
+      prod.imagens.forEach(img=>{
+        const t=document.createElement("img");
+        t.src=img; t.onclick=()=>document.getElementById("mainImg").src=img;
+        thumbs.appendChild(t);
+      });
+      document.getElementById("buyWhats").onclick=()=>window.open(`https://wa.me/5551998378751?text=Quero%20comprar%20${prod.nome}%20por%20R$${prod.preco.toFixed(2)}`);
+      document.getElementById("buySite").onclick=()=>alert("Aqui você pode integrar com checkout no site.");
+      document.getElementById("addCart").onclick=()=>addToCart(prod);
     }
-    function zoomImage(url){window.open(url,"_blank");}
-    function addToCart(id){
-      const p=products.find(x=>x.id===id);
-      cart.push(p);
-      localStorage.setItem("cart",JSON.stringify(cart));
-      showToast(p.nome+" adicionado ao carrinho!");
-      renderCart();
+    function closeModal(){ modal.style.display="none"; }
+
+    function addToCart(prod){
+      cart.push(prod);
+      updateCart();
+      closeModal();
     }
-    function toggleCart(){document.getElementById("cart").classList.toggle("active");renderCart();}
-    function renderCart(){
-      const container=document.getElementById("cart-items");
-      if(!cart.length){container.innerHTML="<p>Carrinho vazio.</p>";document.getElementById("cart-total").innerText="Total: R$ 0,00";return;}
-      container.innerHTML=cart.map((p,i)=>`
-        <div class="cart-item">
-          <img src="${p.imagem}">
-          <span>${p.nome}</span>
-          <span>R$ ${p.valor.toFixed(2)}</span>
-          <button class="btn btn-danger" onclick="removeFromCart(${i})">x</button>
-        </div>`).join("");
-      const total=cart.reduce((s,p)=>s+p.valor,0);
-      document.getElementById("cart-total").innerText="Total: R$ "+total.toFixed(2);
+
+    function updateCart(){
+      cartItemsEl.innerHTML="";
+      let total=0;
+      cart.forEach(item=>{
+        total+=item.preco;
+        const el=document.createElement("div");
+        el.className="cart-item";
+        el.innerHTML=`<img src="${item.imagens[0]}"><span>${item.nome}</span><span>R$ ${item.preco.toFixed(2)}</span>`;
+        cartItemsEl.appendChild(el);
+      });
+      cartTotalEl.innerText=total.toFixed(2);
+      cartCount.innerText=cart.length;
     }
-    function removeFromCart(i){cart.splice(i,1);localStorage.setItem("cart",JSON.stringify(cart));renderCart();}
-    function checkout(){
-      if(!cart.length){alert("Carrinho vazio!");return;}
-      const total=cart.reduce((s,p)=>s+p.valor,0).toFixed(2);
-      alert("Pagamento simulado de R$ "+total);
-      cart=[];localStorage.setItem("cart","[]");renderCart();
+
+    cartBtn.onclick=()=>cartModal.style.display="flex";
+    function closeCart(){ cartModal.style.display="none"; }
+
+    // Finalizar pelo WhatsApp
+    function checkoutWhats(){
+      let msg="Olá, quero finalizar minha compra:\n";
+      cart.forEach(i=>msg+=`- ${i.nome} R$${i.preco.toFixed(2)}\n`);
+      msg+=`Total: R$ ${cart.reduce((a,b)=>a+b.preco,0).toFixed(2)}`;
+      window.open("https://wa.me/5551998378751?text="+encodeURIComponent(msg));
     }
-    function showToast(msg){
-      const t=document.createElement("div");t.className="toast";t.innerText=msg;
-      document.getElementById("toast").appendChild(t);
-      setTimeout(()=>t.remove(),4500);
+
+    // Simulação de pagamento interno
+    function checkoutCatalog(){
+      const metodo=paySelect.value;
+      if(metodo==="pix"){
+        extra.innerHTML="<p>⚡ Use o Pix para pagar: chave <b>pix@empresa.com</b></p>";
+      } else if(metodo==="card"){
+        extra.innerHTML="<p>💳 Pagamento via cartão ainda em integração.</p>";
+      } else {
+        extra.innerHTML="<p>📄 Boleto gerado! Pague até a data de vencimento.</p>";
+      }
     }
-    document.getElementById("search").addEventListener("input",renderProducts);
-    renderCategories();renderProducts();renderCart();
   </script>
 </body>
 </html>
