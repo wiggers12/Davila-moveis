@@ -8,11 +8,15 @@
   <style>
     * { box-sizing: border-box; margin:0; padding:0; font-family:"Poppins", sans-serif; }
     body { background:#f9f9f9; color:#333; display:flex; flex-direction:column; min-height:100vh; }
-    header { background:#2c3e50; color:#fff; padding:15px; text-align:center; font-weight:700; font-size:20px; position:sticky; top:0; z-index:1000; }
+    header { background:#ffcc00; padding:15px; text-align:center; font-weight:700; font-size:20px; position:sticky; top:0; z-index:1000; }
     main { flex:1; padding:10px; }
 
     .search-bar { display:flex; justify-content:center; margin:10px 15px; }
     .search-bar input { width:100%; max-width:500px; padding:12px; border-radius:6px; border:1px solid #ccc; font-size:16px; }
+
+    .categorias { display:flex; gap:10px; overflow-x:auto; padding:10px; background:#fff; border-bottom:1px solid #ddd; }
+    .categorias button { padding:8px 15px; border:none; border-radius:20px; background:#eee; cursor:pointer; font-weight:600; }
+    .categorias button.active { background:#ffcc00; color:#000; }
 
     .catalogo { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:15px; padding:15px; }
     .card { background:#fff; border-radius:12px; box-shadow:0 3px 8px rgba(0,0,0,0.1); padding:10px; cursor:pointer; transition:.2s; position:relative; }
@@ -20,20 +24,20 @@
     .card img { width:100%; height:140px; object-fit:cover; border-radius:8px; }
     .card h3 { font-size:15px; margin:8px 0 5px; }
     .card p { color:#27ae60; font-weight:600; margin:2px 0; }
+    .fav-btn { position:absolute; top:8px; right:8px; background:#fff; border:none; border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; }
+    .fav-btn.active { color:red; }
     .stars { color:#f1c40f; font-size:14px; margin-top:4px; }
 
-    /* Modal produto */
     .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
     .modal-content { background:#fff; border-radius:10px; padding:20px; max-width:600px; width:95%; max-height:90%; overflow-y:auto; }
 
-    /* Carrinho */
     #cart-btn { position:fixed; bottom:80px; right:20px; background:#ff9800; color:#fff; border:none; border-radius:50%; width:60px; height:60px; font-size:22px; cursor:pointer; z-index:1100; }
     #cart-count { position:absolute; top:-5px; right:-5px; background:red; color:#fff; border-radius:50%; font-size:14px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; }
 
     /* Botão chat */
     #chat-btn { position:fixed; bottom:150px; right:20px; background:#3498db; color:#fff; border:none; border-radius:50%; width:60px; height:60px; font-size:22px; cursor:pointer; z-index:1100; }
 
-    /* Modal chat */
+    /* Chat modal */
     #chat-modal .modal-content { max-width:400px; height:500px; display:flex; flex-direction:column; }
     #chat-messages { flex:1; overflow-y:auto; margin-bottom:10px; }
     .msg { margin:5px 0; padding:8px 12px; border-radius:12px; max-width:70%; }
@@ -42,24 +46,56 @@
     #chat-input { display:flex; gap:5px; }
     #chat-input input { flex:1; padding:8px; border-radius:6px; border:1px solid #ddd; }
     #chat-input button { padding:8px 12px; border:none; border-radius:6px; background:#27ae60; color:#fff; cursor:pointer; }
+
+    footer { background:#2c3e50; color:#fff; padding:20px; text-align:center; margin-top:auto; }
+    footer a { color:#ffcc00; text-decoration:none; margin:0 5px; }
   </style>
 </head>
 <body>
-  <header>Catálogo de Produtos</header>
+  <header>🛍️ Catálogo de Produtos</header>
 
   <div class="search-bar">
     <input type="text" id="search" placeholder="🔎 Buscar produtos..." oninput="filtrarProdutos()">
   </div>
+
+  <div class="categorias" id="categorias"></div>
 
   <main>
     <div class="catalogo" id="catalogo"></div>
   </main>
 
   <!-- Modal produto -->
-  <div class="modal" id="productModal"><div class="modal-content"><h2 id="prodTitle"></h2></div></div>
+  <div class="modal" id="productModal">
+    <div class="modal-content">
+      <h2 id="prodTitle"></h2>
+      <div class="stars" id="prodStars"></div>
+      <img id="mainImg" src="">
+      <div id="thumbs"></div>
+      <p id="prodDesc"></p>
+      <p id="prodPrice"></p>
+      <button class="btn btn-whats" id="buyWhats">Comprar no WhatsApp</button>
+      <button class="btn btn-site" id="buySite">Comprar no Site</button>
+      <button class="btn btn-cart" id="addCart">Adicionar ao Carrinho</button>
+      <button class="btn" onclick="closeModal()">Fechar</button>
+    </div>
+  </div>
 
   <!-- Modal carrinho -->
-  <div class="modal" id="cart-modal"><div class="modal-content"><h2>🛒 Seu Carrinho</h2></div></div>
+  <div class="modal" id="cart-modal">
+    <div class="modal-content">
+      <h2>🛒 Seu Carrinho</h2>
+      <div id="cart-items"></div>
+      <p class="cart-total">Total: R$ <span id="cart-total">0.00</span></p>
+      <div class="checkout">
+        <label for="pay">Forma de Pagamento</label>
+        <select id="pay"><option value="pix">Pix</option><option value="card">Cartão</option><option value="boleto">Boleto</option></select>
+        <div id="extra"></div>
+        <button class="btn btn-whats" onclick="checkoutWhats()">Finalizar no WhatsApp</button>
+        <button class="btn btn-site" onclick="checkoutCatalog()">Pagar Agora</button>
+      </div>
+      <button class="btn" onclick="closeCart()">Fechar</button>
+    </div>
+  </div>
 
   <!-- Botão carrinho -->
   <button id="cart-btn">🛒 <span id="cart-count">0</span></button>
@@ -80,7 +116,10 @@
     </div>
   </div>
 
-  <footer style="background:#2c3e50;color:#fff;text-align:center;padding:15px;">© 2025 Meu Catálogo</footer>
+  <footer>
+    <p>© 2025 Meu Catálogo. Todos os direitos reservados.</p>
+    <p><a href="https://wa.me/5551998378751" target="_blank">WhatsApp</a> | <a href="#">Instagram</a> | <a href="#">Facebook</a></p>
+  </footer>
 
   <!-- Firebase -->
   <script type="module">
@@ -98,65 +137,43 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    let chatId = null;
-    const chatModal = document.getElementById("chat-modal");
-    const chatMessages = document.getElementById("chat-messages");
+    let chatId=null;
+    const chatModal=document.getElementById("chat-modal");
+    const chatMessages=document.getElementById("chat-messages");
 
-    // Criar chat ao abrir
-    async function initChat() {
-      if (!chatId) {
-        const docRef = await addDoc(collection(db, "chats"), {
-          createdAt: serverTimestamp(),
-          status: "open"
-        });
-        chatId = docRef.id;
+    async function initChat(){
+      if(!chatId){
+        const docRef=await addDoc(collection(db,"chats"),{createdAt:serverTimestamp(),status:"open"});
+        chatId=docRef.id;
         listenMessages();
       }
     }
 
-    // Escutar mensagens em tempo real
-    function listenMessages() {
-      const q = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp"));
-      onSnapshot(q, (snapshot) => {
-        chatMessages.innerHTML = "";
-        snapshot.forEach(doc => {
-          const msg = doc.data();
-          const div = document.createElement("div");
-          div.className = "msg " + (msg.sender === "admin" ? "admin" : "user");
-          div.textContent = msg.text;
+    function listenMessages(){
+      const q=query(collection(db,"chats",chatId,"messages"),orderBy("timestamp"));
+      onSnapshot(q,(snapshot)=>{
+        chatMessages.innerHTML="";
+        snapshot.forEach(doc=>{
+          const msg=doc.data();
+          const div=document.createElement("div");
+          div.className="msg "+(msg.sender==="admin"?"admin":"user");
+          div.textContent=msg.text;
           chatMessages.appendChild(div);
         });
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatMessages.scrollTop=chatMessages.scrollHeight;
       });
     }
 
-    // Enviar mensagem
-    async function sendMessage() {
-      const text = document.getElementById("msgText").value.trim();
-      if (!text) return;
-      await addDoc(collection(db, "chats", chatId, "messages"), {
-        sender: "user",
-        text,
-        timestamp: serverTimestamp()
-      });
-      document.getElementById("msgText").value = "";
+    async function sendMessage(){
+      const text=document.getElementById("msgText").value.trim();
+      if(!text) return;
+      await addDoc(collection(db,"chats",chatId,"messages"),{sender:"user",text,timestamp:serverTimestamp()});
+      document.getElementById("msgText").value="";
     }
 
-    // Abrir/fechar chat
-    document.getElementById("chat-btn").onclick = () => { chatModal.style.display="flex"; initChat(); };
-    function closeChat(){ chatModal.style.display="none"; }
-    window.closeChat = closeChat;
-    window.sendMessage = sendMessage;
-
-    // ---- Catálogo fake (só pra manter exemplo) ----
-    const produtos=[{id:1,nome:"Camiseta Premium",preco:89.90,imagens:["https://picsum.photos/400?1"],avaliacao:4.5}];
-    const catalogo=document.getElementById("catalogo");
-    produtos.forEach(p=>{
-      const card=document.createElement("div");
-      card.className="card";
-      card.innerHTML=`<img src="${p.imagens[0]}"><h3>${p.nome}</h3><p>R$ ${p.preco.toFixed(2)}</p>`;
-      catalogo.appendChild(card);
-    });
+    document.getElementById("chat-btn").onclick=()=>{chatModal.style.display="flex";initChat();};
+    function closeChat(){chatModal.style.display="none";}
+    window.closeChat=closeChat; window.sendMessage=sendMessage;
   </script>
 </body>
 </html>
