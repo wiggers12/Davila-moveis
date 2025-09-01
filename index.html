@@ -4,210 +4,150 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catálogo de Produtos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Poppins', sans-serif; margin:0; background:#f9f9f9; }
-    header { background:#2c3e50; color:white; padding:15px; text-align:center; }
-    .container { padding:20px; max-width:1200px; margin:auto; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:20px; }
-    .card { background:white; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); cursor:pointer; transition:.3s; }
+    * { box-sizing: border-box; margin:0; padding:0; font-family:"Poppins", sans-serif; }
+    body { background:#f9f9f9; color:#333; }
+    header { background:#ffcc00; padding:15px; text-align:center; font-weight:700; font-size:20px; }
+    .catalogo { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:15px; padding:15px; }
+    .card { background:#fff; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:10px; cursor:pointer; transition:.2s; }
     .card:hover { transform:translateY(-3px); }
-    .card img { width:100%; height:160px; object-fit:cover; border-radius:8px 8px 0 0; }
-    .card .info { padding:10px; text-align:center; }
-    .card h3 { margin:5px 0; font-size:16px; }
-    .card p { margin:0; color:#3498db; font-weight:600; }
-
-    /* Carrinho */
-    #cart-btn { position:fixed; bottom:20px; right:20px; background:#3498db; color:white; border:none; border-radius:50%; width:60px; height:60px; font-size:24px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.2);}
-    #cart-count { position:absolute; top:10px; right:10px; background:red; color:white; border-radius:50%; padding:4px 8px; font-size:12px; }
-
+    .card img { width:100%; height:120px; object-fit:cover; border-radius:8px; }
+    .card h3 { font-size:15px; margin:8px 0 5px; }
+    .card p { color:#27ae60; font-weight:600; }
     /* Modal produto */
-    .modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:1000; visibility:hidden; opacity:0; transition:.3s; }
-    .modal.active { visibility:visible; opacity:1; }
-    .modal-content { background:white; border-radius:10px; max-width:600px; width:95%; padding:20px; position:relative; }
-    .close-btn { position:absolute; top:10px; right:10px; cursor:pointer; font-size:18px; color:#444; }
-
-    .carousel { display:flex; overflow-x:auto; gap:10px; }
-    .carousel img { height:200px; border-radius:8px; }
-
-    .options { margin:15px 0; }
-    .options label { font-weight:600; }
-    .options select { padding:6px; margin-left:10px; }
-
-    .btn { padding:10px 15px; border:none; border-radius:6px; cursor:pointer; font-weight:600; }
-    .btn-primary { background:#3498db; color:white; }
-    .btn-whatsapp { background:#25d366; color:white; margin-left:10px; }
-
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
+    .modal-content { background:#fff; border-radius:10px; padding:20px; max-width:500px; width:95%; max-height:90%; overflow-y:auto; }
+    .modal-content img { width:100%; border-radius:8px; margin-bottom:10px; }
+    .thumbs { display:flex; gap:10px; margin-top:10px; }
+    .thumbs img { width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
+    .thumbs img:hover { border:2px solid #ffcc00; }
+    .btn { display:inline-block; margin:10px 5px 0; padding:10px 15px; border:none; border-radius:6px; font-weight:600; cursor:pointer; text-align:center; }
+    .btn-whats { background:#25d366; color:#fff; }
+    .btn-site { background:#3498db; color:#fff; }
+    .btn-cart { background:#ff9800; color:#fff; }
     /* Carrinho */
-    #cart-modal .cart-items { max-height:300px; overflow-y:auto; margin-bottom:15px; }
-    #cart-modal table { width:100%; border-collapse:collapse; }
-    #cart-modal th, #cart-modal td { border:1px solid #ddd; padding:8px; text-align:center; }
-    #checkout { margin-top:15px; }
-    #checkout button { width:100%; margin-top:10px; }
+    #cart-btn { position:fixed; bottom:20px; right:20px; background:#ff9800; color:#fff; border:none; border-radius:50%; width:60px; height:60px; font-size:22px; cursor:pointer; }
+    #cart-count { position:absolute; top:-5px; right:-5px; background:red; color:#fff; border-radius:50%; font-size:14px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; }
+    #cart-modal .modal-content { max-width:400px; }
+    .cart-item { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .cart-item img { width:50px; height:50px; border-radius:6px; object-fit:cover; }
+    .cart-total { font-weight:700; margin-top:15px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Catálogo de Produtos</h1>
-  </header>
+  <header>🛍️ Catálogo de Produtos</header>
 
-  <main class="container">
-    <div id="product-grid" class="grid">Carregando produtos...</div>
-  </main>
-
-  <!-- Botão carrinho -->
-  <button id="cart-btn">🛒<span id="cart-count">0</span></button>
+  <!-- Lista de produtos -->
+  <div class="catalogo" id="catalogo"></div>
 
   <!-- Modal produto -->
-  <div id="product-modal" class="modal">
+  <div class="modal" id="productModal">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal('product-modal')">✖</span>
-      <div id="product-detail"></div>
+      <h2 id="prodTitle"></h2>
+      <img id="mainImg" src="">
+      <div class="thumbs" id="thumbs"></div>
+      <p id="prodDesc"></p>
+      <p id="prodPrice" style="color:#27ae60;font-weight:700;font-size:18px;"></p>
+      <button class="btn btn-whats" id="buyWhats">Comprar no WhatsApp</button>
+      <button class="btn btn-site" id="buySite">Comprar no Site</button>
+      <button class="btn btn-cart" id="addCart">Adicionar ao Carrinho</button>
+      <button class="btn" onclick="closeModal()">Fechar</button>
     </div>
   </div>
 
   <!-- Modal carrinho -->
-  <div id="cart-modal" class="modal">
+  <div class="modal" id="cart-modal">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal('cart-modal')">✖</span>
       <h2>🛒 Seu Carrinho</h2>
-      <div class="cart-items" id="cart-items"></div>
-      <div id="checkout">
-        <button class="btn btn-primary" onclick="checkoutPix()">Pagar com Pix</button>
-        <button class="btn btn-primary">Pagar com Cartão</button>
-        <button class="btn btn-primary">Pagar em Dinheiro</button>
-        <button class="btn btn-whatsapp" onclick="checkoutWhatsApp()">Finalizar pelo WhatsApp</button>
-      </div>
+      <div id="cart-items"></div>
+      <p class="cart-total">Total: R$ <span id="cart-total">0.00</span></p>
+      <button class="btn btn-whats" onclick="checkoutWhats()">Finalizar no WhatsApp</button>
+      <button class="btn" onclick="closeCart()">Fechar</button>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <!-- Botão carrinho -->
+  <button id="cart-btn">
+    🛒
+    <span id="cart-count">0</span>
+  </button>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyB-rnG4cIZzEb1w_h_qmif3XPSx28ZIdaM",
-      authDomain: "ecomercie-vendas.firebaseapp.com",
-      projectId: "ecomercie-vendas",
-      storageBucket: "ecomercie-vendas.firebasestorage.app",
-      messagingSenderId: "1054540261609",
-      appId: "1:1054540261609:web:90042b823220b4c73f6878",
-      measurementId: "G-TNC5M9G89H"
-    };
+  <script>
+    // Produtos de exemplo (pode puxar do Firebase depois)
+    const produtos = [
+      {id:1,nome:"Camiseta Premium",preco:89.90,desc:"Camiseta 100% algodão com várias cores.",imagens:["https://picsum.photos/400?1","https://picsum.photos/400?2","https://picsum.photos/400?3"]},
+      {id:2,nome:"Tênis Esportivo",preco:299.90,desc:"Tênis leve e confortável para corrida.",imagens:["https://picsum.photos/400?4","https://picsum.photos/400?5"]},
+      {id:3,nome:"Relógio Smart",preco:499.90,desc:"Smartwatch com monitor de saúde.",imagens:["https://picsum.photos/400?6","https://picsum.photos/400?7","https://picsum.photos/400?8"]}
+    ];
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const catalogo=document.getElementById("catalogo");
+    const modal=document.getElementById("productModal");
+    const cartModal=document.getElementById("cart-modal");
+    const cartBtn=document.getElementById("cart-btn");
+    const cartCount=document.getElementById("cart-count");
+    const cartItemsEl=document.getElementById("cart-items");
+    const cartTotalEl=document.getElementById("cart-total");
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cart=[]; let selectedProduct=null;
 
-    async function loadProducts() {
-      const grid = document.getElementById("product-grid");
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        if (querySnapshot.empty) {
-          grid.innerHTML = "<p>Nenhum produto encontrado.</p>";
-          return;
-        }
-        let html = "";
-        querySnapshot.forEach(doc => {
-          const p = doc.data();
-          html += `
-            <div class="card" onclick="openProduct('${doc.id}')">
-              <img src="${p.imagens?.[0] || 'https://via.placeholder.com/200'}" alt="${p.nome}">
-              <div class="info">
-                <h3>${p.nome}</h3>
-                <p>R$ ${(p.valor||0).toFixed(2)}</p>
-              </div>
-            </div>`;
-        });
-        grid.innerHTML = html;
-      } catch (err) {
-        grid.innerHTML = "<p style='color:red'>Erro ao carregar produtos.</p>";
-        console.error(err);
-      }
-    }
-
-    window.openProduct = async function(productId) {
-      const modal = document.getElementById("product-modal");
-      const detail = document.getElementById("product-detail");
-      const docSnap = await getDocs(collection(db, "products"));
-      let product;
-      docSnap.forEach(d => { if (d.id === productId) product = {id:d.id, ...d.data()} });
-      if (!product) return;
-
-      let imagesHtml = product.imagens?.map(img => `<img src="${img}" alt="">`).join("") || "";
-      let coresHtml = product.cores ? `<label>Cor:</label><select id="sel-cor">${product.cores.map(c=>`<option>${c}</option>`)}</select>` : "";
-      let tamanhosHtml = product.tamanhos ? `<label>Tamanho:</label><select id="sel-tam">${product.tamanhos.map(t=>`<option>${t}</option>`)}</select>` : "";
-
-      detail.innerHTML = `
-        <h2>${product.nome}</h2>
-        <div class="carousel">${imagesHtml}</div>
-        <p><strong>R$ ${(product.valor||0).toFixed(2)}</strong></p>
-        <p>${product.descricao||''}</p>
-        <div class="options">${coresHtml} ${tamanhosHtml}</div>
-        <button class="btn btn-primary" onclick="addToCart('${product.id}')">Adicionar ao Carrinho</button>
-        <button class="btn btn-whatsapp" onclick="buyWhatsApp('${product.nome}')">Comprar pelo WhatsApp</button>
-      `;
-      modal.classList.add("active");
-    }
-
-    window.closeModal = function(id) {
-      document.getElementById(id).classList.remove("active");
-    }
-
-    window.addToCart = function(id) {
-      if (!cart.find(c=>c.id===id)) {
-        cart.push({id, qtd:1});
-      } else {
-        cart = cart.map(c=>c.id===id?{...c,qtd:c.qtd+1}:c);
-      }
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCartCount();
-      alert("Produto adicionado ao carrinho!");
-    }
-
-    function updateCartCount() {
-      document.getElementById("cart-count").innerText = cart.reduce((a,b)=>a+b.qtd,0);
-    }
-
-    document.getElementById("cart-btn").addEventListener("click", () => {
-      renderCart();
-      document.getElementById("cart-modal").classList.add("active");
+    // Render catálogo
+    produtos.forEach(p=>{
+      const card=document.createElement("div");
+      card.className="card";
+      card.innerHTML=`<img src="${p.imagens[0]}"><h3>${p.nome}</h3><p>R$ ${p.preco.toFixed(2)}</p>`;
+      card.onclick=()=>openProduct(p);
+      catalogo.appendChild(card);
     });
 
-    function renderCart() {
-      const container = document.getElementById("cart-items");
-      if (!cart.length) {
-        container.innerHTML = "<p>Carrinho vazio</p>";
-        return;
-      }
-      let html = "<table><tr><th>Produto</th><th>Qtd</th></tr>";
-      cart.forEach(item=>{
-        html += `<tr><td>${item.id}</td><td>${item.qtd}</td></tr>`;
+    function openProduct(prod){
+      selectedProduct=prod;
+      modal.style.display="flex";
+      document.getElementById("prodTitle").innerText=prod.nome;
+      document.getElementById("mainImg").src=prod.imagens[0];
+      document.getElementById("prodDesc").innerText=prod.desc;
+      document.getElementById("prodPrice").innerText="R$ "+prod.preco.toFixed(2);
+      const thumbs=document.getElementById("thumbs"); thumbs.innerHTML="";
+      prod.imagens.forEach(img=>{
+        const t=document.createElement("img");
+        t.src=img; t.onclick=()=>document.getElementById("mainImg").src=img;
+        thumbs.appendChild(t);
       });
-      html+="</table>";
-      container.innerHTML = html;
+      document.getElementById("buyWhats").onclick=()=>window.open(`https://wa.me/5551998378751?text=Quero%20comprar%20${prod.nome}%20por%20R$${prod.preco.toFixed(2)}`);
+      document.getElementById("buySite").onclick=()=>alert("Aqui você pode integrar com checkout no site.");
+      document.getElementById("addCart").onclick=()=>addToCart(prod);
+    }
+    function closeModal(){ modal.style.display="none"; }
+
+    function addToCart(prod){
+      cart.push(prod);
+      updateCart();
+      closeModal();
     }
 
-    window.checkoutPix = function() {
-      alert("🚀 Gerar QRCode PIX aqui (futuro)");
+    function updateCart(){
+      cartItemsEl.innerHTML="";
+      let total=0;
+      cart.forEach(item=>{
+        total+=item.preco;
+        const el=document.createElement("div");
+        el.className="cart-item";
+        el.innerHTML=`<img src="${item.imagens[0]}"><span>${item.nome}</span><span>R$ ${item.preco.toFixed(2)}</span>`;
+        cartItemsEl.appendChild(el);
+      });
+      cartTotalEl.innerText=total.toFixed(2);
+      cartCount.innerText=cart.length;
     }
 
-    window.buyWhatsApp = function(nome) {
-      const numero="5551999999999"; // <-- SEU WHATSAPP
-      const msg=`Olá, quero comprar: ${nome}`;
-      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`);
-    }
+    cartBtn.onclick=()=>cartModal.style.display="flex";
+    function closeCart(){ cartModal.style.display="none"; }
 
-    window.checkoutWhatsApp = function() {
-      const numero="5551999999999"; 
-      const itens = cart.map(c=>`${c.qtd}x ${c.id}`).join(", ");
-      const msg=`Meu pedido: ${itens}`;
-      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`);
+    function checkoutWhats(){
+      let msg="Olá, quero finalizar minha compra:\n";
+      cart.forEach(i=>msg+=`- ${i.nome} R$${i.preco.toFixed(2)}\n`);
+      msg+=`Total: R$ ${cart.reduce((a,b)=>a+b.preco,0).toFixed(2)}`;
+      window.open("https://wa.me/5551998378751?text="+encodeURIComponent(msg));
     }
-
-    loadProducts();
-    updateCartCount();
   </script>
 </body>
 </html>
