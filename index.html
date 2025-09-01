@@ -7,8 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin:0; padding:0; font-family:"Poppins", sans-serif; }
-    body { background:#f9f9f9; color:#333; }
+    body { background:#f9f9f9; color:#333; display:flex; flex-direction:column; min-height:100vh; }
     header { background:#ffcc00; padding:15px; text-align:center; font-weight:700; font-size:20px; }
+    main { flex:1; }
     .catalogo { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:15px; padding:15px; }
     .card { background:#fff; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); padding:10px; cursor:pointer; transition:.2s; }
     .card:hover { transform:translateY(-3px); }
@@ -27,19 +28,29 @@
     .btn-site { background:#3498db; color:#fff; }
     .btn-cart { background:#ff9800; color:#fff; }
     /* Carrinho */
-    #cart-btn { position:fixed; bottom:20px; right:20px; background:#ff9800; color:#fff; border:none; border-radius:50%; width:60px; height:60px; font-size:22px; cursor:pointer; }
+    #cart-btn { position:fixed; bottom:80px; right:20px; background:#ff9800; color:#fff; border:none; border-radius:50%; width:60px; height:60px; font-size:22px; cursor:pointer; }
     #cart-count { position:absolute; top:-5px; right:-5px; background:red; color:#fff; border-radius:50%; font-size:14px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; }
     #cart-modal .modal-content { max-width:400px; }
     .cart-item { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
     .cart-item img { width:50px; height:50px; border-radius:6px; object-fit:cover; }
     .cart-total { font-weight:700; margin-top:15px; }
+    /* Checkout */
+    .checkout { margin-top:20px; }
+    .checkout label { display:block; margin:10px 0 5px; font-weight:600; }
+    .checkout select, .checkout input { width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; }
+    /* Rodapé */
+    footer { background:#2c3e50; color:#fff; padding:20px; text-align:center; margin-top:auto; }
+    footer p { margin:5px 0; }
+    footer a { color:#ffcc00; text-decoration:none; margin:0 5px; }
   </style>
 </head>
 <body>
   <header>🛍️ Catálogo de Produtos</header>
 
-  <!-- Lista de produtos -->
-  <div class="catalogo" id="catalogo"></div>
+  <main>
+    <!-- Lista de produtos -->
+    <div class="catalogo" id="catalogo"></div>
+  </main>
 
   <!-- Modal produto -->
   <div class="modal" id="productModal">
@@ -62,7 +73,20 @@
       <h2>🛒 Seu Carrinho</h2>
       <div id="cart-items"></div>
       <p class="cart-total">Total: R$ <span id="cart-total">0.00</span></p>
-      <button class="btn btn-whats" onclick="checkoutWhats()">Finalizar no WhatsApp</button>
+
+      <!-- Checkout -->
+      <div class="checkout">
+        <label for="pay">Forma de Pagamento</label>
+        <select id="pay">
+          <option value="pix">Pix</option>
+          <option value="card">Cartão de Crédito</option>
+          <option value="boleto">Boleto</option>
+        </select>
+        <div id="extra"></div>
+        <button class="btn btn-whats" onclick="checkoutWhats()">Finalizar no WhatsApp</button>
+        <button class="btn btn-site" onclick="checkoutCatalog()">Pagar Agora</button>
+      </div>
+
       <button class="btn" onclick="closeCart()">Fechar</button>
     </div>
   </div>
@@ -72,6 +96,16 @@
     🛒
     <span id="cart-count">0</span>
   </button>
+
+  <!-- Rodapé -->
+  <footer>
+    <p>© 2025 Meu Catálogo. Todos os direitos reservados.</p>
+    <p>
+      <a href="https://wa.me/5551998378751" target="_blank">WhatsApp</a> | 
+      <a href="#">Instagram</a> | 
+      <a href="#">Facebook</a>
+    </p>
+  </footer>
 
   <script>
     // Produtos de exemplo (pode puxar do Firebase depois)
@@ -88,6 +122,8 @@
     const cartCount=document.getElementById("cart-count");
     const cartItemsEl=document.getElementById("cart-items");
     const cartTotalEl=document.getElementById("cart-total");
+    const paySelect=document.getElementById("pay");
+    const extra=document.getElementById("extra");
 
     let cart=[]; let selectedProduct=null;
 
@@ -142,11 +178,24 @@
     cartBtn.onclick=()=>cartModal.style.display="flex";
     function closeCart(){ cartModal.style.display="none"; }
 
+    // Finalizar pelo WhatsApp
     function checkoutWhats(){
       let msg="Olá, quero finalizar minha compra:\n";
       cart.forEach(i=>msg+=`- ${i.nome} R$${i.preco.toFixed(2)}\n`);
       msg+=`Total: R$ ${cart.reduce((a,b)=>a+b.preco,0).toFixed(2)}`;
       window.open("https://wa.me/5551998378751?text="+encodeURIComponent(msg));
+    }
+
+    // Simulação de pagamento interno
+    function checkoutCatalog(){
+      const metodo=paySelect.value;
+      if(metodo==="pix"){
+        extra.innerHTML="<p>⚡ Use o Pix para pagar: chave <b>pix@empresa.com</b></p>";
+      } else if(metodo==="card"){
+        extra.innerHTML="<p>💳 Pagamento via cartão ainda em integração.</p>";
+      } else {
+        extra.innerHTML="<p>📄 Boleto gerado! Pague até a data de vencimento.</p>";
+      }
     }
   </script>
 </body>
