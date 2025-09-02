@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achados & Perdidos - Grid Motos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:#e50914;
+      --dark:#111;
+      --light:#f4f4f4;
+      --white:#fff;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+    body{background:var(--light);color:var(--dark);}
+    header{
+      background:linear-gradient(90deg,var(--dark),var(--primary));
+      color:var(--white);padding:20px;text-align:center;
+    }
+    header h1{margin:0;font-size:28px;font-weight:700;}
+    .container{
+      max-width:1000px;margin:20px auto;padding:20px;
+      background:var(--white);border-radius:10px;
+      box-shadow:0 3px 8px rgba(0,0,0,0.1);
+    }
+    h2{margin-bottom:10px;}
+    form{margin-bottom:20px;}
+    form label{display:block;margin-top:10px;font-weight:600;}
+    input,select,textarea,button{
+      width:100%;padding:12px;margin-top:5px;
+      border:1px solid #ccc;border-radius:6px;font-size:14px;
+    }
+    button{
+      background:var(--primary);color:var(--white);
+      border:none;cursor:pointer;font-weight:600;transition:0.3s;
+    }
+    button:hover{background:#b0060f;}
+    .painel{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .lista{background:#fafafa;border-radius:8px;padding:15px;}
+    .item{
+      background:#fff;border-left:6px solid var(--primary);
+      padding:12px;margin-bottom:12px;border-radius:6px;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+    .item strong{font-size:16px;}
+    .contato{
+      margin-top:8px;display:inline-block;
+      background:#25D366;color:white;padding:6px 12px;
+      border-radius:5px;text-decoration:none;font-weight:600;
+    }
+    @media(max-width:768px){.painel{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Achados & Perdidos</h1>
+    <p>Uma iniciativa da Grid Motos</p>
+  </header>
+
+  <div class="container">
+    <h2>Registrar Anúncio</h2>
+    <form id="formAnuncio">
+      <label>Tipo:</label>
+      <select id="tipo" required>
+        <option value="">Selecione</option>
+        <option value="perdido">Perdido</option>
+        <option value="achado">Achado</option>
+      </select>
+
+      <label>Título:</label>
+      <input type="text" id="titulo" placeholder="Ex: Carteira preta" required>
+
+      <label>Descrição:</label>
+      <textarea id="descricao" rows="3" placeholder="Ex: Perdi próximo à Av. Ipiranga"></textarea>
+
+      <label>WhatsApp para contato:</label>
+      <input type="tel" id="whatsapp" placeholder="Ex: 51999999999" required>
+
+      <button type="submit">Publicar</button>
+    </form>
+
+    <div class="painel">
+      <div class="lista">
+        <h2>🔎 Perdidos</h2>
+        <div id="listaPerdidos"></div>
+      </div>
+      <div class="lista">
+        <h2>📦 Achados</h2>
+        <div id="listaAchados"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("formAnuncio");
+    const listaPerdidos = document.getElementById("listaPerdidos");
+    const listaAchados = document.getElementById("listaAchados");
+
+    form.addEventListener("submit", e=>{
+      e.preventDefault();
+      const tipo = document.getElementById("tipo").value;
+      const titulo = document.getElementById("titulo").value;
+      const descricao = document.getElementById("descricao").value;
+      const whatsapp = document.getElementById("whatsapp").value;
+
+      const item = document.createElement("div");
+      item.classList.add("item");
+      item.innerHTML = `<strong>${titulo}</strong><br>
+                        ${descricao ? descricao+"<br>":""}
+                        <a class="contato" target="_blank" 
+                           href="https://wa.me/55${whatsapp}">
+                           Falar no WhatsApp</a>`;
+
+      if(tipo === "perdido"){
+        listaPerdidos.appendChild(item);
+      } else {
+        listaAchados.appendChild(item);
+      }
+      form.reset();
+    });
+  </script>
+</body>
+</html>
