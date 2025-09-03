@@ -6,6 +6,8 @@
 <title>Açaí Imperial 👑</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 <style>
 :root{
   --primary:#6a0dad;--secondary:#f39c12;--success:#2ecc71;--info:#3498db;--danger:#e74c3c;
@@ -19,10 +21,10 @@ nav button{border:none;background:none;padding:1rem;font-weight:600;cursor:point
 nav button.active{color:var(--primary);border-bottom:3px solid var(--primary);}
 section{display:none;padding:2rem;max-width:1200px;margin:auto;}
 section.active{display:block;}
-/* Produtos */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
-.product-card{background:#fff;border-radius:10px;box-shadow:var(--shadow);overflow:hidden;text-align:center;}
-.product-card img{width:100%;height:150px;object-fit:cover;}
+/* Produtos - carrossel */
+.swiper{width:100%;padding:1rem 0;}
+.swiper-slide{background:#fff;border-radius:10px;box-shadow:var(--shadow);overflow:hidden;text-align:center;}
+.swiper-slide img{width:100%;height:200px;object-fit:cover;}
 .product-info{padding:1rem;}
 .order-button{background:var(--primary);color:#fff;border:none;padding:.6rem 1rem;border-radius:8px;cursor:pointer;}
 /* Carrinho */
@@ -30,7 +32,7 @@ section.active{display:block;}
 .cart-item{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:.5rem 0;}
 .cart-total{font-weight:700;color:var(--primary);text-align:right;margin-top:1rem;}
 .btn-finish{background:var(--success);color:#fff;border:none;padding:.7rem;border-radius:8px;width:100%;margin-top:1rem;}
-/* Admin cards */
+/* Admin */
 .kpi-card{background:#fff;padding:1rem;border-radius:10px;box-shadow:var(--shadow);text-align:center;margin:1rem;flex:1;}
 .order-list-item{background:#fff;padding:1rem;margin:1rem 0;border-radius:10px;box-shadow:var(--shadow);}
 .order-status{padding:.3rem .6rem;border-radius:8px;color:#fff;font-size:.8rem;}
@@ -56,7 +58,10 @@ section.active{display:block;}
 <!-- Catálogo -->
 <section id="catalogo" class="active">
   <h2>Monte seu Açaí</h2>
-  <div class="products-grid" id="products-container"></div>
+  <!-- Carrossel -->
+  <div class="swiper">
+    <div class="swiper-wrapper" id="products-container"></div>
+  </div>
   <div class="cart-container">
     <h3>Seu Pedido</h3>
     <div id="cart-items"><p>Seu carrinho está vazio</p></div>
@@ -69,10 +74,7 @@ section.active{display:block;}
 </section>
 
 <!-- Pedidos -->
-<section id="pedidos">
-  <h2>Pedidos</h2>
-  <div id="orders-list"></div>
-</section>
+<section id="pedidos"><h2>Pedidos</h2><div id="orders-list"></div></section>
 
 <!-- Financeiro -->
 <section id="financeiro">
@@ -86,32 +88,40 @@ section.active{display:block;}
 </section>
 
 <!-- Estoque -->
-<section id="estoque">
-  <h2>Estoque</h2>
-  <div id="stock-list"></div>
-</section>
+<section id="estoque"><h2>Estoque</h2><div id="stock-list"></div></section>
 
 <!-- Logística -->
-<section id="logistica">
-  <h2>Logística</h2>
-  <div id="logistics-list"></div>
-</section>
+<section id="logistica"><h2>Logística</h2><div id="logistics-list"></div></section>
 
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 let cart=[],orders=JSON.parse(localStorage.getItem("acaiOrders"))||[];
-const PRODUCTS=[{id:1,name:"Copo 300ml",price:12,cost:6,stock:10,image:"https://source.unsplash.com/300x200/?acai"},
-{id:2,name:"Copo 500ml",price:18,cost:9,stock:10,image:"https://source.unsplash.com/300x201/?acai"},
-{id:3,name:"Barca",price:35,cost:18,stock:5,image:"https://source.unsplash.com/300x202/?acai"}];
+const PRODUCTS=[
+ {id:1,name:"Copo 300ml",price:12,cost:6,stock:10,image:"https://images.unsplash.com/photo-1617196039897-d68e4f5a5a2c"},
+ {id:2,name:"Copo 500ml",price:18,cost:9,stock:10,image:"https://images.unsplash.com/photo-1604908177522-8e43f5201fa3"},
+ {id:3,name:"Barca Açaí",price:35,cost:18,stock:5,image:"https://images.unsplash.com/photo-1598514982419-1cbcb2f3c1b9"}
+];
 const TOPPINGS=[{name:"Leite em pó",price:2,cost:1,stock:20},{name:"Morango",price:3,cost:1.5,stock:15}];
 
 // Tabs
 function showTab(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));event.target.classList.add("active");if(id==="pedidos")renderOrders();if(id==="financeiro")renderFinance();if(id==="estoque")renderStock();if(id==="logistica")renderLogistics();}
 
-// Produtos
-function renderProducts(){document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
-<div class="product-card">
-<img src="${p.image}"><div class="product-info"><h3>${p.name}</h3><p>R$ ${p.price}</p>
-<button class="order-button" onclick="addToCart(${p.id})">Adicionar</button></div></div>`).join("");}
+// Render produtos no carrossel
+function renderProducts(){
+ document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
+   <div class="swiper-slide">
+     <img src="${p.image}" alt="${p.name}">
+     <div class="product-info">
+       <h3>${p.name}</h3>
+       <p>R$ ${p.price}</p>
+       <button class="order-button" onclick="addToCart(${p.id})">Adicionar</button>
+     </div>
+   </div>`).join("");
+ new Swiper(".swiper",{slidesPerView:1,spaceBetween:10,autoplay:{delay:3000},loop:true});
+}
+
+// Carrinho
 function addToCart(id){let p=PRODUCTS.find(x=>x.id===id);if(p&&p.stock>0){cart.push({product:p,total:p.price});updateCart();}else{alert("Sem estoque!");}}
 function updateCart(){let c=document.getElementById("cart-items");if(cart.length==0){c.innerHTML="<p>Seu carrinho está vazio</p>";}
 else{c.innerHTML=cart.map((it,i)=>`<div class="cart-item"><span>${it.product.name}</span><span>R$ ${it.total}</span><button onclick="removeFromCart(${i})">❌</button></div>`).join("");}
@@ -140,7 +150,7 @@ let ctx=document.getElementById("salesChart").getContext("2d");if(window.salesCh
 
 // Estoque
 function baixarEstoque(order){order.items.forEach(it=>{let p=PRODUCTS.find(x=>x.id===it.product.id);if(p) p.stock--;});}
-function renderStock(){document.getElementById("stock-list").innerHTML="<h4>Produtos</h4>"+PRODUCTS.map(p=>`${p.name} - Estoque: ${p.stock} ${p.stock<3?"⚠":""}`).join("<br>");}
+function renderStock(){document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`${p.name} - Estoque: ${p.stock} ${p.stock<3?"⚠":""}`).join("<br>");}
 
 // Logística
 const entregadores=[{nome:"Carlos",fone:"5199999999"},{nome:"Ana",fone:"5198888888"}];
