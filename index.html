@@ -1,420 +1,350 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Açaí Imperial - Peça Agora!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --primary: #6a0dad; --secondary: #f39c12; --success: #2ecc71; --info: #3498db;
-            --background: #f4f4f9; --text-dark: #333; --text-light: #fff;
-            --card-bg: #ffffff; --shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        * { box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--background); color: var(--text-dark); }
-        header { background: linear-gradient(135deg, var(--primary), #8e44ad); color: var(--text-light); text-align: center; padding: 2rem 1rem; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        header h1 { margin: 0; font-size: 2.5rem; }
-        header p { margin: 0.5rem 0 0; font-size: 1.1rem; opacity: 0.9; }
-        main { padding: 2rem 1rem; max-width: 1200px; margin: auto; }
-        h2 { text-align: center; color: var(--primary); font-size: 2rem; margin-bottom: 2rem; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .product-card { background-color: var(--card-bg); border-radius: 15px; box-shadow: var(--shadow); overflow: hidden; text-align: center; transition: transform 0.3s, box-shadow 0.3s; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; }
-        .product-info { padding: 1.5rem; }
-        h3 { margin: 0 0 0.5rem; font-size: 1.4rem; }
-        .price { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; }
-        .description { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; min-height: 40px; }
-        .order-button { background-color: var(--primary); color: var(--text-light); border: none; border-radius: 10px; padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s; width: 100%; }
-        .order-button:hover { background-color: #5a0a99; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background: var(--card-bg); border-radius: 20px; width: 90%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.3); transform: scale(0.9); transition: transform 0.3s; }
-        .modal-overlay.active .modal-content { transform: scale(1); }
-        .modal-header { padding: 1.5rem; border-bottom: 1px solid #eee; text-align: center; }
-        .modal-header h2 { margin: 0; }
-        .modal-body { display: flex; flex-wrap: wrap; flex-grow: 1; overflow: hidden; padding: 2rem; gap: 2rem; }
-        .toppings-panel, .cup-panel { flex: 1; min-width: 250px; overflow-y: auto; padding-right: 1rem;}
-        .toppings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
-        .topping-item { border: 2px solid #eee; border-radius: 10px; padding: 0.8rem; text-align: center; cursor: pointer; transition: border-color 0.3s, background-color 0.3s; }
-        .topping-item.selected { border-color: var(--primary); background-color: #f0e6f9; }
-        .topping-item span { font-weight: 500; }
-        .topping-item .price-add { font-size: 0.8rem; color: #888; }
-        .cup-panel .cup-visual { background-color: #eee; border-radius: 10px; padding: 1rem; text-align: center; position: sticky; top: 0; }
-        .cup-visual h4 { margin: 0 0 1rem; }
-        #cup-toppings { min-height: 100px; background: #fff; border-radius: 5px; padding: 0.5rem; }
-        #cup-toppings div { background: #f0e6f9; border-radius: 5px; padding: 0.3rem 0.5rem; margin-bottom: 0.3rem; font-size: 0.9rem; }
-        .modal-footer { padding: 1.5rem; border-top: 1px solid #eee; text-align: right; background: #fafafa; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;}
-        #total-price { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
-        .btn-close { background-color: #ccc; }
-        .cart-container { background-color: var(--card-bg); border-radius: 15px; padding: 2rem; box-shadow: var(--shadow); }
-        .cart-item { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid #eee; }
-        .cart-item-details { flex-grow: 1; }
-        strong { font-size: 1.1rem; }
-        .toppings-list { font-size: 0.8rem; color: #666; margin-left: 1rem; }
-        .cart-item-price { font-weight: 600; }
-        .cart-total { text-align: right; font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; }
-        .cart-actions { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-        #client-info input { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; }
-        .btn-finish { background-color: var(--success); color: var(--text-light); border: none; padding: 1rem; font-size: 1.2rem; font-weight: 700; border-radius: 10px; cursor: pointer; transition: background-color 0.3s; }
-        .btn-finish:hover { background-color: #27ae60; }
-        .btn-finish:disabled { background-color: #95a5a6; cursor: not-allowed; }
-        
-        /* --- ADMIN STYLES --- */
-        #admin-panel { display: none; }
-        .admin-nav { display: flex; justify-content: center; background-color: var(--text-dark); padding: 0.5rem; border-radius: 10px; margin-bottom: 2rem; }
-        .admin-nav button { background: none; border: none; color: var(--text-light); font-size: 1rem; padding: 0.8rem 1.5rem; cursor: pointer; font-weight: 600; border-radius: 8px; }
-        .admin-nav button.active { background-color: var(--primary); }
-        .admin-view { display: none; }
-        .admin-view.active { display: block; }
-        .kpi-container { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 2rem; }
-        .kpi-card { background: var(--card-bg); padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow); text-align: center; flex-grow: 1; }
-        .kpi-card h4 { margin: 0 0 0.5rem; color: #888; font-size: 1rem; }
-        .kpi-card p { margin: 0; font-size: 2rem; font-weight: 700; color: var(--primary); }
-        .chart-container { background: var(--card-bg); padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow); }
-        .order-list-item { background: var(--card-bg); padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow); margin-bottom: 1rem; }
-        .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem; }
-        .order-status { font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 20px; color: white; }
-        .status-Recebido { background-color: var(--info); }
-        .status-Em-Preparação { background-color: var(--secondary); }
-        .status-Saiu-para-Entrega { background-color: #e67e22; }
-        .status-Concluído { background-color: var(--success); }
-        .status-Cancelado { background-color: #e74c3c; }
-        .order-actions select { padding: 0.5rem; border-radius: 5px; border: 1px solid #ddd; margin-left: 1rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Açaí da Barra POA 🍧</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #6a0dad;
+      --secondary: #f39c12;
+      --success: #2ecc71;
+      --danger: #e74c3c;
+      --dark-bg: #121212;
+      --card-bg: #1f1f1f;
+      --text-light: #fff;
+      --text-muted: #aaa;
+      --shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: 'Poppins', sans-serif;
+      background: var(--dark-bg); color: var(--text-light);
+    }
+
+    /* Splash */
+    #splash {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: linear-gradient(135deg, var(--primary), #8e44ad);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; z-index: 9999; color: #fff;
+    }
+    #splash h1 { font-size: 2rem; margin: 0; }
+    #splash p { margin-top: 0.5rem; color: var(--secondary); }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), #8e44ad);
+      text-align: center; padding: 1.5rem 1rem;
+      border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    header h1 { margin: 0; font-size: 1.8rem; }
+    header p { margin: 0.5rem 0 0; color: var(--text-muted); }
+
+    main { padding: 1.5rem; max-width: 1200px; margin: auto; }
+    h2 { text-align: center; margin-bottom: 1.5rem; color: var(--secondary); }
+
+    /* Produtos */
+    .products-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--card-bg); border-radius: 12px;
+      box-shadow: var(--shadow); overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .product-card:hover { transform: translateY(-8px); }
+    .product-card img { width: 100%; height: 180px; object-fit: cover; }
+    .product-info { padding: 1rem; text-align: center; }
+    .product-info h3 { margin: 0; font-size: 1.2rem; }
+    .product-info p { font-size: 0.9rem; color: var(--text-muted); }
+    .price { font-weight: 700; color: var(--secondary); margin: 0.5rem 0; }
+    .btn { background: var(--primary); color: #fff; border: none;
+      padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .btn:hover { background: #5a0a99; }
+
+    /* Carrinho */
+    #cart { margin-top: 2rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow);}
+    .cart-item { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
+    .cart-total { text-align: right; font-size: 1.2rem; margin-top: 1rem; font-weight: bold; }
+
+    /* Admin */
+    #admin-panel { display: none; padding:2rem; }
+    .admin-nav { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem; }
+    .admin-nav button { padding: 0.6rem 1rem; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+    .admin-nav button.active { background: var(--primary); color: #fff; }
+    .admin-view { display: none; }
+    .admin-view.active { display: block; }
+    .kpi-container { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .kpi-card {
+      flex: 1; min-width: 200px; background: var(--card-bg); padding: 1rem;
+      border-radius: 10px; text-align: center; box-shadow: var(--shadow);
+    }
+    .kpi-card h4 { margin: 0; color: var(--text-muted); }
+    .kpi-card p { margin: 0.5rem 0 0; font-size: 1.4rem; font-weight: bold; color: var(--secondary); }
+
+    /* Botões sociais */
+    .social-btns { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .social-btns a {
+      display: flex; align-items: center; justify-content: center;
+      width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: #fff;
+      font-size: 1.2rem; text-decoration: none; box-shadow: var(--shadow);
+    }
+  </style>
 </head>
 <body>
 
+<!-- Splash -->
+<div id="splash">
+  <h1>Açaí da Barra POA 🍧</h1>
+  <p>Carregando...</p>
+</div>
+
 <header>
-    <h1>Açaí Imperial 👑</h1>
-    <p>O sabor que te faz reinar! Peça agora e monte do seu jeito.</p>
+  <h1>Açaí da Barra POA 🍧</h1>
+  <p>Monte seu açaí do seu jeito!</p>
 </header>
 
+<!-- Cliente -->
 <main id="customer-view">
-    <section id="menu">
-        <h2>Nosso Cardápio</h2>
-        <div class="products-grid" id="products-container"></div>
-    </section>
+  <section id="menu">
+    <h2>Vitrine de Produtos</h2>
+    <div class="products-grid" id="products-container"></div>
+  </section>
 
-    <section id="cart" style="margin-top: 3rem;">
-        <h2>Seu Pedido</h2>
-        <div class="cart-container">
-            <div id="cart-items"><p>Seu carrinho está vazio.</p></div>
-            <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
-            <hr>
-            <div class="cart-actions">
-                <h3>Complete seus Dados</h3>
-                <div id="client-info">
-                    <input type="text" id="client-name" placeholder="Seu nome">
-                    <input type="text" id="client-address" placeholder="Seu endereço completo (Rua, Nº, Bairro)">
-                </div>
-                <button class="btn-finish" id="finish-order-button" disabled>Finalizar Pedido no WhatsApp</button>
-            </div>
-        </div>
-    </section>
+  <section id="cart">
+    <h2>Seu Pedido</h2>
+    <div id="cart-items"><p>Carrinho vazio</p></div>
+    <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
+    <button class="btn" id="finish-order">Finalizar Pedido</button>
+  </section>
 </main>
 
+<!-- Admin -->
 <main id="admin-panel">
-    <h2>Painel de Controle</h2>
-    <nav class="admin-nav">
-        <button onclick="showAdminView('deliveries')" class="active">📦 Entregas</button>
-        <button onclick="showAdminView('finance')">💰 Financeiro</button>
-    </nav>
+  <h2>Painel de Controle</h2>
+  <div class="admin-nav">
+    <button onclick="showAdmin('orders')" class="active">📦 Pedidos</button>
+    <button onclick="showAdmin('finance')">💰 Financeiro</button>
+    <button onclick="showAdmin('stock')">📊 Estoque</button>
+    <button onclick="showAdmin('logistics')">🚚 Logística</button>
+  </div>
 
-    <div id="deliveries" class="admin-view active">
-        <h3>Pedidos a Fazer</h3>
-        <div id="orders-list"></div>
+  <div id="orders" class="admin-view active">
+    <h3>Gestão de Pedidos</h3>
+    <div id="orders-list"></div>
+  </div>
+
+  <div id="finance" class="admin-view">
+    <h3>Financeiro</h3>
+    <div class="kpi-container">
+      <div class="kpi-card"><h4>Faturamento</h4><p id="kpi-revenue">R$ 0</p></div>
+      <div class="kpi-card"><h4>Pedidos</h4><p id="kpi-orders">0</p></div>
+      <div class="kpi-card"><h4>Ticket Médio</h4><p id="kpi-ticket">R$ 0</p></div>
+      <div class="kpi-card"><h4>Lucro</h4><p id="kpi-profit">R$ 0</p></div>
     </div>
-    <div id="finance" class="admin-view">
-        <h3>Visão Geral Financeira</h3>
-        <div class="kpi-container">
-            <div class="kpi-card"><h4>Faturamento Total</h4><p id="kpi-revenue">R$ 0,00</p></div>
-            <div class="kpi-card"><h4>Pedidos Concluídos</h4><p id="kpi-orders">0</p></div>
-            <div class="kpi-card"><h4>Ticket Médio</h4><p id="kpi-avg-ticket">R$ 0,00</p></div>
-        </div>
-        <div class="chart-container">
-            <canvas id="salesChart"></canvas>
-        </div>
+    <canvas id="salesChart"></canvas>
+  </div>
+
+  <div id="stock" class="admin-view">
+    <h3>Controle de Estoque</h3>
+    <div id="stock-list"></div>
+  </div>
+
+  <div id="logistics" class="admin-view">
+    <h3>Mapa de Entregas (ilustrativo)</h3>
+    <div id="map" style="height:300px;width:100%;background:#333;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#aaa;">
+      <p>🗺️ Aqui poderia ser integrado Google Maps com endereços dos pedidos.</p>
     </div>
+  </div>
 </main>
 
-<div class="modal-overlay" id="builder-modal">
-    <div class="modal-content">
-        <div class="modal-header"><h2 id="modal-product-name"></h2></div>
-        <div class="modal-body">
-            <div class="toppings-panel"><h4>Escolha seus adicionais:</h4><div class="toppings-grid" id="toppings-container"></div></div>
-            <div class="cup-panel"><div class="cup-visual"><h4>Seu Copo:</h4><div id="cup-toppings"></div></div></div>
-        </div>
-        <div class="modal-footer">
-            <button class="order-button btn-close" onclick="closeModal()">Cancelar</button>
-            <button class="order-button" onclick="addToCart()">Adicionar: <span id="total-price">R$ 0,00</span></button>
-        </div>
-    </div>
+<!-- Botões Sociais -->
+<div class="social-btns">
+  <a href="https://wa.me/5551999999999" target="_blank">🟢</a>
+  <a href="https://instagram.com" target="_blank">📷</a>
+  <a href="https://facebook.com" target="_blank">📘</a>
 </div>
 
 <script>
-// --- CONFIGURAÇÕES DA LOJA ---
-const WHATSAPP_NUMBER = "5551999999999"; // <<<<---- COLOQUE SEU NÚMERO DE WHATSAPP
-const SENHA_ADMIN = "1234"; // <<<<---- COLOQUE UMA SENHA PARA O PAINEL ADMIN
-
 const PRODUCTS = [
-    { id: 1, name: "Copo de Açaí 300ml", price: 12.00, description: "Cremoso e refrescante. Monte com seus adicionais preferidos!", image: "https://source.unsplash.com/random/400x300?acai-bowl" },
-    { id: 2, name: "Copo de Açaí 500ml", price: 18.00, description: "Uma porção generosa do melhor açaí. Monte do seu jeito!", image: "https://source.unsplash.com/random/400x301?acai-bowl" },
-    { id: 3, name: "Barca de Açaí (Serve 2)", price: 35.00, description: "Uma barca recheada para compartilhar. Monte com seus adicionais!", image: "https://source.unsplash.com/random/400x302?acai-bowl" }
+  { id:1, name:"Copo 300ml", price:12, buyPrice:6, stock:20, image:"https://source.unsplash.com/400x300/?acai"},
+  { id:2, name:"Copo 500ml", price:18, buyPrice:8, stock:15, image:"https://source.unsplash.com/400x301/?acai"},
+  { id:3, name:"Barca Família", price:35, buyPrice:15, stock:10, image:"https://source.unsplash.com/400x302/?acai"}
 ];
-const TOPPINGS = [
-    { name: 'Leite em Pó', price: 2.00 }, { name: 'Leite Condensado', price: 2.50 }, { name: 'Granola', price: 2.00 },
-    { name: 'Banana', price: 1.50 }, { name: 'Morango', price: 3.00 }, { name: 'Kiwi', price: 3.00 },
-    { name: 'Paçoca', price: 1.00 }, { name: 'Creme de Avelã', price: 4.00 }
-];
-// ------------------------------
+let cart=[], orders=[];
 
-let currentProduct = null;
-let selectedToppings = [];
-let cart = [];
-let orders = JSON.parse(localStorage.getItem('acaiOrders')) || [];
-
-function saveOrders() { localStorage.setItem('acaiOrders', JSON.stringify(orders)); }
-
-// --- LÓGICA DE VISUALIZAÇÃO ---
-function checkView() {
-    if (window.location.hash === '#admin') {
-        const password = prompt('Digite a senha para acessar o painel de controle:');
-        if (password === SENHA_ADMIN) {
-            document.getElementById('customer-view').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'block';
-            renderAdminPanel();
-        } else {
-            alert('Senha incorreta!');
-            window.location.hash = '';
-        }
-    } else {
-        document.getElementById('customer-view').style.display = 'block';
-        document.getElementById('admin-panel').style.display = 'none';
-        renderProducts();
-        updateCart();
-    }
-}
-
-// --- LÓGICA DO CLIENTE ---
-function renderProducts() {
-    const container = document.getElementById('products-container');
-    container.innerHTML = PRODUCTS.map(p => `
-        <div class="product-card">
-            <img src="${p.image}" alt="${p.name}"><div class="product-info">
-            <h3>${p.name}</h3><p class="description">${p.description}</p>
-            <p class="price">R$ ${p.price.toFixed(2)}</p>
-            <button class="order-button" onclick='openBuilder(${JSON.stringify(p)})'>Montar meu Açaí</button>
-        </div></div>`).join('');
-}
-function openBuilder(product) {
-    currentProduct = product; selectedToppings = [];
-    document.getElementById('modal-product-name').innerText = `Monte seu ${product.name}`;
-    const toppingsContainer = document.getElementById('toppings-container');
-    toppingsContainer.innerHTML = TOPPINGS.map((t, i) => `
-        <div class="topping-item" id="topping-${i}" onclick='toggleTopping(${i}, ${JSON.stringify(t)})'>
-        <span>${t.name}</span><div class="price-add">+ R$ ${t.price.toFixed(2)}</div></div>`).join('');
-    updateBuilderTotal();
-    document.getElementById('builder-modal').classList.add('active');
-}
-function toggleTopping(index, topping) {
-    const el = document.getElementById(`topping-${index}`);
-    const existingIndex = selectedToppings.findIndex(t => t.name === topping.name);
-    if (existingIndex > -1) { selectedToppings.splice(existingIndex, 1); el.classList.remove('selected'); }
-    else { selectedToppings.push(topping); el.classList.add('selected'); }
-    updateBuilderTotal();
-}
-function updateBuilderTotal() {
-    const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
-    const totalPrice = currentProduct.price + toppingsPrice;
-    document.getElementById('total-price').innerText = `R$ ${totalPrice.toFixed(2)}`;
-    document.getElementById('cup-toppings').innerHTML = selectedToppings.length > 0
-        ? selectedToppings.map(t => `<div>${t.name}</div>`).join('') : '<p style="color:#888; font-size:0.9rem;">Selecione os adicionais!</p>';
-}
-function closeModal() { document.getElementById('builder-modal').classList.remove('active'); }
-function addToCart() {
-    const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
-    cart.push({
-        product: currentProduct,
-        toppings: [...selectedToppings],
-        totalPrice: currentProduct.price + toppingsPrice
-    });
-    updateCart();
-    closeModal();
-}
-function updateCart() {
-    const cartItemsContainer = document.getElementById('cart-items');
-    if (cart.length === 0) cartItemsContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
-    else {
-        cartItemsContainer.innerHTML = cart.map((item, index) => `
-            <div class="cart-item">
-                <div class="cart-item-details">
-                    <strong>${item.product.name}</strong>
-                    <div class="toppings-list">${item.toppings.map(t => t.name).join(', ') || 'Sem adicionais'}</div>
-                </div>
-                <div class="cart-item-price">R$ ${item.totalPrice.toFixed(2)}</div>
-                <button onclick="removeFromCart(${index})" style="background:none;border:none;color:var(--danger);cursor:pointer;margin-left:1rem;">✖</button>
-            </div>`).join('');
-    }
-    document.getElementById('cart-total-price').innerText = `R$ ${cart.reduce((t, i) => t + i.totalPrice, 0).toFixed(2)}`;
-    checkFormValidity();
-}
-function removeFromCart(index) { cart.splice(index, 1); updateCart(); }
-function checkFormValidity() {
-    const name = document.getElementById('client-name').value;
-    const address = document.getElementById('client-address').value;
-    document.getElementById('finish-order-button').disabled = !(name && address && cart.length > 0);
-}
-function sendWhatsAppMessage() {
-    const name = document.getElementById('client-name').value;
-    const address = document.getElementById('client-address').value;
-    
-    // Salva o pedido no localStorage para o admin
-    const newOrder = {
-        id: Date.now(),
-        customerName: name,
-        customerAddress: address,
-        items: cart,
-        totalPrice: cart.reduce((t, i) => t + i.totalPrice, 0),
-        status: 'Recebido',
-        createdAt: new Date().toISOString()
-    };
-    orders.push(newOrder);
-    saveOrders();
-
-    // Cria a mensagem para o WhatsApp
-    let message = `Olá Açaí Imperial! 👑\n\nNovo Pedido!\nNome: *${name}*\n\n`;
-    cart.forEach(item => {
-        message += `*1x ${item.product.name}* - R$ ${item.totalPrice.toFixed(2)}\n`;
-        if(item.toppings.length > 0) message += `   Adicionais: ${item.toppings.map(t => t.name).join(', ')}\n`;
-        message += `\n`;
-    });
-    message += `*Total do Pedido: R$ ${newOrder.totalPrice.toFixed(2)}*\n\n*Endereço de Entrega:*\n${address}`;
-    
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
-    
-    // Limpa o carrinho e reseta a página
-    alert('Pedido salvo! Você será redirecionado para o WhatsApp.');
-    cart = [];
-    document.getElementById('client-name').value = '';
-    document.getElementById('client-address').value = '';
-    updateCart();
-}
-
-// --- LÓGICA DO ADMIN ---
-function showAdminView(viewName) {
-    document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
-    document.getElementById(viewName).classList.add('active');
-    document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.admin-nav button[onclick="showAdminView('${viewName}')"]`).classList.add('active');
-    if(viewName === 'finance') renderFinancePanel();
-}
-
-function renderAdminPanel() {
-    renderOrdersList();
-    renderFinancePanel();
-}
-function renderOrdersList() {
-    const container = document.getElementById('orders-list');
-    const pendingOrders = orders.filter(o => o.status !== 'Concluído' && o.status !== 'Cancelado').reverse();
-    if(pendingOrders.length === 0) {
-        container.innerHTML = "<p>Nenhum pedido pendente. Bom trabalho!</p>";
-        return;
-    }
-    container.innerHTML = pendingOrders.map(order => `
-        <div class="order-list-item">
-            <div class="order-header">
-                <div>
-                    <strong>Pedido #${order.id}</strong><br>
-                    <small>${new Date(order.createdAt).toLocaleString('pt-BR')}</small>
-                </div>
-                <div class="order-status status-${order.status.replace(' ', '-')}">${order.status}</div>
-            </div>
-            <p><strong>Cliente:</strong> ${order.customerName}</p>
-            <p><strong>Endereço:</strong> ${order.customerAddress}</p>
-            <div><strong>Itens:</strong></div>
-            ${order.items.map(item => `
-                <div>- ${item.product.name} (R$ ${item.totalPrice.toFixed(2)})
-                    <div class="toppings-list">${item.toppings.map(t => t.name).join(', ') || ''}</div>
-                </div>
-            `).join('')}
-            <div class="cart-total" style="margin-top:1rem;">Total: R$ ${order.totalPrice.toFixed(2)}</div>
-            <div class="order-actions">
-                <span>Mudar Status:</span>
-                <select onchange="updateOrderStatus(${order.id}, this.value)">
-                    <option value="Recebido" ${order.status === 'Recebido' ? 'selected' : ''}>Recebido</option>
-                    <option value="Em Preparação" ${order.status === 'Em Preparação' ? 'selected' : ''}>Em Preparação</option>
-                    <option value="Saiu para Entrega" ${order.status === 'Saiu para Entrega' ? 'selected' : ''}>Saiu para Entrega</option>
-                    <option value="Concluído" ${order.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
-                    <option value="Cancelado" ${order.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
-                </select>
-            </div>
+function renderProducts(){
+  document.getElementById("products-container").innerHTML =
+    PRODUCTS.map(p=>`
+      <div class="product-card">
+        <img src="${p.image}">
+        <div class="product-info">
+          <h3>${p.name}</h3>
+          <p class="price">R$ ${p.price.toFixed(2)}</p>
+          <button class="btn" onclick="addToCart(${p.id})">Adicionar</button>
         </div>
+      </div>
     `).join('');
 }
-function updateOrderStatus(orderId, newStatus) {
-    const order = orders.find(o => o.id === orderId);
-    if (order) {
-        order.status = newStatus;
-        saveOrders();
-        renderOrdersList();
-        renderFinancePanel(); // Atualiza os KPIs financeiros
-    }
+function addToCart(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  cart.push(p); updateCart();
 }
-function renderFinancePanel() {
-    const completedOrders = orders.filter(o => o.status === 'Concluído');
-    const totalRevenue = completedOrders.reduce((total, o) => total + o.totalPrice, 0);
-    const totalOrders = completedOrders.length;
-    const avgTicket = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-    
-    document.getElementById('kpi-revenue').innerText = `R$ ${totalRevenue.toFixed(2)}`;
-    document.getElementById('kpi-orders').innerText = totalOrders;
-    document.getElementById('kpi-avg-ticket').innerText = `R$ ${avgTicket.toFixed(2)}`;
+function updateCart(){
+  if(cart.length===0){document.getElementById("cart-items").innerHTML="<p>Carrinho vazio</p>";}
+  else{
+    document.getElementById("cart-items").innerHTML = cart.map((c,i)=>`
+      <div class="cart-item">
+        <span>${c.name}</span>
+        <span>R$ ${c.price.toFixed(2)}</span>
+        <button onclick="removeFromCart(${i})">❌</button>
+      </div>
+    `).join('');
+  }
+  const total=cart.reduce((t,c)=>t+c.price,0);
+  document.getElementById("cart-total-price").innerText=`R$ ${total.toFixed(2)}`;
+}
+function removeFromCart(i){ cart.splice(i,1); updateCart(); }
 
-    // Lógica do Gráfico
-    const salesByDay = completedOrders.reduce((acc, order) => {
-        const day = new Date(order.createdAt).toLocaleDateString('pt-BR');
-        acc[day] = (acc[day] || 0) + order.totalPrice;
-        return acc;
-    }, {});
+// Finalizar pedido com pagamento mock
+document.getElementById("finish-order").onclick=()=>{
+  if(cart.length===0)return alert("Carrinho vazio");
+  const metodo=prompt("Escolha forma de pagamento: Pix ou Cartão (digite 'pix' ou 'cartao')");
+  if(!metodo)return;
+  let msg="";
+  if(metodo.toLowerCase()==="pix"){
+    msg="Use a chave Pix: CNPJ 12.345.678/0001-99\nValor: R$ "+cart.reduce((t,c)=>t+c.price,0).toFixed(2);
+  } else {
+    msg="Simulação de pagamento com cartão de crédito aceita.\n(Na versão real integraria gateway).";
+  }
+  alert(msg);
 
-    const chartCtx = document.getElementById('salesChart').getContext('2d');
-    if(window.mySalesChart) window.mySalesChart.destroy(); // Destroi o gráfico anterior para redesenhar
-    
-    window.mySalesChart = new Chart(chartCtx, {
-        type: 'bar',
-        data: {
-            labels: Object.keys(salesByDay),
-            datasets: [{
-                label: 'Faturamento por Dia (R$)',
-                data: Object.values(salesByDay),
-                backgroundColor: 'rgba(106, 13, 173, 0.7)',
-                borderColor: 'rgba(106, 13, 173, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: { scales: { y: { beginAtZero: true } } }
-    });
+  const order={id:Date.now(),items:[...cart],total:cart.reduce((t,c)=>t+c.price,0),status:"Recebido",created:new Date(),payment:metodo};
+  orders.push(order);
+  cart=[]; updateCart();
+  alert("Pedido salvo! Veja no painel #admin");
+};
+
+// Alternar entre cliente e admin
+function checkView(){
+  if(window.location.hash==="#admin"){
+    document.getElementById("customer-view").style.display="none";
+    document.getElementById("admin-panel").style.display="block";
+    renderOrders(); renderFinance(); renderStock();
+  } else {
+    document.getElementById("customer-view").style.display="block";
+    document.getElementById("admin-panel").style.display="none";
+  }
+}
+window.addEventListener("hashchange",checkView);
+checkView();
+
+// Alternar abas do admin
+function showAdmin(view){
+  document.querySelectorAll(".admin-view").forEach(v=>v.classList.remove("active"));
+  document.getElementById(view).classList.add("active");
+  document.querySelectorAll(".admin-nav button").forEach(b=>b.classList.remove("active"));
+  document.querySelector(`.admin-nav button[onclick="showAdmin('${view}')"]`).classList.add("active");
+  if(view==="orders")renderOrders();
+  if(view==="finance")renderFinance();
+  if(view==="stock")renderStock();
 }
 
+// Renderizar pedidos
+function renderOrders(){
+  if(orders.length===0){
+    document.getElementById("orders-list").innerHTML="<p>Nenhum pedido ainda</p>"; return;
+  }
+  document.getElementById("orders-list").innerHTML = orders.map(o=>`
+    <div class="order-item" style="background:var(--card-bg);padding:1rem;margin-bottom:1rem;border-radius:8px;">
+      <p><b>Pedido #${o.id}</b> - ${o.status}</p>
+      <p>Total: R$ ${o.total.toFixed(2)}</p>
+      <div>
+        <label>Status:</label>
+        <select onchange="updateOrderStatus(${o.id},this.value)">
+          <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
+          <option ${o.status==="Preparando"?"selected":""}>Preparando</option>
+          <option ${o.status==="Saiu para Entrega"?"selected":""}>Saiu para Entrega</option>
+          <option ${o.status==="Concluído"?"selected":""}>Concluído</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+function updateOrderStatus(id,newStatus){
+  const o=orders.find(x=>x.id===id);
+  if(o){o.status=newStatus; renderOrders();}
+}
 
-// --- INICIALIZAÇÃO ---
-document.addEventListener('DOMContentLoaded', () => {
-    checkView();
-    // Adiciona listener para mudanças no hash (ex: voltar no navegador)
-    window.addEventListener('hashchange', checkView);
+// Financeiro
+function renderFinance(){
+  const totalRevenue=orders.reduce((t,o)=>t+o.total,0);
+  const totalOrders=orders.length;
+  const avgTicket=totalOrders?totalRevenue/totalOrders:0;
+  const profit=orders.reduce((t,o)=>t+o.items.reduce((s,i)=>s+(i.price-(i.buyPrice||0)),0),0);
 
-    // Liga os listeners do formulário do cliente
-    ['client-name', 'client-address'].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.addEventListener('input', checkFormValidity);
-    });
-    const finishButton = document.getElementById('finish-order-button');
-    if(finishButton) finishButton.addEventListener('click', sendWhatsAppMessage);
-});
+  document.getElementById("kpi-revenue").innerText=`R$ ${totalRevenue.toFixed(2)}`;
+  document.getElementById("kpi-orders").innerText=totalOrders;
+  document.getElementById("kpi-ticket").innerText=`R$ ${avgTicket.toFixed(2)}`;
+  document.getElementById("kpi-profit").innerText=`R$ ${profit.toFixed(2)}`;
+
+  const ctx=document.getElementById("salesChart").getContext("2d");
+  if(window.salesChart)window.salesChart.destroy();
+  window.salesChart=new Chart(ctx,{type:"bar",data:{
+    labels:orders.map(o=>new Date(o.created).toLocaleDateString("pt-BR")),
+    datasets:[{label:"Vendas",data:orders.map(o=>o.total),backgroundColor:"rgba(106,13,173,0.7)"}]
+  }});
+}
+
+// Estoque
+function renderStock(){
+  document.getElementById("stock-list").innerHTML =
+    PRODUCTS.map(p=>`
+      <div style="background:var(--card-bg);padding:0.8rem;margin-bottom:0.5rem;border-radius:6px;">
+        <b>${p.name}</b> - Estoque: ${p.stock||10} | Compra: R$${p.buyPrice||5} | Venda: R$${p.price}
+        ${p.stock&&p.stock<5?`<span style="color:var(--danger)"> ⚠ Estoque baixo!</span>`:""}
+      </div>
+    `).join('');
+}
+
+// Splash desaparece após 2s
+window.onload=()=>{ setTimeout(()=>{document.getElementById("splash").style.display="none";},2000); };
+document.addEventListener("DOMContentLoaded",()=>{ renderProducts(); updateCart(); });
+
+// PWA Manifest + Service Worker
+const manifest={
+  "name":"Açaí da Barra POA",
+  "short_name":"Açaí Barra",
+  "start_url":".",
+  "display":"standalone",
+  "background_color":"#121212",
+  "theme_color":"#6a0dad",
+  "icons":[
+    {"src":"https://source.unsplash.com/128x128/?acai","sizes":"128x128","type":"image/png"},
+    {"src":"https://source.unsplash.com/256x256/?acai","sizes":"256x256","type":"image/png"}
+  ]
+};
+const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+const url=URL.createObjectURL(blob);
+const link=document.createElement('link');
+link.rel='manifest'; link.href=url;
+document.head.appendChild(link);
+
+const swCode=`
+  self.addEventListener('install',e=>{
+    e.waitUntil(caches.open('acai-barra').then(c=>c.addAll(['./'])));
+  });
+  self.addEventListener('fetch',e=>{
+    e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
+  });
+`;
+const swBlob=new Blob([swCode],{type:'application/javascript'});
+const swUrl=URL.createObjectURL(swBlob);
+if('serviceWorker'in navigator){navigator.serviceWorker.register(swUrl);}
 </script>
-
 </body>
 </html>
