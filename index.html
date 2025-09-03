@@ -60,7 +60,6 @@
     .product-card img { width: 100%; height: 180px; object-fit: cover; }
     .product-info { padding: 1rem; text-align: center; }
     .product-info h3 { margin: 0; font-size: 1.2rem; }
-    .product-info p { font-size: 0.9rem; color: var(--text-muted); }
     .price { font-weight: 700; color: var(--secondary); margin: 0.5rem 0; }
     .btn { background: var(--primary); color: #fff; border: none;
       padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
@@ -130,7 +129,7 @@
     <button onclick="showAdmin('orders')" class="active">📦 Pedidos</button>
     <button onclick="showAdmin('finance')">💰 Financeiro</button>
     <button onclick="showAdmin('stock')">📊 Estoque</button>
-    <button onclick="showAdmin('logistics')">🚚 Logística</button>
+    <button onclick="showAdmin('logistics')">🚚 Entregas</button>
   </div>
 
   <div id="orders" class="admin-view active">
@@ -157,7 +156,7 @@
   <div id="logistics" class="admin-view">
     <h3>Mapa de Entregas (ilustrativo)</h3>
     <div id="map" style="height:300px;width:100%;background:#333;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#aaa;">
-      <p>🗺️ Aqui poderia ser integrado Google Maps com endereços dos pedidos.</p>
+      <p>🗺️ Integração futura com Google Maps aqui.</p>
     </div>
   </div>
 </main>
@@ -171,9 +170,9 @@
 
 <script>
 const PRODUCTS = [
-  { id:1, name:"Copo 300ml", price:12, buyPrice:6, stock:20, image:"https://source.unsplash.com/400x300/?acai"},
-  { id:2, name:"Copo 500ml", price:18, buyPrice:8, stock:15, image:"https://source.unsplash.com/400x301/?acai"},
-  { id:3, name:"Barca Família", price:35, buyPrice:15, stock:10, image:"https://source.unsplash.com/400x302/?acai"}
+  { id:1, name:"Copo 300ml", price:12, buyPrice:6, stock:20, image:"https://images.unsplash.com/photo-1601924582971-b0fc7f6f84bd?auto=format&fit=crop&w=600&q=80"},
+  { id:2, name:"Copo 500ml", price:18, buyPrice:8, stock:15, image:"https://images.unsplash.com/photo-1613145993483-9f4199114ef2?auto=format&fit=crop&w=600&q=80"},
+  { id:3, name:"Barca Família", price:35, buyPrice:15, stock:10, image:"https://images.unsplash.com/photo-1604909052749-1a18e403d315?auto=format&fit=crop&w=600&q=80"}
 ];
 let cart=[], orders=[];
 
@@ -210,26 +209,17 @@ function updateCart(){
 }
 function removeFromCart(i){ cart.splice(i,1); updateCart(); }
 
-// Finalizar pedido com pagamento mock
+// Finalizar pedido
 document.getElementById("finish-order").onclick=()=>{
   if(cart.length===0)return alert("Carrinho vazio");
-  const metodo=prompt("Escolha forma de pagamento: Pix ou Cartão (digite 'pix' ou 'cartao')");
-  if(!metodo)return;
-  let msg="";
-  if(metodo.toLowerCase()==="pix"){
-    msg="Use a chave Pix: CNPJ 12.345.678/0001-99\nValor: R$ "+cart.reduce((t,c)=>t+c.price,0).toFixed(2);
-  } else {
-    msg="Simulação de pagamento com cartão de crédito aceita.\n(Na versão real integraria gateway).";
-  }
-  alert(msg);
-
+  const metodo=prompt("Pagamento: Pix ou Cartão?");
   const order={id:Date.now(),items:[...cart],total:cart.reduce((t,c)=>t+c.price,0),status:"Recebido",created:new Date(),payment:metodo};
   orders.push(order);
   cart=[]; updateCart();
   alert("Pedido salvo! Veja no painel #admin");
 };
 
-// Alternar entre cliente e admin
+// Alternar views
 function checkView(){
   if(window.location.hash==="#admin"){
     document.getElementById("customer-view").style.display="none";
@@ -243,7 +233,7 @@ function checkView(){
 window.addEventListener("hashchange",checkView);
 checkView();
 
-// Alternar abas do admin
+// Abas admin
 function showAdmin(view){
   document.querySelectorAll(".admin-view").forEach(v=>v.classList.remove("active"));
   document.getElementById(view).classList.add("active");
@@ -254,24 +244,21 @@ function showAdmin(view){
   if(view==="stock")renderStock();
 }
 
-// Renderizar pedidos
+// Pedidos
 function renderOrders(){
   if(orders.length===0){
     document.getElementById("orders-list").innerHTML="<p>Nenhum pedido ainda</p>"; return;
   }
   document.getElementById("orders-list").innerHTML = orders.map(o=>`
-    <div class="order-item" style="background:var(--card-bg);padding:1rem;margin-bottom:1rem;border-radius:8px;">
+    <div style="background:var(--card-bg);padding:1rem;margin-bottom:1rem;border-radius:8px;">
       <p><b>Pedido #${o.id}</b> - ${o.status}</p>
-      <p>Total: R$ ${o.total.toFixed(2)}</p>
-      <div>
-        <label>Status:</label>
-        <select onchange="updateOrderStatus(${o.id},this.value)">
-          <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
-          <option ${o.status==="Preparando"?"selected":""}>Preparando</option>
-          <option ${o.status==="Saiu para Entrega"?"selected":""}>Saiu para Entrega</option>
-          <option ${o.status==="Concluído"?"selected":""}>Concluído</option>
-        </select>
-      </div>
+      <p>Total: R$ ${o.total.toFixed(2)} (${o.payment})</p>
+      <select onchange="updateOrderStatus(${o.id},this.value)">
+        <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
+        <option ${o.status==="Em Preparação"?"selected":""}>Em Preparação</option>
+        <option ${o.status==="Saiu para Entrega"?"selected":""}>Saiu para Entrega</option>
+        <option ${o.status==="Concluído"?"selected":""}>Concluído</option>
+      </select>
     </div>
   `).join('');
 }
@@ -286,12 +273,10 @@ function renderFinance(){
   const totalOrders=orders.length;
   const avgTicket=totalOrders?totalRevenue/totalOrders:0;
   const profit=orders.reduce((t,o)=>t+o.items.reduce((s,i)=>s+(i.price-(i.buyPrice||0)),0),0);
-
   document.getElementById("kpi-revenue").innerText=`R$ ${totalRevenue.toFixed(2)}`;
   document.getElementById("kpi-orders").innerText=totalOrders;
   document.getElementById("kpi-ticket").innerText=`R$ ${avgTicket.toFixed(2)}`;
   document.getElementById("kpi-profit").innerText=`R$ ${profit.toFixed(2)}`;
-
   const ctx=document.getElementById("salesChart").getContext("2d");
   if(window.salesChart)window.salesChart.destroy();
   window.salesChart=new Chart(ctx,{type:"bar",data:{
@@ -305,17 +290,17 @@ function renderStock(){
   document.getElementById("stock-list").innerHTML =
     PRODUCTS.map(p=>`
       <div style="background:var(--card-bg);padding:0.8rem;margin-bottom:0.5rem;border-radius:6px;">
-        <b>${p.name}</b> - Estoque: ${p.stock||10} | Compra: R$${p.buyPrice||5} | Venda: R$${p.price}
-        ${p.stock&&p.stock<5?`<span style="color:var(--danger)"> ⚠ Estoque baixo!</span>`:""}
+        <b>${p.name}</b> - Estoque: ${p.stock} | Compra: R$${p.buyPrice} | Venda: R$${p.price}
+        ${p.stock<5?`<span style="color:var(--danger)"> ⚠ Estoque baixo!</span>`:""}
       </div>
     `).join('');
 }
 
-// Splash desaparece após 2s
+// Splash
 window.onload=()=>{ setTimeout(()=>{document.getElementById("splash").style.display="none";},2000); };
 document.addEventListener("DOMContentLoaded",()=>{ renderProducts(); updateCart(); });
 
-// PWA Manifest + Service Worker
+// PWA
 const manifest={
   "name":"Açaí da Barra POA",
   "short_name":"Açaí Barra",
@@ -324,8 +309,8 @@ const manifest={
   "background_color":"#121212",
   "theme_color":"#6a0dad",
   "icons":[
-    {"src":"https://source.unsplash.com/128x128/?acai","sizes":"128x128","type":"image/png"},
-    {"src":"https://source.unsplash.com/256x256/?acai","sizes":"256x256","type":"image/png"}
+    {"src":"https://images.unsplash.com/photo-1601924582971-b0fc7f6f84bd?auto=format&fit=crop&w=128&q=80","sizes":"128x128","type":"image/png"},
+    {"src":"https://images.unsplash.com/photo-1601924582971-b0fc7f6f84bd?auto=format&fit=crop&w=256&q=80","sizes":"256x256","type":"image/png"}
   ]
 };
 const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
@@ -333,7 +318,6 @@ const url=URL.createObjectURL(blob);
 const link=document.createElement('link');
 link.rel='manifest'; link.href=url;
 document.head.appendChild(link);
-
 const swCode=`
   self.addEventListener('install',e=>{
     e.waitUntil(caches.open('acai-barra').then(c=>c.addAll(['./'])));
