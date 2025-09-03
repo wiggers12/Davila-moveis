@@ -169,13 +169,15 @@
 </div>
 
 <script>
+/* ---------- Produtos fictícios ---------- */
 const PRODUCTS = [
-  { id:1, name:"Copo 300ml", price:12, buyPrice:6, stock:20, image:"https://images.unsplash.com/photo-1601924582971-b0fc7f6f84bd?auto=format&fit=crop&w=600&q=80"},
-  { id:2, name:"Copo 500ml", price:18, buyPrice:8, stock:15, image:"https://images.unsplash.com/photo-1613145993483-9f4199114ef2?auto=format&fit=crop&w=600&q=80"},
-  { id:3, name:"Barca Família", price:35, buyPrice:15, stock:10, image:"https://images.unsplash.com/photo-1604909052749-1a18e403d315?auto=format&fit=crop&w=600&q=80"}
+  { id:1, name:"Copo 300ml", price:12, buyPrice:6, stock:20, image:"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg" },
+  { id:2, name:"Copo 500ml", price:18, buyPrice:8, stock:15, image:"https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg" },
+  { id:3, name:"Barca Família", price:35, buyPrice:15, stock:10, image:"https://images.pexels.com/photos/1893555/pexels-photo-1893555.jpeg" }
 ];
 let cart=[], orders=[];
 
+/* ---------- Vitrine ---------- */
 function renderProducts(){
   document.getElementById("products-container").innerHTML =
     PRODUCTS.map(p=>`
@@ -209,7 +211,7 @@ function updateCart(){
 }
 function removeFromCart(i){ cart.splice(i,1); updateCart(); }
 
-// Finalizar pedido
+/* ---------- Finalizar pedido ---------- */
 document.getElementById("finish-order").onclick=()=>{
   if(cart.length===0)return alert("Carrinho vazio");
   const metodo=prompt("Pagamento: Pix ou Cartão?");
@@ -219,7 +221,7 @@ document.getElementById("finish-order").onclick=()=>{
   alert("Pedido salvo! Veja no painel #admin");
 };
 
-// Alternar views
+/* ---------- Alternar views ---------- */
 function checkView(){
   if(window.location.hash==="#admin"){
     document.getElementById("customer-view").style.display="none";
@@ -233,7 +235,7 @@ function checkView(){
 window.addEventListener("hashchange",checkView);
 checkView();
 
-// Abas admin
+/* ---------- Abas admin ---------- */
 function showAdmin(view){
   document.querySelectorAll(".admin-view").forEach(v=>v.classList.remove("active"));
   document.getElementById(view).classList.add("active");
@@ -244,7 +246,7 @@ function showAdmin(view){
   if(view==="stock")renderStock();
 }
 
-// Pedidos
+/* ---------- Pedidos ---------- */
 function renderOrders(){
   if(orders.length===0){
     document.getElementById("orders-list").innerHTML="<p>Nenhum pedido ainda</p>"; return;
@@ -267,7 +269,7 @@ function updateOrderStatus(id,newStatus){
   if(o){o.status=newStatus; renderOrders();}
 }
 
-// Financeiro
+/* ---------- Financeiro ---------- */
 function renderFinance(){
   const totalRevenue=orders.reduce((t,o)=>t+o.total,0);
   const totalOrders=orders.length;
@@ -285,7 +287,7 @@ function renderFinance(){
   }});
 }
 
-// Estoque
+/* ---------- Estoque ---------- */
 function renderStock(){
   document.getElementById("stock-list").innerHTML =
     PRODUCTS.map(p=>`
@@ -296,11 +298,11 @@ function renderStock(){
     `).join('');
 }
 
-// Splash
+/* ---------- Splash ---------- */
 window.onload=()=>{ setTimeout(()=>{document.getElementById("splash").style.display="none";},2000); };
 document.addEventListener("DOMContentLoaded",()=>{ renderProducts(); updateCart(); });
 
-// PWA
+/* ---------- PWA ---------- */
 const manifest={
   "name":"Açaí da Barra POA",
   "short_name":"Açaí Barra",
@@ -309,8 +311,8 @@ const manifest={
   "background_color":"#121212",
   "theme_color":"#6a0dad",
   "icons":[
-    {"src":"https://images.unsplash.com/photo-1601924582971-b0fc7f6f84bd?auto=format&fit=crop&w=128&q=80","sizes":"128x128","type":"image/png"},
-    {"src":"https://images.unsplash.com/photo-1601924582971-b0fc7f6f84bd?auto=format&fit=crop&w=256&q=80","sizes":"256x256","type":"image/png"}
+    {"src":"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg","sizes":"128x128","type":"image/png"},
+    {"src":"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg","sizes":"256x256","type":"image/png"}
   ]
 };
 const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
