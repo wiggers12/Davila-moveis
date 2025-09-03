@@ -24,13 +24,14 @@ section.active{display:block;}
 /* Produtos */
 .swiper{width:100%;padding:1rem 0;}
 .swiper-slide{background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;text-align:center;}
-.swiper-slide img{width:100%;height:220px;object-fit:cover;}
+.swiper-slide img,.swiper-slide video{width:100%;height:220px;object-fit:cover;}
 .product-info{padding:1rem;}
 .order-button{background:linear-gradient(145deg,#9d4edd,#5a189a);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;}
+.order-button:disabled{background:#555;cursor:not-allowed;}
 /* Carrinho */
 .cart-container{background:var(--card-bg);padding:1.5rem;border-radius:16px;box-shadow:var(--shadow);}
 .cart-item{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);padding:.5rem 0;}
-.cart-total{font-weight:700;color:var(--secondary);text-align:right;margin-top:1rem;font-size:1.2rem;}
+.cart-total{font-weight:700;color:var(--secondary);text-align:right;margin-top:1rem;font-size:1.1rem;}
 .btn-finish{background:linear-gradient(145deg,#2ecc71,#208d4e);color:#fff;border:none;padding:1rem;border-radius:10px;width:100%;margin-top:1rem;font-weight:700;cursor:pointer;}
 input,select,textarea{width:100%;padding:.7rem;margin:.4rem 0;border:none;border-radius:8px;}
 /* Logística */
@@ -47,7 +48,7 @@ input,select,textarea{width:100%;padding:.7rem;margin:.4rem 0;border:none;border
 
 <header>
   <h1>Sua Marca Aqui 👑</h1>
-  <p>App de pedidos premium com logística e frete integrado</p>
+  <p>Gestão completa: Vitrine, Estoque, Pedidos, Financeiro e Logística</p>
 </header>
 
 <nav>
@@ -55,6 +56,7 @@ input,select,textarea{width:100%;padding:.7rem;margin:.4rem 0;border:none;border
   <button onclick="showTab('carrinho')">🛍 Carrinho</button>
   <button onclick="showTab('pedidos')">📦 Pedidos</button>
   <button onclick="showTab('financeiro')">💰 Financeiro</button>
+  <button onclick="showTab('estoque')">📊 Estoque</button>
   <button onclick="showTab('logistica')">🚚 Logística</button>
 </nav>
 
@@ -95,17 +97,27 @@ input,select,textarea{width:100%;padding:.7rem;margin:.4rem 0;border:none;border
 <!-- Financeiro -->
 <section id="financeiro"><h2>💰 Financeiro</h2><canvas id="salesChart"></canvas></section>
 
+<!-- Estoque -->
+<section id="estoque">
+  <h2>📊 Estoque</h2>
+  <div style="margin-bottom:1rem;">
+    <input id="new-name" placeholder="Nome do produto">
+    <input id="new-price" placeholder="Preço" type="number">
+    <input id="new-cost" placeholder="Custo" type="number">
+    <input id="new-stock" placeholder="Estoque inicial" type="number">
+    <input id="new-media" type="file" accept="image/*,video/*">
+    <button onclick="addProduct()">Adicionar Produto</button>
+  </div>
+  <div id="stock-list"></div>
+</section>
+
 <!-- Logística -->
 <section id="logistica"><h2>🚚 Logística</h2><div id="logistics-list"></div></section>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 let cart=[],orders=JSON.parse(localStorage.getItem("acaiOrders"))||[];
-let PRODUCTS=[
- {id:1,name:"Copo 300ml",price:12},
- {id:2,name:"Copo 500ml",price:18},
- {id:3,name:"Barca Açaí",price:35}
-];
+let PRODUCTS=JSON.parse(localStorage.getItem("acaiProducts"))||[];
 const FRETE_FIXO=5.0;
 
 function showTab(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");render();}
@@ -114,16 +126,16 @@ function toggleDeliveryForm(){document.getElementById("delivery-form").style.dis
 function renderProducts(){
  document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
    <div class="swiper-slide">
-     <img src="https://source.unsplash.com/400x30${p.id}?acai" alt="${p.name}">
+     ${p.media.includes("video")?`<video src="${p.media}" controls></video>`:`<img src="${p.media}" alt="${p.name}">`}
      <div class="product-info">
        <h3>${p.name}</h3>
        <p><strong>R$ ${p.price}</strong></p>
-       <button class="order-button" onclick="addToCart(${p.id})">Selecionar</button>
+       <button class="order-button" onclick="addToCart(${p.id})" ${p.stock<=0?"disabled":""}>${p.stock<=0?"Sem estoque":"Selecionar"}</button>
      </div>
    </div>`).join("");
  new Swiper(".swiper",{slidesPerView:1,loop:true});
 }
-function addToCart(id){let p=PRODUCTS.find(x=>x.id===id);if(p){cart.push({product:p,total:p.price});updateCart();}}
+function addToCart(id){let p=PRODUCTS.find(x=>x.id===id);if(p&&p.stock>0){cart.push({product:p,total:p.price});p.stock--;saveProducts();updateCart();renderProducts();}}
 function updateCart(){
  let c=document.getElementById("cart-items");
  if(cart.length==0){c.innerHTML="<p>Seu carrinho está vazio</p>";}
@@ -146,8 +158,21 @@ function finalizarPedido(){
  orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));cart=[];updateCart();alert("Pedido registrado!");render();
 }
 
+// Estoque
+function addProduct(){
+ let file=document.getElementById("new-media").files[0];
+ let reader=new FileReader();
+ reader.onload=function(e){
+   let p={id:Date.now(),name:document.getElementById("new-name").value,price:parseFloat(document.getElementById("new-price").value),cost:parseFloat(document.getElementById("new-cost").value),stock:parseInt(document.getElementById("new-stock").value),media:e.target.result};
+   PRODUCTS.push(p);saveProducts();render();
+ };
+ if(file) reader.readAsDataURL(file);
+}
+function saveProducts(){localStorage.setItem("acaiProducts",JSON.stringify(PRODUCTS));}
+function renderStock(){document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`${p.name} - R$ ${p.price} - Estoque:${p.stock}`).join("<br>");}
+
 // Renderizações
-function render(){renderProducts();renderOrders();renderLogistics();}
+function render(){renderProducts();renderStock();renderOrders();renderLogistics();}
 function renderOrders(){document.getElementById("orders-list").innerHTML=orders.map(o=>`<div class="cart-item">#${o.id} - ${o.customerName} - ${o.deliveryType} - R$${o.total}</div>`).join("");}
 function renderLogistics(){
  let c=document.getElementById("logistics-list");
@@ -162,7 +187,7 @@ function renderLogistics(){
      Subtotal: R$ ${o.totalItems.toFixed(2)} | Frete: R$ ${o.frete.toFixed(2)} | <strong>Total: R$ ${o.total.toFixed(2)}</strong><br>
      <small>Data: ${o.createdAt}</small><br>
      <span class="status status-${o.status}">${o.status}</span><br>
-     <label>Mudar status: 
+     <label>Status: 
        <select onchange="updateStatus(${o.id},this.value)">
          <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
          <option value="Preparação" ${o.status==="Preparação"?"selected":""}>Em preparação</option>
