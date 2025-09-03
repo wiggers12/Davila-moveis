@@ -17,27 +17,32 @@
 body{font-family:'Poppins',sans-serif;background:var(--dark-bg);color:var(--light);}
 header{background:linear-gradient(135deg,#7b2cbf,#5a189a);color:#fff;padding:1.5rem;text-align:center;box-shadow:var(--shadow);}
 nav{background:rgba(20,20,40,.8);backdrop-filter:blur(12px);display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;}
-nav button{flex:1;min-width:120px;border:none;background:none;padding:1rem;font-weight:600;cursor:pointer;color:#aaa;transition:.2s;}
+nav button{flex:1;min-width:120px;border:none;background:none;padding:1rem;font-weight:600;cursor:pointer;color:#aaa;transition:.2s;position:relative;}
 nav button.active{color:var(--primary);text-shadow:0 0 8px var(--primary);}
+nav button:hover{background:rgba(255,255,255,.05);}
+.badge{position:absolute;top:5px;right:20px;background:var(--danger);color:#fff;font-size:.7rem;padding:2px 6px;border-radius:50%;display:none;}
 section{display:none;padding:1.5rem;max-width:1200px;margin:auto;}
 section.active{display:block;}
 /* Produtos */
 .swiper{width:100%;padding:1rem 0;}
-.swiper-slide{background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;text-align:center;}
+.swiper-slide{background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;text-align:center;transition:0.2s;}
+.swiper-slide.added{box-shadow:0 0 15px var(--success);}
 .swiper-slide img,.swiper-slide video{width:100%;height:220px;object-fit:cover;}
 .product-info{padding:1rem;}
-.order-button{background:linear-gradient(145deg,#9d4edd,#5a189a);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;}
+.order-button{background:linear-gradient(145deg,#9d4edd,#5a189a);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;transition:.2s;}
 .order-button:disabled{background:#555;cursor:not-allowed;}
+.order-button:active{transform:scale(0.95);}
 /* Modal complementos */
-#modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1500;}
-#modal-content{background:#fff;color:#000;padding:1.5rem;border-radius:12px;width:90%;max-width:400px;}
+#modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1500;animation:fadeIn .3s;}
+#modal-content{background:#fff;color:#000;padding:1.5rem;border-radius:12px;width:90%;max-width:400px;animation:zoomIn .3s;}
 #modal-content h3{margin-bottom:1rem;}
 .topping{margin:.3rem 0;}
 /* Carrinho */
 .cart-container{background:var(--card-bg);padding:1.5rem;border-radius:16px;box-shadow:var(--shadow);}
 .cart-item{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);padding:.5rem 0;}
 .cart-total{font-weight:700;color:var(--secondary);text-align:right;margin-top:1rem;font-size:1.1rem;}
-.btn-finish{background:linear-gradient(145deg,#2ecc71,#208d4e);color:#fff;border:none;padding:1rem;border-radius:10px;width:100%;margin-top:1rem;font-weight:700;cursor:pointer;}
+.btn-finish{background:linear-gradient(145deg,#2ecc71,#208d4e);color:#fff;border:none;padding:1rem;border-radius:10px;width:100%;margin-top:1rem;font-weight:700;cursor:pointer;transition:.2s;}
+.btn-finish:active{transform:scale(0.95);}
 /* Logística e Pedidos */
 .order-card{background:var(--card-bg);padding:1rem;margin:.8rem 0;border-radius:12px;box-shadow:var(--shadow);}
 .status{padding:.3rem .6rem;border-radius:8px;font-size:.8rem;font-weight:600;display:inline-block;}
@@ -61,6 +66,8 @@ section.active{display:block;}
 .splash-content{text-align:center;animation:zoomIn 1s;}
 .splash-content h1{font-size:4rem;margin:0;}
 .splash-content h2{margin:0;font-size:2rem;}
+/* Toast */
+#toast{position:fixed;bottom:20px;right:20px;background:var(--card-bg);color:#fff;padding:1rem 1.5rem;border-radius:8px;box-shadow:var(--shadow);display:none;z-index:3000;}
 @keyframes zoomIn{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 </style>
@@ -75,6 +82,9 @@ section.active{display:block;}
     <p>Carregando...</p>
   </div>
 </div>
+
+<!-- TOAST -->
+<div id="toast"></div>
 
 <!-- MODAL COMPLEMENTOS -->
 <div id="modal">
@@ -96,8 +106,8 @@ section.active{display:block;}
 
 <nav>
   <button class="active" onclick="showTab('catalogo')">🛒 Catálogo</button>
-  <button onclick="showTab('carrinho')">🛍 Carrinho</button>
-  <button onclick="showTab('pedidos')">📦 Pedidos</button>
+  <button onclick="showTab('carrinho')">🛍 Carrinho <span id="cart-badge" class="badge"></span></button>
+  <button onclick="showTab('pedidos')">📦 Pedidos <span id="orders-badge" class="badge"></span></button>
   <button onclick="showTab('financeiro')">💰 Financeiro</button>
   <button onclick="showTab('estoque')">📊 Estoque</button>
   <button onclick="showTab('logistica')">🚚 Logística</button>
@@ -160,6 +170,13 @@ section.active{display:block;}
 /* Splash */
 window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").style.display="none";document.getElementById("app").style.display="block";},2000);});
 
+/* Toast */
+function showToast(msg){
+  let t=document.getElementById("toast");
+  t.innerText=msg;t.style.display="block";
+  setTimeout(()=>{t.style.display="none";},3000);
+}
+
 /* Dados */
 let cart=[],orders=JSON.parse(localStorage.getItem("acaiOrders"))||[];
 let PRODUCTS=JSON.parse(localStorage.getItem("acaiProducts"))||[];
@@ -183,6 +200,7 @@ function confirmAdd(){
   checkboxes.forEach(c=>{let t=TOPPINGS[c.value];toppingsChosen.push(t);total+=t.price;});
   cart.push({product:selectedProduct,toppings:toppingsChosen,total:total});
   selectedProduct.stock--;saveProducts();closeModal();updateCart();
+  showToast("Produto adicionado ao carrinho!");
 }
 
 /* Render produtos */
@@ -205,6 +223,8 @@ function updateCart(){
  else{c.innerHTML=cart.map(it=>`<div class="cart-item">${it.product.name} ${it.toppings.length?"+ "+it.toppings.map(t=>t.name).join(", "):""} <span>R$ ${it.total}</span></div>`).join("");}
  document.getElementById("cart-total-price").innerText="R$ "+cart.reduce((s,i)=>s+i.total,0).toFixed(2);
  document.getElementById("finish-order-button").disabled=cart.length==0;
+ document.getElementById("cart-badge").style.display=cart.length>0?"inline-block":"none";
+ document.getElementById("cart-badge").innerText=cart.length;
 }
 document.getElementById("finish-order-button").addEventListener("click",finalizarPedido);
 
@@ -212,6 +232,7 @@ function finalizarPedido(){
  let subtotal=cart.reduce((s,i)=>s+i.total,0);
  let o={id:Date.now(),customerName:"",phone:"",deliveryType:"",address:"",notes:"",payment:"",items:cart,totalItems:subtotal,frete:0,total:subtotal,status:"Recebido",createdAt:new Date().toLocaleString()};
  orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));cart=[];updateCart();showTab('logistica');render();
+ showToast("Pedido registrado e enviado para logística!");
 }
 
 /* Estoque */
@@ -233,6 +254,8 @@ function renderOrders(){
      Subtotal: R$ ${o.totalItems.toFixed(2)} | Total: R$ ${o.total.toFixed(2)}<br>
      <span class="status status-${o.status}">${o.status}</span>
    </div>`).join("");
+ document.getElementById("orders-badge").style.display=orders.length>0?"inline-block":"none";
+ document.getElementById("orders-badge").innerText=orders.filter(o=>o.status!=="Concluído"&&o.status!=="Cancelado").length;
 }
 
 /* Logística */
@@ -253,6 +276,13 @@ function renderLogistics(){
      Subtotal: R$ ${o.totalItems.toFixed(2)} | Frete: R$ ${o.frete.toFixed(2)} | <strong>Total: R$ ${o.total.toFixed(2)}</strong><br>
      <small>Data: ${o.createdAt}</small><br>
      <span class="status status-${o.status}">${o.status}</span>
+     <br><select onchange="updateStatus(${o.id},this.value)">
+       <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
+       <option ${o.status==="Preparação"?"selected":""}>Preparação</option>
+       <option ${o.status==="Saiu"?"selected":""}>Saiu</option>
+       <option ${o.status==="Concluído"?"selected":""}>Concluído</option>
+       <option ${o.status==="Cancelado"?"selected":""}>Cancelado</option>
+     </select>
    </div>`).join("");
 }
 function setDelivery(id,val){
@@ -261,6 +291,9 @@ function setDelivery(id,val){
  if(val==="Entrega"){o.frete=FRETE_FIXO;o.total=o.totalItems+o.frete;}
  else{o.frete=0;o.total=o.totalItems;}
  saveOrders();renderLogistics();
+}
+function updateStatus(id,newStatus){
+ let o=orders.find(x=>x.id===id);if(o){o.status=newStatus;saveOrders();renderLogistics();renderOrders();showToast("Status do pedido atualizado para "+newStatus);}
 }
 function saveOrders(){localStorage.setItem("acaiOrders",JSON.stringify(orders));}
 
