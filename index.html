@@ -1,332 +1,321 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Açaí da Barra POA 🍧</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root {
-      --primary: #6a0dad;
-      --secondary: #f39c12;
-      --success: #2ecc71;
-      --danger: #e74c3c;
-      --dark-bg: #121212;
-      --card-bg: #1f1f1f;
-      --text-light: #fff;
-      --text-muted: #aaa;
-      --shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; font-family: 'Poppins', sans-serif;
-      background: var(--dark-bg); color: var(--text-light);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protótipo | Açaí da Barra POA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a0dad; --secondary: #f39c12; --success: #2ecc71; --danger: #e74c3c;
+            --dark-bg: #121212; --card-bg: #1e1e1e; --text-light: #f5f5f5; --text-muted: #aaa;
+            --shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--dark-bg); color: var(--text-light); }
 
-    /* Splash */
-    #splash {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: linear-gradient(135deg, var(--primary), #8e44ad);
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; z-index: 9999; color: #fff;
-    }
-    #splash h1 { font-size: 2rem; margin: 0; }
-    #splash p { margin-top: 0.5rem; color: var(--secondary); }
+        /* --- Layout Geral --- */
+        .container { max-width: 1200px; margin: auto; padding: 1.5rem; }
+        .hidden { display: none !important; }
 
-    header {
-      background: linear-gradient(135deg, var(--primary), #8e44ad);
-      text-align: center; padding: 1.5rem 1rem;
-      border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
-      box-shadow: var(--shadow);
-    }
-    header h1 { margin: 0; font-size: 1.8rem; }
-    header p { margin: 0.5rem 0 0; color: var(--text-muted); }
+        /* --- Cabeçalho --- */
+        header { background: var(--card-bg); text-align: center; padding: 1rem; border-bottom: 2px solid var(--primary); }
+        
+        /* --- Vitrine de Produtos --- */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .product-card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+        .product-card:hover { transform: translateY(-8px); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; }
+        .product-info { padding: 1rem; }
+        .product-info h3 { font-size: 1.25rem; }
+        .product-info p { color: var(--text-muted); font-size: 0.9rem; }
+        .product-price { font-weight: 700; color: var(--secondary); font-size: 1.3rem; margin-top: 0.5rem; }
+        
+        /* --- Modal de Personalização --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: var(--dark-bg); padding: 2rem; border-radius: 15px; width: 90%; max-width: 500px; border-top: 5px solid var(--primary); }
+        .modal-content h3 { color: var(--secondary); }
+        .customization-group { margin: 1.5rem 0; }
+        .customization-group label { display: flex; align-items: center; gap: 10px; background: var(--card-bg); padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem; }
+        .btn { background: var(--primary); color: #fff; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; display: block; width: 100%; margin-top: 1rem; }
+        .btn:hover { opacity: 0.9; }
+        
+        /* --- Carrinho e Pedidos --- */
+        #cart-summary, #order-tracker { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin-top: 2rem; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #333; padding-bottom: 1rem; }
+        .item-details small { color: var(--text-muted); display: block; }
+        .cart-total { text-align: right; font-size: 1.3rem; margin-top: 1rem; font-weight: bold; color: var(--secondary); }
 
-    main { padding: 1.5rem; max-width: 1200px; margin: auto; }
-    h2 { text-align: center; margin-bottom: 1.5rem; color: var(--secondary); }
+        /* --- Rastreio de Pedido --- */
+        .status-bar { display: flex; justify-content: space-between; margin: 1rem 0; }
+        .status-step { flex: 1; text-align: center; color: var(--text-muted); position: relative; }
+        .status-step.active { color: var(--success); font-weight: bold; }
+        .status-step::before { content: '●'; font-size: 2rem; }
+        .status-step.active::after { content: ''; position: absolute; top: 15px; left: 50%; width: 100%; height: 4px; background: var(--success); z-index: -1; }
 
-    /* Produtos */
-    .products-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-    .product-card {
-      background: var(--card-bg); border-radius: 12px;
-      box-shadow: var(--shadow); overflow: hidden;
-      transition: transform 0.3s;
-    }
-    .product-card:hover { transform: translateY(-8px); }
-    .product-card img { width: 100%; height: 180px; object-fit: cover; }
-    .product-info { padding: 1rem; text-align: center; }
-    .product-info h3 { margin: 0; font-size: 1.2rem; }
-    .price { font-weight: 700; color: var(--secondary); margin: 0.5rem 0; }
-    .btn { background: var(--primary); color: #fff; border: none;
-      padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-    .btn:hover { background: #5a0a99; }
+        /* --- Painel Admin --- */
+        #admin-panel .order-card { background: var(--card-bg); padding: 1rem; margin-bottom: 1rem; border-radius: 8px; }
+        #admin-panel select { background: #333; color: white; border: 1px solid var(--primary); padding: 0.5rem; border-radius: 5px; }
 
-    /* Carrinho */
-    #cart { margin-top: 2rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow);}
-    .cart-item { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
-    .cart-total { text-align: right; font-size: 1.2rem; margin-top: 1rem; font-weight: bold; }
-
-    /* Admin */
-    #admin-panel { display: none; padding:2rem; }
-    .admin-nav { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem; }
-    .admin-nav button { padding: 0.6rem 1rem; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
-    .admin-nav button.active { background: var(--primary); color: #fff; }
-    .admin-view { display: none; }
-    .admin-view.active { display: block; }
-    .kpi-container { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .kpi-card {
-      flex: 1; min-width: 200px; background: var(--card-bg); padding: 1rem;
-      border-radius: 10px; text-align: center; box-shadow: var(--shadow);
-    }
-    .kpi-card h4 { margin: 0; color: var(--text-muted); }
-    .kpi-card p { margin: 0.5rem 0 0; font-size: 1.4rem; font-weight: bold; color: var(--secondary); }
-
-    /* Botões sociais */
-    .social-btns { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; }
-    .social-btns a {
-      display: flex; align-items: center; justify-content: center;
-      width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: #fff;
-      font-size: 1.2rem; text-decoration: none; box-shadow: var(--shadow);
-    }
-  </style>
+    </style>
 </head>
 <body>
 
-<div id="splash">
-  <h1>Açaí da Barra POA 🍧</h1>
-  <p>Carregando...</p>
-</div>
+    <main id="customer-view">
+        <header>
+            <h1>Açaí da Barra POA 🍧</h1>
+            <p>Escolha e personalize seu pedido!</p>
+        </header>
+        <div class="container">
+            <section id="menu">
+                <h2>Cardápio</h2>
+                <div class="product-grid" id="product-list"></div>
+            </section>
 
-<header>
-  <h1>Açaí da Barra POA 🍧</h1>
-  <p>Monte seu açaí do seu jeito!</p>
-</header>
+            <section id="cart-summary">
+                <h2>Seu Pedido</h2>
+                <div id="cart-items-container"><p>Carrinho vazio.</p></div>
+                <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
+                <button class="btn" id="checkout-btn">Finalizar Pedido</button>
+            </section>
 
-<main id="customer-view">
-  <section id="menu">
-    <h2>Vitrine de Produtos</h2>
-    <div class="products-grid" id="products-container"></div>
-  </section>
+            <section id="order-tracker" class="hidden">
+                <h2>Acompanhe seu Pedido</h2>
+                <div id="tracker-info"></div>
+            </section>
+        </div>
+    </main>
+    
+    <main id="admin-panel" class="hidden">
+       <header><h1>Painel de Gestão</h1></header>
+       <div class="container">
+            <h2>Pedidos Recebidos</h2>
+            <div id="admin-orders-list"><p>Nenhum pedido recebido ainda.</p></div>
+       </div>
+    </main>
 
-  <section id="cart">
-    <h2>Seu Pedido</h2>
-    <div id="cart-items"><p>Carrinho vazio</p></div>
-    <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
-    <button class="btn" id="finish-order">Finalizar Pedido</button>
-  </section>
-</main>
-
-<main id="admin-panel">
-  <h2>Painel de Controle</h2>
-  <div class="admin-nav">
-    <button onclick="showAdmin('orders')" class="active">📦 Pedidos</button>
-    <button onclick="showAdmin('finance')">💰 Financeiro</button>
-    <button onclick="showAdmin('stock')">📊 Estoque</button>
-    <button onclick="showAdmin('logistics')">🚚 Entregas</button>
-  </div>
-
-  <div id="orders" class="admin-view active">
-    <h3>Gestão de Pedidos</h3>
-    <div id="orders-list"></div>
-  </div>
-
-  <div id="finance" class="admin-view">
-    <h3>Financeiro</h3>
-    <div class="kpi-container">
-      <div class="kpi-card"><h4>Faturamento</h4><p id="kpi-revenue">R$ 0</p></div>
-      <div class="kpi-card"><h4>Pedidos</h4><p id="kpi-orders">0</p></div>
-      <div class="kpi-card"><h4>Ticket Médio</h4><p id="kpi-ticket">R$ 0</p></div>
-      <div class="kpi-card"><h4>Lucro</h4><p id="kpi-profit">R$ 0</p></div>
+    <div id="customization-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 id="modal-product-name">Personalize seu Produto</h3>
+            <p id="modal-product-description"></p>
+            <form id="customization-form">
+                <input type="hidden" id="modal-product-id">
+                <div id="modal-options"></div>
+                <button type="submit" class="btn">Adicionar ao Pedido</button>
+            </form>
+        </div>
     </div>
-    <canvas id="salesChart"></canvas>
-  </div>
-
-  <div id="stock" class="admin-view">
-    <h3>Controle de Estoque</h3>
-    <div id="stock-list"></div>
-  </div>
-
-  <div id="logistics" class="admin-view">
-    <h3>Mapa de Entregas (ilustrativo)</h3>
-    <div id="map" style="height:300px;width:100%;background:#333;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#aaa;">
-      <p>🗺️ Integração futura com Google Maps aqui.</p>
-    </div>
-  </div>
-</main>
-
-<div class="social-btns">
-  <a href="https://wa.me/5551999999999" target="_blank">🟢</a>
-  <a href="https://instagram.com" target="_blank">📷</a>
-  <a href="https://facebook.com" target="_blank">📘</a>
-</div>
 
 <script>
-/* ---------- Produtos fictícios ---------- */
-const PRODUCTS = [
-  { id:1, name:"Copo 300ml", price:12, buyPrice:6, stock:20, image:"https://i.ibb.co/C0740pX/acai-300ml.jpg" },
-  { id:2, name:"Copo 500ml", price:18, buyPrice:8, stock:15, image:"https://i.ibb.co/d5m33jN/acai-500ml.jpg" },
-  { id:3, name:"Barca Família", price:35, buyPrice:15, stock:10, image:"https://i.ibb.co/rQxM89K/acai-barca.jpg" }
-];
-let cart=[], orders=[];
+document.addEventListener('DOMContentLoaded', () => {
 
-/* ---------- Vitrine ---------- */
-function renderProducts(){
-  document.getElementById("products-container").innerHTML =
-    PRODUCTS.map(p=>`
-      <div class="product-card">
-        <img src="${p.image}" alt="${p.name}">
-        <div class="product-info">
-          <h3>${p.name}</h3>
-          <p class="price">R$ ${p.price.toFixed(2)}</p>
-          <button class="btn" onclick="addToCart(${p.id})">Adicionar</button>
-        </div>
-      </div>
-    `).join('');
-}
-function addToCart(id){
-  const p=PRODUCTS.find(x=>x.id===id);
-  cart.push(p); updateCart();
-}
-function updateCart(){
-  if(cart.length===0){document.getElementById("cart-items").innerHTML="<p>Carrinho vazio</p>";}
-  else{
-    document.getElementById("cart-items").innerHTML = cart.map((c,i)=>`
-      <div class="cart-item">
-        <span>${c.name}</span>
-        <span>R$ ${c.price.toFixed(2)}</span>
-        <button onclick="removeFromCart(${i})">❌</button>
-      </div>
-    `).join('');
-  }
-  const total=cart.reduce((t,c)=>t+c.price,0);
-  document.getElementById("cart-total-price").innerText=`R$ ${total.toFixed(2)}`;
-}
-function removeFromCart(i){ cart.splice(i,1); updateCart(); }
+    // --- BANCO DE DADOS FICTÍCIO ---
+    const PRODUCTS = [
+        { id: 1, name: "Açaí Tradicional", description: "O sabor clássico da Amazônia, puro e delicioso.", price: 15.00, image: "https://i.ibb.co/C0740pX/acai-300ml.jpg", category: "Açaís" },
+        { id: 2, name: "Barca de Açaí Média", description: "Perfeita para compartilhar, cheia de frutas e complementos.", price: 45.00, image: "https://i.ibb.co/rQxM89K/acai-barca.jpg", category: "Barcas" },
+        { id: 3, name: "Açaí com Cupuaçu", description: "A combinação perfeita do azedinho do cupuaçu com o doce do açaí.", price: 18.00, image: "https://i.ibb.co/d5m33jN/acai-500ml.jpg", category: "Açaís" }
+    ];
 
-/* ---------- Finalizar pedido ---------- */
-document.getElementById("finish-order").onclick=()=>{
-  if(cart.length===0)return alert("Carrinho vazio");
-  const metodo=prompt("Pagamento: Pix ou Cartão?");
-  const order={id:Date.now(),items:[...cart],total:cart.reduce((t,c)=>t+c.price,0),status:"Recebido",created:new Date(),payment:metodo};
-  orders.push(order);
-  cart=[]; updateCart();
-  alert("Pedido salvo! Veja no painel #admin");
-};
+    const TOPPINGS = [
+        { id: 101, name: "Leite em Pó", price: 2.00 }, { id: 102, name: "Leite Condensado", price: 2.50 },
+        { id: 103, name: "Granola", price: 1.50 }, { id: 104, name: "Banana", price: 1.00 },
+        { id: 105, name: "Morango", price: 2.00 }, { id: 106, name: "Creme de Ninho", price: 3.00 }
+    ];
 
-/* ---------- Alternar views ---------- */
-function checkView(){
-  if(window.location.hash==="#admin"){
-    document.getElementById("customer-view").style.display="none";
-    document.getElementById("admin-panel").style.display="block";
-    renderOrders(); renderFinance(); renderStock();
-  } else {
-    document.getElementById("customer-view").style.display="block";
-    document.getElementById("admin-panel").style.display="none";
-  }
-}
-window.addEventListener("hashchange",checkView);
-checkView();
+    let cart = [];
+    let orders = [];
+    
+    // --- LÓGICA DE ROTEAMENTO (CLIENTE vs ADMIN) ---
+    const checkView = () => {
+        if (window.location.hash === "#admin") {
+            document.getElementById('customer-view').classList.add('hidden');
+            document.getElementById('admin-panel').classList.remove('hidden');
+            renderAdminOrders();
+        } else {
+            document.getElementById('customer-view').classList.remove('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+            renderProducts();
+            renderCart();
+        }
+    };
+    window.addEventListener('hashchange', checkView);
 
-/* ---------- Abas admin ---------- */
-function showAdmin(view){
-  document.querySelectorAll(".admin-view").forEach(v=>v.classList.remove("active"));
-  document.getElementById(view).classList.add("active");
-  document.querySelectorAll(".admin-nav button").forEach(b=>b.classList.remove("active"));
-  document.querySelector(`.admin-nav button[onclick="showAdmin('${view}')"]`).classList.add("active");
-  if(view==="orders")renderOrders();
-  if(view==="finance")renderFinance();
-  if(view==="stock")renderStock();
-}
+    // --- FUNÇÕES DA VITRINE E MODAL ---
+    const renderProducts = () => {
+        const productList = document.getElementById('product-list');
+        productList.innerHTML = PRODUCTS.map(p => `
+            <div class="product-card" onclick="openModal(${p.id})">
+                <img src="${p.image}" alt="${p.name}">
+                <div class="product-info">
+                    <h3>${p.name}</h3>
+                    <p>${p.description}</p>
+                    <div class="product-price">R$ ${p.price.toFixed(2)}</div>
+                </div>
+            </div>
+        `).join('');
+    };
 
-/* ---------- Pedidos ---------- */
-function renderOrders(){
-  if(orders.length===0){
-    document.getElementById("orders-list").innerHTML="<p>Nenhum pedido ainda</p>"; return;
-  }
-  document.getElementById("orders-list").innerHTML = orders.map(o=>`
-    <div style="background:var(--card-bg);padding:1rem;margin-bottom:1rem;border-radius:8px;">
-      <p><b>Pedido #${o.id}</b> - ${o.status}</p>
-      <p>Total: R$ ${o.total.toFixed(2)} (${o.payment})</p>
-      <select onchange="updateOrderStatus(${o.id},this.value)">
-        <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
-        <option ${o.status==="Em Preparação"?"selected":""}>Em Preparação</option>
-        <option ${o.status==="Saiu para Entrega"?"selected":""}>Saiu para Entrega</option>
-        <option ${o.status==="Concluído"?"selected":""}>Concluído</option>
-      </select>
-    </div>
-  `).join('');
-}
-function updateOrderStatus(id,newStatus){
-  const o=orders.find(x=>x.id===id);
-  if(o){o.status=newStatus; renderOrders();}
-}
+    window.openModal = (productId) => {
+        const product = PRODUCTS.find(p => p.id === productId);
+        document.getElementById('modal-product-id').value = product.id;
+        document.getElementById('modal-product-name').innerText = `Personalize seu ${product.name}`;
+        document.getElementById('modal-product-description').innerText = product.description;
 
-/* ---------- Financeiro ---------- */
-function renderFinance(){
-  const totalRevenue=orders.reduce((t,o)=>t+o.total,0);
-  const totalOrders=orders.length;
-  const avgTicket=totalOrders?totalRevenue/totalOrders:0;
-  const profit=orders.reduce((t,o)=>t+o.items.reduce((s,i)=>s+(i.price-(i.buyPrice||0)),0),0);
-  document.getElementById("kpi-revenue").innerText=`R$ ${totalRevenue.toFixed(2)}`;
-  document.getElementById("kpi-orders").innerText=totalOrders;
-  document.getElementById("kpi-ticket").innerText=`R$ ${avgTicket.toFixed(2)}`;
-  document.getElementById("kpi-profit").innerText=`R$ ${profit.toFixed(2)}`;
-  const ctx=document.getElementById("salesChart").getContext("2d");
-  if(window.salesChart)window.salesChart.destroy();
-  window.salesChart=new Chart(ctx,{type:"bar",data:{
-    labels:orders.map(o=>new Date(o.created).toLocaleDateString("pt-BR")),
-    datasets:[{label:"Vendas",data:orders.map(o=>o.total),backgroundColor:"rgba(106,13,173,0.7)"}]
-  }});
-}
+        const optionsContainer = document.getElementById('modal-options');
+        optionsContainer.innerHTML = `
+            <div class="customization-group">
+                <h4>Adicionais (Cobrados à parte):</h4>
+                ${TOPPINGS.map(t => `
+                    <label>
+                        <input type="checkbox" name="topping" value="${t.id}">
+                        ${t.name} (+ R$ ${t.price.toFixed(2)})
+                    </label>
+                `).join('')}
+            </div>
+        `;
+        document.getElementById('customization-modal').classList.remove('hidden');
+    };
 
-/* ---------- Estoque ---------- */
-function renderStock(){
-  document.getElementById("stock-list").innerHTML =
-    PRODUCTS.map(p=>`
-      <div style="background:var(--card-bg);padding:0.8rem;margin-bottom:0.5rem;border-radius:6px;">
-        <b>${p.name}</b> - Estoque: ${p.stock} | Compra: R$${p.buyPrice} | Venda: R$${p.price}
-        ${p.stock<5?`<span style="color:var(--danger)"> ⚠ Estoque baixo!</span>`:""}
-      </div>
-    `).join('');
-}
+    // --- LÓGICA DO CARRINHO ---
+    const renderCart = () => {
+        const cartContainer = document.getElementById('cart-items-container');
+        if (cart.length === 0) {
+            cartContainer.innerHTML = '<p>Carrinho vazio.</p>';
+        } else {
+            cartContainer.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <div class="item-details">
+                        <b>${item.name}</b>
+                        <small>${item.toppings.map(t => t.name).join(', ') || 'Sem adicionais'}</small>
+                    </div>
+                    <span>R$ ${item.totalPrice.toFixed(2)}</span>
+                    <button onclick="removeFromCart(${index})" style="background:transparent; border:none; color:var(--danger); cursor:pointer;">❌</button>
+                </div>
+            `).join('');
+        }
+        
+        const total = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+        document.getElementById('cart-total-price').innerText = `R$ ${total.toFixed(2)}`;
+    };
 
-/* ---------- Splash ---------- */
-window.onload=()=>{ setTimeout(()=>{document.getElementById("splash").style.display="none";},2000); };
-document.addEventListener("DOMContentLoaded",()=>{ renderProducts(); updateCart(); });
+    window.removeFromCart = (index) => {
+        cart.splice(index, 1);
+        renderCart();
+    };
 
-/* ---------- PWA ---------- */
-const manifest={
-  "name":"Açaí da Barra POA",
-  "short_name":"Açaí Barra",
-  "start_url":".",
-  "display":"standalone",
-  "background_color":"#121212",
-  "theme_color":"#6a0dad",
-  "icons":[
-    {"src":"https://i.ibb.co/C0740pX/acai-300ml.jpg","sizes":"128x128","type":"image/png"},
-    {"src":"https://i.ibb.co/C0740pX/acai-300ml.jpg","sizes":"256x256","type":"image/png"}
-  ]
-};
-const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
-const url=URL.createObjectURL(blob);
-const link=document.createElement('link');
-link.rel='manifest'; link.href=url;
-document.head.appendChild(link);
-const swCode=`
-  self.addEventListener('install',e=>{
-    e.waitUntil(caches.open('acai-barra').then(c=>c.addAll(['./'])));
-  });
-  self.addEventListener('fetch',e=>{
-    e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
-  });
-`;
-const swBlob=new Blob([swCode],{type:'application/javascript'});
-const swUrl=URL.createObjectURL(swBlob);
-if('serviceWorker'in navigator){navigator.serviceWorker.register(swUrl);}
+    document.getElementById('customization-form').onsubmit = (e) => {
+        e.preventDefault();
+        const productId = parseInt(document.getElementById('modal-product-id').value);
+        const product = PRODUCTS.find(p => p.id === productId);
+
+        const selectedToppingIds = Array.from(e.target.elements.topping)
+            .filter(input => input.checked)
+            .map(input => parseInt(input.value));
+        
+        const selectedToppings = TOPPINGS.filter(t => selectedToppingIds.includes(t.id));
+        const toppingsPrice = selectedToppings.reduce((sum, t) => sum + t.price, 0);
+
+        cart.push({
+            cartId: Date.now(),
+            name: product.name,
+            toppings: selectedToppings,
+            totalPrice: product.price + toppingsPrice
+        });
+
+        renderCart();
+        document.getElementById('customization-modal').classList.add('hidden');
+    };
+    
+    // Fechar modal ao clicar fora
+    document.getElementById('customization-modal').onclick = (e) => {
+        if (e.target.id === 'customization-modal') {
+            e.target.classList.add('hidden');
+        }
+    };
+
+    // --- LÓGICA DE FINALIZAÇÃO E RASTREIO ---
+    document.getElementById('checkout-btn').onclick = () => {
+        if (cart.length === 0) return alert('Seu carrinho está vazio!');
+        
+        const newOrder = {
+            id: Date.now(),
+            items: [...cart],
+            total: cart.reduce((sum, item) => sum + item.totalPrice, 0),
+            status: 'Pedido Recebido',
+            createdAt: new Date()
+        };
+        orders.push(newOrder);
+        
+        cart = [];
+        renderCart();
+        
+        document.getElementById('cart-summary').classList.add('hidden');
+        document.getElementById('order-tracker').classList.remove('hidden');
+        renderOrderTracker(newOrder.id);
+        
+        // Simula a notificação para o admin
+        if(window.location.hash === '#admin') renderAdminOrders();
+    };
+
+    const renderOrderTracker = (orderId) => {
+        const order = orders.find(o => o.id === orderId);
+        if (!order) return;
+
+        const statuses = ['Pedido Recebido', 'Em Preparação', 'Saiu para Entrega', 'Entregue'];
+        const currentStatusIndex = statuses.indexOf(order.status);
+
+        const trackerInfo = document.getElementById('tracker-info');
+        trackerInfo.innerHTML = `
+            <p>Pedido #${order.id}</p>
+            <p>Total: R$ ${order.total.toFixed(2)}</p>
+            <div class="status-bar">
+                ${statuses.map((s, i) => `
+                    <div class="status-step ${i <= currentStatusIndex ? 'active' : ''}">${s}</div>
+                `).join('')}
+            </div>
+        `;
+
+        // Continuamente checa por atualizações de status
+        setTimeout(() => renderOrderTracker(orderId), 2000);
+    };
+
+    // --- FUNÇÕES DO PAINEL ADMIN ---
+    const renderAdminOrders = () => {
+        const orderList = document.getElementById('admin-orders-list');
+        if (orders.length === 0) {
+            orderList.innerHTML = '<p>Nenhum pedido recebido ainda.</p>';
+            return;
+        }
+
+        orderList.innerHTML = orders.slice().reverse().map(o => `
+            <div class="order-card">
+                <h4>Pedido #${o.id} - R$ ${o.total.toFixed(2)}</h4>
+                <small>${o.items.map(i => `${i.name} (${i.toppings.map(t=>t.name).join(', ') || 'Puro'})`).join('; ')}</small>
+                <div style="margin-top: 1rem;">
+                    <label for="status-${o.id}">Status: </label>
+                    <select id="status-${o.id}" onchange="updateOrderStatus(${o.id}, this.value)">
+                        <option value="Pedido Recebido" ${o.status === 'Pedido Recebido' ? 'selected' : ''}>Recebido</option>
+                        <option value="Em Preparação" ${o.status === 'Em Preparação' ? 'selected' : ''}>Em Preparação</option>
+                        <option value="Saiu para Entrega" ${o.status === 'Saiu para Entrega' ? 'selected' : ''}>Saiu para Entrega</option>
+                        <option value="Entregue" ${o.status === 'Entregue' ? 'selected' : ''}>Entregue</option>
+                    </select>
+                </div>
+            </div>
+        `).join('');
+    };
+
+    window.updateOrderStatus = (orderId, newStatus) => {
+        const order = orders.find(o => o.id === orderId);
+        if (order) {
+            order.status = newStatus;
+            console.log(`Status do pedido ${orderId} atualizado para ${newStatus}`);
+        }
+    };
+
+    // --- INICIALIZAÇÃO ---
+    checkView();
+});
 </script>
+
 </body>
 </html>
