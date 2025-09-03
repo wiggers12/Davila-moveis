@@ -96,7 +96,6 @@
 </head>
 <body>
 
-<!-- Splash -->
 <div id="splash">
   <h1>Açaí da Barra POA 🍧</h1>
   <p>Carregando...</p>
@@ -107,7 +106,6 @@
   <p>Monte seu açaí do seu jeito!</p>
 </header>
 
-<!-- Cliente -->
 <main id="customer-view">
   <section id="menu">
     <h2>Vitrine de Produtos</h2>
@@ -122,7 +120,6 @@
   </section>
 </main>
 
-<!-- Admin -->
 <main id="admin-panel">
   <h2>Painel de Controle</h2>
   <div class="admin-nav">
@@ -161,7 +158,6 @@
   </div>
 </main>
 
-<!-- Botões Sociais -->
 <div class="social-btns">
   <a href="https://wa.me/5551999999999" target="_blank">🟢</a>
   <a href="https://instagram.com" target="_blank">📷</a>
@@ -171,9 +167,9 @@
 <script>
 /* ---------- Produtos fictícios ---------- */
 const PRODUCTS = [
-  { id:1, name:"Copo 300ml", price:12, buyPrice:6, stock:20, image:"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg" },
-  { id:2, name:"Copo 500ml", price:18, buyPrice:8, stock:15, image:"https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg" },
-  { id:3, name:"Barca Família", price:35, buyPrice:15, stock:10, image:"https://images.pexels.com/photos/1893555/pexels-photo-1893555.jpeg" }
+  { id:1, name:"Copo 300ml", price:12, buyPrice:6, stock:20, image:"https://i.ibb.co/C0740pX/acai-300ml.jpg" },
+  { id:2, name:"Copo 500ml", price:18, buyPrice:8, stock:15, image:"https://i.ibb.co/d5m33jN/acai-500ml.jpg" },
+  { id:3, name:"Barca Família", price:35, buyPrice:15, stock:10, image:"https://i.ibb.co/rQxM89K/acai-barca.jpg" }
 ];
 let cart=[], orders=[];
 
@@ -182,7 +178,7 @@ function renderProducts(){
   document.getElementById("products-container").innerHTML =
     PRODUCTS.map(p=>`
       <div class="product-card">
-        <img src="${p.image}">
+        <img src="${p.image}" alt="${p.name}">
         <div class="product-info">
           <h3>${p.name}</h3>
           <p class="price">R$ ${p.price.toFixed(2)}</p>
@@ -311,8 +307,8 @@ const manifest={
   "background_color":"#121212",
   "theme_color":"#6a0dad",
   "icons":[
-    {"src":"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg","sizes":"128x128","type":"image/png"},
-    {"src":"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg","sizes":"256x256","type":"image/png"}
+    {"src":"https://i.ibb.co/C0740pX/acai-300ml.jpg","sizes":"128x128","type":"image/png"},
+    {"src":"https://i.ibb.co/C0740pX/acai-300ml.jpg","sizes":"256x256","type":"image/png"}
   ]
 };
 const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
