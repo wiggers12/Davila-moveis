@@ -9,41 +9,47 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 <style>
 :root{
-  --primary:#6a0dad;--secondary:#f39c12;--success:#2ecc71;--info:#3498db;--danger:#e74c3c;
-  --bg:#f4f4f9;--light:#fff;--dark:#333;--shadow:0 4px 15px rgba(0,0,0,.1);
+  --primary:#7d3cff;--secondary:#ffb347;--success:#2ecc71;--info:#3498db;--danger:#e74c3c;
+  --bg:#f8f9fd;--light:#fff;--dark:#333;--shadow:0 4px 20px rgba(0,0,0,.1);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--dark);}
-header{background:linear-gradient(135deg,var(--primary),#8e44ad);color:#fff;padding:1rem;text-align:center;}
+header{background:linear-gradient(135deg,var(--primary),#9d5bff);color:#fff;padding:1.2rem;text-align:center;box-shadow:var(--shadow);}
 header h1{font-size:2rem;}
-nav{background:#fff;box-shadow:var(--shadow);display:flex;justify-content:center;gap:.5rem;position:sticky;top:0;z-index:100;}
-nav button{border:none;background:none;padding:1rem 1.5rem;font-weight:600;cursor:pointer;transition:.3s;}
+nav{background:#fff;box-shadow:var(--shadow);display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;}
+nav button{flex:1;min-width:120px;border:none;background:none;padding:.8rem;font-weight:600;cursor:pointer;transition:.3s;display:flex;flex-direction:column;align-items:center;gap:.3rem;}
 nav button.active{color:var(--primary);border-bottom:3px solid var(--primary);}
-section{display:none;padding:2rem;max-width:1200px;margin:auto;}
+nav button small{font-size:.75rem;color:#666;}
+.badge{background:var(--danger);color:#fff;padding:.1rem .4rem;border-radius:12px;font-size:.7rem;font-weight:600;}
+section{display:none;padding:1.5rem;max-width:1200px;margin:auto;}
 section.active{display:block;}
-/* Produtos - carrossel */
+/* Produtos */
 .swiper{width:100%;padding:1rem 0;}
-.swiper-slide{background:#fff;border-radius:10px;box-shadow:var(--shadow);overflow:hidden;text-align:center;}
+.swiper-slide{background:#fff;border-radius:12px;box-shadow:var(--shadow);overflow:hidden;text-align:center;}
 .swiper-slide img{width:100%;height:220px;object-fit:cover;}
 .product-info{padding:1rem;}
 .order-button{background:linear-gradient(135deg,var(--primary),#5a0a99);color:#fff;border:none;padding:.6rem 1rem;border-radius:8px;cursor:pointer;transition:.3s;}
 .order-button:hover{opacity:.9;}
 /* Carrinho */
-.cart-container{background:#fff;padding:1.5rem;border-radius:10px;box-shadow:var(--shadow);margin-top:2rem;}
+.cart-container{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:var(--shadow);margin-top:2rem;}
 .cart-item{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:.5rem 0;}
 .cart-total{font-weight:700;color:var(--primary);text-align:right;margin-top:1rem;}
 .btn-finish{background:linear-gradient(135deg,var(--success),#27ae60);color:#fff;border:none;padding:.9rem;border-radius:8px;width:100%;margin-top:1rem;font-weight:600;cursor:pointer;}
 .btn-finish:disabled{background:#aaa;}
 /* Admin */
-.kpi-card{background:#fff;padding:1rem;border-radius:10px;box-shadow:var(--shadow);text-align:center;margin:1rem;flex:1;}
+.kpi-card{background:#fff;padding:1rem;border-radius:12px;box-shadow:var(--shadow);text-align:center;margin:1rem;flex:1;min-width:200px;}
 .kpi-card h4{font-size:1rem;color:#555;}
 .kpi-card p{font-size:1.4rem;font-weight:700;color:var(--primary);}
-.order-list-item{background:#fff;padding:1rem;margin:1rem 0;border-radius:10px;box-shadow:var(--shadow);}
+.order-list-item{background:#fff;padding:1rem;margin:1rem 0;border-radius:12px;box-shadow:var(--shadow);}
 .order-status{padding:.3rem .6rem;border-radius:8px;color:#fff;font-size:.8rem;}
 .status-Recebido{background:var(--info);} 
 .status-Em{background:var(--secondary);}
 .status-Concluído{background:var(--success);} 
 .status-Cancelado{background:var(--danger);}
+@media(max-width:768px){
+  header h1{font-size:1.4rem;}
+  nav button{min-width:100px;padding:.6rem;}
+}
 </style>
 </head>
 <body>
@@ -54,11 +60,11 @@ section.active{display:block;}
 </header>
 
 <nav>
-  <button class="active" onclick="showTab('catalogo')">🛒 Catálogo</button>
-  <button onclick="showTab('pedidos')">📦 Pedidos</button>
-  <button onclick="showTab('financeiro')">💰 Financeiro</button>
-  <button onclick="showTab('estoque')">📊 Estoque</button>
-  <button onclick="showTab('logistica')">🚚 Logística</button>
+  <button class="active" onclick="showTab('catalogo')">🛒<span>Catálogo</span><small id="nav-catalogo">0 produtos</small></button>
+  <button onclick="showTab('pedidos')">📦<span>Pedidos</span><small id="nav-pedidos">0</small></button>
+  <button onclick="showTab('financeiro')">💰<span>Financeiro</span><small id="nav-financeiro">R$ 0</small></button>
+  <button onclick="showTab('estoque')">📊<span>Estoque</span><small id="nav-estoque">ok</small></button>
+  <button onclick="showTab('logistica')">🚚<span>Logística</span><small id="nav-logistica">0 entregas</small></button>
 </nav>
 
 <!-- Catálogo -->
@@ -70,7 +76,7 @@ section.active{display:block;}
     <div class="swiper-button-next"></div>
   </div>
   <div class="cart-container">
-    <h3>Seu Pedido - Sua Marca Aqui</h3>
+    <h3>Seu Pedido</h3>
     <div id="cart-items"><p>Seu carrinho está vazio</p></div>
     <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
     <input id="client-name" placeholder="Sua Marca Aqui">
@@ -108,9 +114,7 @@ const PRODUCTS=[
  {id:2,name:"Copo 500ml",price:18,cost:9,stock:10,image:"https://images.unsplash.com/photo-1604908177522-8e43f5201fa3"},
  {id:3,name:"Barca Açaí",price:35,cost:18,stock:5,image:"https://images.unsplash.com/photo-1598514982419-1cbcb2f3c1b9"}
 ];
-const TOPPINGS=[{name:"Leite em pó",price:2,cost:1,stock:20},{name:"Morango",price:3,cost:1.5,stock:15}];
 
-// Tabs
 function showTab(id){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -120,6 +124,7 @@ function showTab(id){
   if(id==="financeiro")renderFinance();
   if(id==="estoque")renderStock();
   if(id==="logistica")renderLogistics();
+  updateNavBadges();
 }
 
 // Render produtos
@@ -134,6 +139,7 @@ function renderProducts(){
      </div>
    </div>`).join("");
  new Swiper(".swiper",{slidesPerView:1,spaceBetween:20,autoplay:{delay:3000},loop:true,navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"}});
+ updateNavBadges();
 }
 
 // Carrinho
@@ -147,8 +153,12 @@ document.getElementById("client-name").addEventListener("input",checkForm);docum
 document.getElementById("finish-order-button").addEventListener("click",finalizarPedido);
 
 // Pedido
-function finalizarPedido(){let o={id:Date.now(),customerName:document.getElementById("client-name").value||"Sua Marca Aqui",customerAddress:document.getElementById("client-address").value,payment:document.getElementById("payment-method").value,items:cart,total:cart.reduce((s,i)=>s+i.total,0),status:"Recebido",createdAt:new Date().toISOString()};orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));baixarEstoque(o);cart=[];updateCart();alert("Pedido realizado pela Sua Marca Aqui!");}
-function renderOrders(){document.getElementById("orders-list").innerHTML=orders.map(o=>`
+function finalizarPedido(){
+ let o={id:Date.now(),customerName:document.getElementById("client-name").value||"Sua Marca Aqui",customerAddress:document.getElementById("client-address").value,payment:document.getElementById("payment-method").value,items:cart,total:cart.reduce((s,i)=>s+i.total,0),status:"Recebido",createdAt:new Date().toISOString()};
+ orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));baixarEstoque(o);cart=[];updateCart();updateNavBadges();alert("Pedido realizado pela Sua Marca Aqui!");
+}
+function renderOrders(){
+ document.getElementById("orders-list").innerHTML=orders.map(o=>`
 <div class="order-list-item"><strong>Pedido #${o.id}</strong><br>${o.customerName} - ${o.customerAddress}<br>Total: R$ ${o.total}<br>Status:
 <select onchange="updateStatus(${o.id},this.value)">
 <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
@@ -156,24 +166,56 @@ function renderOrders(){document.getElementById("orders-list").innerHTML=orders.
 <option ${o.status==="Saiu para Entrega"?"selected":""}>Saiu para Entrega</option>
 <option ${o.status==="Concluído"?"selected":""}>Concluído</option>
 <option ${o.status==="Cancelado"?"selected":""}>Cancelado</option>
-</select></div>`).join("");}
+</select></div>`).join("");
+ updateNavBadges();
+}
 function updateStatus(id,s){let o=orders.find(x=>x.id===id);if(o){o.status=s;localStorage.setItem("acaiOrders",JSON.stringify(orders));renderOrders();}}
 
 // Financeiro
-function renderFinance(){let done=orders.filter(o=>o.status==="Concluído");let rev=done.reduce((s,o)=>s+o.total,0);let cost=0;done.forEach(o=>o.items.forEach(it=>cost+=it.product.cost));let profit=rev-cost;let avg=done.length?rev/done.length:0;document.getElementById("kpi-revenue").innerText="R$ "+rev.toFixed(2);document.getElementById("kpi-profit").innerText="R$ "+profit.toFixed(2);document.getElementById("kpi-avg").innerText="R$ "+avg.toFixed(2);
-let ctx=document.getElementById("salesChart").getContext("2d");if(window.salesChart)window.salesChart.destroy();window.salesChart=new Chart(ctx,{type:"bar",data:{labels:done.map(o=>new Date(o.createdAt).toLocaleDateString()),datasets:[{label:"Vendas - Sua Marca Aqui",data:done.map(o=>o.total),backgroundColor:"rgba(106,13,173,.7)"}]},options:{scales:{y:{beginAtZero:true}}}});}
+function renderFinance(){
+ let done=orders.filter(o=>o.status==="Concluído");
+ let rev=done.reduce((s,o)=>s+o.total,0);
+ let cost=0;done.forEach(o=>o.items.forEach(it=>cost+=it.product.cost));
+ let profit=rev-cost;let avg=done.length?rev/done.length:0;
+ document.getElementById("kpi-revenue").innerText="R$ "+rev.toFixed(2);
+ document.getElementById("kpi-profit").innerText="R$ "+profit.toFixed(2);
+ document.getElementById("kpi-avg").innerText="R$ "+avg.toFixed(2);
+ let ctx=document.getElementById("salesChart").getContext("2d");
+ if(window.salesChart)window.salesChart.destroy();
+ window.salesChart=new Chart(ctx,{type:"bar",data:{labels:done.map(o=>new Date(o.createdAt).toLocaleDateString()),datasets:[{label:"Vendas - Sua Marca Aqui",data:done.map(o=>o.total),backgroundColor:"rgba(125,60,255,.7)"}]},options:{scales:{y:{beginAtZero:true}}}});
+ updateNavBadges();
+}
 
 // Estoque
 function baixarEstoque(order){order.items.forEach(it=>{let p=PRODUCTS.find(x=>x.id===it.product.id);if(p) p.stock--;});}
-function renderStock(){document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`${p.name} - Estoque: ${p.stock} ${p.stock<3?"⚠":""}`).join("<br>");}
+function renderStock(){document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`${p.name} - Estoque: ${p.stock} ${p.stock<3?"⚠":""}`).join("<br>");updateNavBadges();}
 
 // Logística
 const entregadores=[{nome:"Carlos",fone:"5199999999"},{nome:"Ana",fone:"5198888888"}];
-function renderLogistics(){let c=document.getElementById("logistics-list");let pend=orders.filter(o=>o.status==="Saiu para Entrega");c.innerHTML=pend.map(o=>`<div class="order-list-item"><strong>Pedido #${o.id}</strong><br>${o.customerName}<br>${o.customerAddress}<br><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.customerAddress)}" target="_blank">Abrir no Maps</a><br><select onchange="atribuir(${o.id},this.value)"><option>Entregador</option>${entregadores.map(e=>`<option>${e.nome}</option>`).join("")}</select></div>`).join("")||"Nenhuma entrega em andamento";}
+function renderLogistics(){
+ let c=document.getElementById("logistics-list");
+ let pend=orders.filter(o=>o.status==="Saiu para Entrega");
+ c.innerHTML=pend.map(o=>`<div class="order-list-item"><strong>Pedido #${o.id}</strong><br>${o.customerName}<br>${o.customerAddress}<br><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.customerAddress)}" target="_blank">Abrir no Maps</a><br><select onchange="atribuir(${o.id},this.value)"><option>Entregador</option>${entregadores.map(e=>`<option>${e.nome}</option>`).join("")}</select></div>`).join("")||"Nenhuma entrega em andamento";
+ updateNavBadges();
+}
 function atribuir(id,nome){let o=orders.find(x=>x.id===id);if(o){o.entregador=nome;localStorage.setItem("acaiOrders",JSON.stringify(orders));alert("Pedido #"+id+" atribuído a "+nome+" - Sua Marca Aqui");}}
 
+// Atualiza badges do menu
+function updateNavBadges(){
+ document.getElementById("nav-catalogo").innerText=PRODUCTS.length+" produtos";
+ let pend=orders.filter(o=>o.status!=="Concluído"&&o.status!=="Cancelado").length;
+ document.getElementById("nav-pedidos").innerHTML= pend>0?`<span class="badge">${pend}</span>`:"0";
+ let done=orders.filter(o=>o.status==="Concluído");
+ let rev=done.reduce((s,o)=>s+o.total,0);
+ document.getElementById("nav-financeiro").innerText="R$ "+rev.toFixed(0);
+ let low=PRODUCTS.filter(p=>p.stock<3).length;
+ document.getElementById("nav-estoque").innerText= low>0?low+" baixo":"ok";
+ let entregas=orders.filter(o=>o.status==="Saiu para Entrega").length;
+ document.getElementById("nav-logistica").innerText=entregas+" entregas";
+}
+
 // Init
-renderProducts();updateCart();
+renderProducts();updateCart();updateNavBadges();
 </script>
 </body>
 </html>
