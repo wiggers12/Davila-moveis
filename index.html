@@ -4,9 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sua Marca Aqui 👑</title>
+
+<!-- Fontes e Ícones -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Swiper e Chart.js -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 :root{
   --primary:#9d4edd;--secondary:#ffb347;--success:#2ecc71;--info:#4dabf7;--danger:#ff4d6d;
@@ -26,24 +33,21 @@ section.active{display:block;}
 /* Produtos */
 .swiper{width:100%;padding:1rem 0;}
 .swiper-slide{background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;text-align:center;transition:0.2s;}
-.swiper-slide.added{box-shadow:0 0 15px var(--success);}
 .swiper-slide img,.swiper-slide video{width:100%;height:220px;object-fit:cover;}
 .product-info{padding:1rem;}
 .order-button{background:linear-gradient(145deg,#9d4edd,#5a189a);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;transition:.2s;}
 .order-button:disabled{background:#555;cursor:not-allowed;}
-.order-button:active{transform:scale(0.95);}
 /* Modal complementos */
-#modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1500;animation:fadeIn .3s;}
-#modal-content{background:#fff;color:#000;padding:1.5rem;border-radius:12px;width:90%;max-width:400px;animation:zoomIn .3s;}
+#modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1500;}
+#modal-content{background:#fff;color:#000;padding:1.5rem;border-radius:12px;width:90%;max-width:400px;}
 #modal-content h3{margin-bottom:1rem;}
 .topping{margin:.3rem 0;}
 /* Carrinho */
 .cart-container{background:var(--card-bg);padding:1.5rem;border-radius:16px;box-shadow:var(--shadow);}
 .cart-item{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);padding:.5rem 0;}
 .cart-total{font-weight:700;color:var(--secondary);text-align:right;margin-top:1rem;font-size:1.1rem;}
-.btn-finish{background:linear-gradient(145deg,#2ecc71,#208d4e);color:#fff;border:none;padding:1rem;border-radius:10px;width:100%;margin-top:1rem;font-weight:700;cursor:pointer;transition:.2s;}
-.btn-finish:active{transform:scale(0.95);}
-/* Logística e Pedidos */
+.btn-finish{background:linear-gradient(145deg,#2ecc71,#208d4e);color:#fff;border:none;padding:1rem;border-radius:10px;width:100%;margin-top:1rem;font-weight:700;cursor:pointer;}
+/* Cards gerais */
 .order-card{background:var(--card-bg);padding:1rem;margin:.8rem 0;border-radius:12px;box-shadow:var(--shadow);}
 .status{padding:.3rem .6rem;border-radius:8px;font-size:.8rem;font-weight:600;display:inline-block;}
 .status-Recebido{background:var(--info);}
@@ -51,8 +55,7 @@ section.active{display:block;}
 .status-Saiu{background:#ffa94d;}
 .status-Concluído{background:var(--success);}
 .status-Cancelado{background:var(--danger);}
-.action-btn{margin:.2rem;padding:.4rem .7rem;border:none;border-radius:6px;cursor:pointer;font-size:.8rem;}
-.remove-btn{background:var(--danger);color:#fff;}
+.remove-btn{background:var(--danger);color:#fff;border:none;padding:.3rem .6rem;border-radius:6px;cursor:pointer;}
 /* Financeiro */
 .kpi-container{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
 .kpi-card{flex:1;min-width:200px;background:var(--card-bg);padding:1rem;border-radius:12px;box-shadow:var(--shadow);text-align:center;}
@@ -62,14 +65,12 @@ section.active{display:block;}
 #splash{position:fixed;top:0;left:0;width:100%;height:100%;
   background:linear-gradient(135deg,#7b2cbf,#ffb347);
   display:flex;align-items:center;justify-content:center;
-  z-index:2000;color:#fff;animation:fadeIn 1s;}
-.splash-content{text-align:center;animation:zoomIn 1s;}
+  z-index:2000;color:#fff;}
+.splash-content{text-align:center;}
 .splash-content h1{font-size:4rem;margin:0;}
 .splash-content h2{margin:0;font-size:2rem;}
 /* Toast */
 #toast{position:fixed;bottom:20px;right:20px;background:var(--card-bg);color:#fff;padding:1rem 1.5rem;border-radius:8px;box-shadow:var(--shadow);display:none;z-index:3000;}
-@keyframes zoomIn{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 </style>
 </head>
 <body>
@@ -105,12 +106,12 @@ section.active{display:block;}
 </header>
 
 <nav>
-  <button class="active" onclick="showTab('catalogo')">🛒 Catálogo</button>
-  <button onclick="showTab('carrinho')">🛍 Carrinho <span id="cart-badge" class="badge"></span></button>
-  <button onclick="showTab('pedidos')">📦 Pedidos <span id="orders-badge" class="badge"></span></button>
-  <button onclick="showTab('financeiro')">💰 Financeiro</button>
-  <button onclick="showTab('estoque')">📊 Estoque</button>
-  <button onclick="showTab('logistica')">🚚 Logística</button>
+  <button id="btn-catalogo" class="active" onclick="showTab('catalogo',this)">🛒 Catálogo</button>
+  <button id="btn-carrinho" onclick="showTab('carrinho',this)">🛍 Carrinho <span id="cart-badge" class="badge"></span></button>
+  <button id="btn-pedidos" onclick="showTab('pedidos',this)">📦 Pedidos <span id="orders-badge" class="badge"></span></button>
+  <button id="btn-financeiro" onclick="showTab('financeiro',this)">💰 Financeiro</button>
+  <button id="btn-estoque" onclick="showTab('estoque',this)">📊 Estoque</button>
+  <button id="btn-logistica" onclick="showTab('logistica',this)">🚚 Logística</button>
 </nav>
 
 <!-- Catálogo -->
@@ -152,11 +153,8 @@ section.active{display:block;}
   <div style="margin-bottom:1rem;">
     <input id="new-name" placeholder="Nome do produto">
     <input id="new-price" placeholder="Preço" type="number">
-    <input id="new-cost" placeholder="Custo" type="number">
-    <input id="new-stock" placeholder="Estoque inicial" type="number">
-    <input id="new-media" type="file" accept="image/*,video/*">
-    <button onclick="addProduct()">Adicionar Produto</button>
-  </div>
+    <input id="new-cost" placeholder="Custo" type="number
+      </div>
   <div id="stock-list"></div>
 </section>
 
@@ -165,10 +163,12 @@ section.active{display:block;}
 
 </div> <!-- fim app -->
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 /* Splash */
-window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").style.display="none";document.getElementById("app").style.display="block";},2000);});
+window.addEventListener("load",()=>{setTimeout(()=>{
+  document.getElementById("splash").style.display="none";
+  document.getElementById("app").style.display="block";
+},2000);});
 
 /* Toast */
 function showToast(msg){
@@ -184,7 +184,13 @@ const FRETE_FIXO=5.0;
 const TOPPINGS=[{name:"Leite em pó",price:2},{name:"Morango",price:3},{name:"Granola",price:2},{name:"Leite condensado",price:2.5}];
 
 /* Navegação */
-function showTab(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");render();}
+function showTab(id,btn){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  render();
+}
 
 /* Modal complementos */
 let selectedProduct=null,selectedToppings=[];
@@ -204,23 +210,25 @@ function confirmAdd(){
 }
 
 /* Render produtos */
+let swiperInstance=null;
 function renderProducts(){
  document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
    <div class="swiper-slide">
-     ${p.media.includes("video")?`<video src="${p.media}" controls></video>`:`<img src="${p.media}" alt="${p.name}">`}
+     ${p.media && p.media.includes("video")?`<video src="${p.media}" controls></video>`:`<img src="${p.media}" alt="${p.name}">`}
      <div class="product-info">
-       <h3>${p.name}</h3><p><strong>R$ ${p.price}</strong></p>
+       <h3>${p.name}</h3><p><strong>R$ ${p.price.toFixed(2)}</strong></p>
        <button class="order-button" onclick="openModal(${p.id})" ${p.stock<=0?"disabled":""}>${p.stock<=0?"Sem estoque":"Selecionar"}</button>
      </div>
    </div>`).join("");
- new Swiper(".swiper",{slidesPerView:1,loop:true});
+ if(swiperInstance){swiperInstance.destroy();}
+ swiperInstance=new Swiper(".swiper",{slidesPerView:1,loop:true});
 }
 
 /* Carrinho */
 function updateCart(){
  let c=document.getElementById("cart-items");
  if(cart.length==0){c.innerHTML="<p>Seu carrinho está vazio</p>";}
- else{c.innerHTML=cart.map(it=>`<div class="cart-item">${it.product.name} ${it.toppings.length?"+ "+it.toppings.map(t=>t.name).join(", "):""} <span>R$ ${it.total}</span></div>`).join("");}
+ else{c.innerHTML=cart.map(it=>`<div class="cart-item">${it.product.name} ${it.toppings.length?"+ "+it.toppings.map(t=>t.name).join(", "):""} <span>R$ ${it.total.toFixed(2)}</span></div>`).join("");}
  document.getElementById("cart-total-price").innerText="R$ "+cart.reduce((s,i)=>s+i.total,0).toFixed(2);
  document.getElementById("finish-order-button").disabled=cart.length==0;
  document.getElementById("cart-badge").style.display=cart.length>0?"inline-block":"none";
@@ -231,26 +239,34 @@ document.getElementById("finish-order-button").addEventListener("click",finaliza
 function finalizarPedido(){
  let subtotal=cart.reduce((s,i)=>s+i.total,0);
  let o={id:Date.now(),customerName:"",phone:"",deliveryType:"",address:"",notes:"",payment:"",items:cart,totalItems:subtotal,frete:0,total:subtotal,status:"Recebido",createdAt:new Date().toLocaleString()};
- orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));cart=[];updateCart();showTab('logistica');render();
+ orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));cart=[];updateCart();showTab('logistica',document.getElementById("btn-logistica"));render();
  showToast("Pedido registrado e enviado para logística!");
 }
 
 /* Estoque */
 function addProduct(){
  let file=document.getElementById("new-media").files[0];let reader=new FileReader();
- reader.onload=function(e){let p={id:Date.now(),name:document.getElementById("new-name").value,price:parseFloat(document.getElementById("new-price").value),cost:parseFloat(document.getElementById("new-cost").value),stock:parseInt(document.getElementById("new-stock").value),media:e.target.result};PRODUCTS.push(p);saveProducts();render();};
+ reader.onload=function(e){
+   let p={id:Date.now(),name:document.getElementById("new-name").value,price:parseFloat(document.getElementById("new-price").value),cost:parseFloat(document.getElementById("new-cost").value),stock:parseInt(document.getElementById("new-stock").value),media:e.target.result};
+   PRODUCTS.push(p);saveProducts();render();
+ };
  if(file) reader.readAsDataURL(file);
 }
 function saveProducts(){localStorage.setItem("acaiProducts",JSON.stringify(PRODUCTS));}
 function removeProduct(id){PRODUCTS=PRODUCTS.filter(p=>p.id!==id);saveProducts();render();}
-function renderStock(){document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`${p.name} - R$ ${p.price} - Estoque:${p.stock} <button class="remove-btn" onclick="removeProduct(${p.id})">Remover</button>`).join("<br>");}
+function renderStock(){
+ document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`
+   ${p.name} - R$ ${p.price.toFixed(2)} - Estoque:${p.stock}
+   <button class="remove-btn" onclick="removeProduct(${p.id})">Remover</button>
+ `).join("<br>");
+}
 
 /* Pedidos */
 function renderOrders(){
  document.getElementById("orders-list").innerHTML=orders.map(o=>`
    <div class="order-card">
      <strong>Pedido #${o.id}</strong><br>
-     Itens:<ul>${o.items.map(i=>`<li>${i.product.name} ${i.toppings.length?`+ ${i.toppings.map(t=>t.name).join(", ")}`:""} - R$ ${i.total}</li>`).join("")}</ul>
+     Itens:<ul>${o.items.map(i=>`<li>${i.product.name} ${i.toppings.length?`+ ${i.toppings.map(t=>t.name).join(", ")}`:""} - R$ ${i.total.toFixed(2)}</li>`).join("")}</ul>
      Subtotal: R$ ${o.totalItems.toFixed(2)} | Total: R$ ${o.total.toFixed(2)}<br>
      <span class="status status-${o.status}">${o.status}</span>
    </div>`).join("");
