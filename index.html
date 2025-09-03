@@ -1,138 +1,442 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grid Motos - Mecânica Express</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary:#e50914; /* vermelho destaque */
-      --dark:#111;
-      --light:#f4f4f4;
-      --white:#fff;
-    }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
-    body{background:var(--light);color:var(--dark);}
-    header{
-      background:linear-gradient(90deg,var(--dark),var(--primary));
-      color:var(--white);
-      padding:20px;text-align:center;
-    }
-    header h1{margin:0;font-size:28px;font-weight:700;}
-    header p{margin:5px 0 0;font-size:14px;opacity:0.9;}
-    .container{
-      max-width:900px;margin:20px auto;padding:20px;
-      background:var(--white);border-radius:10px;
-      box-shadow:0 3px 8px rgba(0,0,0,0.1);
-    }
-    h2{margin-bottom:10px;}
-    form label{display:block;margin-top:10px;font-weight:600;}
-    input,select,textarea,button{
-      width:100%;padding:12px;margin-top:5px;
-      border:1px solid #ccc;border-radius:6px;font-size:14px;
-    }
-    button{
-      background:var(--primary);color:var(--white);
-      border:none;cursor:pointer;font-weight:600;
-      transition:0.3s;
-    }
-    button:hover{background:#b0060f;}
-    .chamados{margin-top:30px;}
-    .card{
-      background:#fff;border-left:6px solid var(--primary);
-      padding:15px;margin-bottom:12px;border-radius:8px;
-      box-shadow:0 2px 5px rgba(0,0,0,0.1);
-      animation:fadeIn 0.5s ease;
-    }
-    .status{
-      margin-top:8px;font-size:13px;font-weight:600;
-      padding:6px 10px;border-radius:6px;display:inline-block;
-    }
-    .aguardando{background:#ffebee;color:#c62828;}
-    .andamento{background:#fff3e0;color:#ef6c00;}
-    .finalizado{background:#e8f5e9;color:#2e7d32;}
-    .acoes{margin-top:10px;}
-    .acoes button{margin-right:5px;font-size:12px;padding:6px 10px;}
-    @keyframes fadeIn{
-      from{opacity:0;transform:translateY(20px);}
-      to{opacity:1;transform:translateY(0);}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Açaí Imperial - Peça Agora!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a0dad; /* Roxo Açaí */
+            --secondary: #f39c12; /* Laranja Guaraná */
+            --background: #f4f4f9;
+            --text-dark: #333;
+            --text-light: #fff;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), #8e44ad);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem 1rem;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin: 0.5rem 0 0; font-size: 1.1rem; opacity: 0.9; }
+
+        main { padding: 2rem 1rem; max-width: 1200px; margin: auto; }
+        h2 { text-align: center; color: var(--primary); font-size: 2rem; margin-bottom: 2rem; }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .product-info { padding: 1.5rem; }
+        .product-info h3 { margin: 0 0 0.5rem; font-size: 1.4rem; }
+        .product-info .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .product-info .description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            min-height: 40px;
+        }
+        .order-button {
+            background-color: var(--primary);
+            color: var(--text-light);
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        .order-button:hover { background-color: #5a0a99; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transform: scale(0.9); transition: transform 0.3s;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-header { padding: 1.5rem; border-bottom: 1px solid #eee; text-align: center;}
+        .modal-header h2 { margin: 0; }
+        .modal-body { display: flex; flex-grow: 1; overflow: hidden; padding: 2rem; gap: 2rem; }
+        .toppings-panel, .cup-panel { flex: 1; overflow-y: auto; padding-right: 1rem;}
+        .toppings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
+        .topping-item {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .topping-item.selected { border-color: var(--primary); background-color: #f0e6f9; }
+        .topping-item span { font-weight: 500; }
+        .topping-item .price-add { font-size: 0.8rem; color: #888; }
+        .cup-panel .cup-visual {
+            background-color: #eee;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+        }
+        .cup-visual h4 { margin: 0 0 1rem; }
+        #cup-toppings { min-height: 100px; background: #fff; border-radius: 5px; padding: 0.5rem; }
+        #cup-toppings div { background: #f0e6f9; border-radius: 5px; padding: 0.3rem 0.5rem; margin-bottom: 0.3rem; font-size: 0.9rem; }
+        .modal-footer { padding: 1.5rem; border-top: 1px solid #eee; text-align: right; background: #fafafa; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;}
+        #total-price { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .btn-close { background-color: #ccc; }
+
+        /* Cart Styles */
+        .cart-container { background-color: var(--card-bg); border-radius: 15px; padding: 2rem; box-shadow: var(--shadow); }
+        .cart-item { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid #eee; }
+        .cart-item-details { flex-grow: 1; }
+        .cart-item-details strong { font-size: 1.1rem; }
+        .cart-item-details .toppings-list { font-size: 0.8rem; color: #666; margin-left: 1rem; }
+        .cart-item-price { font-weight: 600; }
+        .cart-total { text-align: right; font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; }
+        .cart-actions { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+        #client-info input { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; }
+        .btn-finish {
+            background-color: #2ecc71; /* Verde WhatsApp */
+            color: var(--text-light);
+            border: none;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-finish:hover { background-color: #27ae60; }
+        .btn-finish:disabled { background-color: #95a5a6; cursor: not-allowed; }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Grid Motos</h1>
-    <p>Atendimento Rápido - Mecânica Express</p>
-  </header>
 
-  <div class="container">
-    <h2>Registrar Atendimento</h2>
-    <form id="formAtendimento">
-      <label>Nome do Cliente:</label>
-      <input type="text" id="nome" required>
+<header>
+    <h1>Açaí Imperial 👑</h1>
+    <p>O sabor que te faz reinar! Peça agora e monte do seu jeito.</p>
+</header>
 
-      <label>Serviço:</label>
-      <select id="servico" required>
-        <option value="">Selecione</option>
-        <option value="Troca de óleo">Troca de óleo</option>
-        <option value="Revisão rápida">Revisão rápida</option>
-        <option value="Freios">Freios</option>
-        <option value="Elétrica">Elétrica</option>
-        <option value="Outro">Outro</option>
-      </select>
+<main>
+    <section id="menu">
+        <h2>Nosso Cardápio</h2>
+        <div class="products-grid" id="products-container">
+            </div>
+    </section>
 
-      <label>Descrição do problema:</label>
-      <textarea id="descricao" rows="3"></textarea>
+    <section id="cart" style="margin-top: 3rem;">
+        <h2>Seu Pedido</h2>
+        <div class="cart-container">
+            <div id="cart-items">
+                <p>Seu carrinho está vazio. Escolha um item do cardápio para começar!</p>
+            </div>
+            <div class="cart-total">
+                Total: <span id="cart-total-price">R$ 0,00</span>
+            </div>
+            <hr>
+            <div class="cart-actions">
+                <h3>Complete seus Dados</h3>
+                <div id="client-info">
+                    <input type="text" id="client-name" placeholder="Seu nome">
+                    <input type="text" id="client-address" placeholder="Seu endereço completo">
+                </div>
+                <button class="btn-finish" id="finish-order-button" disabled>
+                    <i class="fab fa-whatsapp"></i> Finalizar Pedido no WhatsApp
+                </button>
+            </div>
+        </div>
+    </section>
+</main>
 
-      <button type="submit">Adicionar à Fila</button>
-    </form>
-
-    <div class="chamados">
-      <h2>Fila de Atendimentos</h2>
-      <div id="listaChamados"></div>
+<div class="modal-overlay" id="builder-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modal-product-name">Monte seu Açaí</h2>
+        </div>
+        <div class="modal-body">
+            <div class="toppings-panel">
+                <h4>Escolha seus adicionais:</h4>
+                <div class="toppings-grid" id="toppings-container">
+                    </div>
+            </div>
+            <div class="cup-panel">
+                <div class="cup-visual">
+                    <h4>Seu Copo:</h4>
+                    <div id="cup-toppings">
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="order-button btn-close" onclick="closeModal()">Cancelar</button>
+            <button class="order-button" onclick="addToCart()">
+                Adicionar ao Pedido: <span id="total-price">R$ 0,00</span>
+            </button>
+        </div>
     </div>
-  </div>
+</div>
 
-  <script>
-    const form = document.getElementById("formAtendimento");
-    const listaChamados = document.getElementById("listaChamados");
+<script>
+// --- CONFIGURAÇÕES DA LOJA ---
+const WHATSAPP_NUMBER = "5551999999999"; // <<<<---- COLOQUE SEU NÚMERO DE WHATSAPP AQUI (com código do país e DDD)
 
-    form.addEventListener("submit", function(e){
-      e.preventDefault();
-      const nome = document.getElementById("nome").value;
-      const servico = document.getElementById("servico").value;
-      const descricao = document.getElementById("descricao").value;
+const PRODUCTS = [
+    {
+        id: 1,
+        name: "Copo de Açaí 300ml",
+        price: 12.00,
+        description: "Açaí puro na tigela, cremoso e refrescante. Monte com seus adicionais preferidos!",
+        image: "https://source.unsplash.com/random/400x300?acai-bowl"
+    },
+    {
+        id: 2,
+        name: "Copo de Açaí 500ml",
+        price: 18.00,
+        description: "Uma porção generosa do melhor açaí. Monte com seus adicionais preferidos!",
+        image: "https://source.unsplash.com/random/400x301?acai-bowl"
+    },
+    {
+        id: 3,
+        name: "Barca de Açaí (Serve 2)",
+        price: 35.00,
+        description: "Uma barca recheada de açaí para compartilhar. Monte com seus adicionais preferidos!",
+        image: "https://source.unsplash.com/random/400x302?acai-bowl"
+    }
+];
 
-      const card = document.createElement("div");
-      card.classList.add("card");
+const TOPPINGS = [
+    { name: 'Leite em Pó', price: 2.00 },
+    { name: 'Leite Condensado', price: 2.50 },
+    { name: 'Granola', price: 2.00 },
+    { name: 'Banana', price: 1.50 },
+    { name: 'Morango', price: 3.00 },
+    { name: 'Kiwi', price: 3.00 },
+    { name: 'Manga', price: 2.50 },
+    { name: 'Paçoca', price: 1.00 },
+    { name: 'Confete', price: 2.00 },
+    { name: 'Creme de Avelã', price: 4.00 }
+];
+// ------------------------------
 
-      const status = document.createElement("span");
-      status.className = "status aguardando";
-      status.innerText = "Aguardando";
+let currentProduct = null;
+let selectedToppings = [];
+let cart = [];
 
-      const acoes = document.createElement("div");
-      acoes.classList.add("acoes");
-      const btnAndamento = document.createElement("button");
-      btnAndamento.innerText = "Iniciar";
-      const btnFinalizar = document.createElement("button");
-      btnFinalizar.innerText = "Finalizar";
-
-      btnAndamento.onclick = ()=>{status.className="status andamento";status.innerText="Em Andamento";};
-      btnFinalizar.onclick = ()=>{status.className="status finalizado";status.innerText="Finalizado";};
-
-      acoes.appendChild(btnAndamento);
-      acoes.appendChild(btnFinalizar);
-
-      card.innerHTML = `<strong>${nome}</strong><br>
-                        Serviço: ${servico}<br>
-                        ${descricao ? "Detalhes: " + descricao : ""}<br>`;
-      card.appendChild(status);
-      card.appendChild(acoes);
-
-      listaChamados.appendChild(card);
-      form.reset();
+document.addEventListener('DOMContentLoaded', () => {
+    renderProducts();
+    updateCart();
+    document.getElementById('finish-order-button').addEventListener('click', sendWhatsAppMessage);
+    ['client-name', 'client-address'].forEach(id => {
+        document.getElementById(id).addEventListener('input', checkFormValidity);
     });
-  </script>
+});
+
+function renderProducts() {
+    const container = document.getElementById('products-container');
+    container.innerHTML = PRODUCTS.map(product => `
+        <div class="product-card">
+            <img src="${product.image}" alt="${product.name}">
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <p class="description">${product.description}</p>
+                <p class="price">R$ ${product.price.toFixed(2)}</p>
+                <button class="order-button" onclick='openBuilder(${JSON.stringify(product)})'>Montar meu Açaí</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openBuilder(product) {
+    currentProduct = product;
+    selectedToppings = [];
+    
+    document.getElementById('modal-product-name').innerText = `Monte seu ${product.name}`;
+    
+    const toppingsContainer = document.getElementById('toppings-container');
+    toppingsContainer.innerHTML = TOPPINGS.map((topping, index) => `
+        <div class="topping-item" id="topping-${index}" onclick='toggleTopping(${index}, ${JSON.stringify(topping)})'>
+            <span>${topping.name}</span>
+            <div class="price-add">+ R$ ${topping.price.toFixed(2)}</div>
+        </div>
+    `).join('');
+
+    updateBuilderTotal();
+    document.getElementById('builder-modal').classList.add('active');
+}
+
+function toggleTopping(index, topping) {
+    const toppingElement = document.getElementById(`topping-${index}`);
+    const existingIndex = selectedToppings.findIndex(t => t.name === topping.name);
+
+    if (existingIndex > -1) {
+        selectedToppings.splice(existingIndex, 1);
+        toppingElement.classList.remove('selected');
+    } else {
+        selectedToppings.push(topping);
+        toppingElement.classList.add('selected');
+    }
+    updateBuilderTotal();
+}
+
+function updateBuilderTotal() {
+    const basePrice = currentProduct.price;
+    const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
+    const totalPrice = basePrice + toppingsPrice;
+
+    document.getElementById('total-price').innerText = `R$ ${totalPrice.toFixed(2)}`;
+
+    const cupToppingsContainer = document.getElementById('cup-toppings');
+    cupToppingsContainer.innerHTML = selectedToppings.length > 0
+        ? selectedToppings.map(t => `<div>${t.name}</div>`).join('')
+        : '<p style="color:#888; font-size:0.9rem;">Clique nos adicionais ao lado!</p>';
+}
+
+function closeModal() {
+    document.getElementById('builder-modal').classList.remove('active');
+}
+
+function addToCart() {
+    const basePrice = currentProduct.price;
+    const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
+    
+    cart.push({
+        product: currentProduct,
+        toppings: [...selectedToppings],
+        totalPrice: basePrice + toppingsPrice
+    });
+
+    updateCart();
+    closeModal();
+}
+
+function updateCart() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Seu carrinho está vazio. Escolha um item do cardápio para começar!</p>';
+    } else {
+        cartItemsContainer.innerHTML = cart.map((item, index) => `
+            <div class="cart-item">
+                <div class="cart-item-details">
+                    <strong>${item.product.name}</strong>
+                    <div class="toppings-list">
+                        ${item.toppings.map(t => t.name).join(', ') || 'Sem adicionais'}
+                    </div>
+                </div>
+                <div class="cart-item-price">R$ ${item.totalPrice.toFixed(2)}</div>
+                <button onclick="removeFromCart(${index})" style="background:none; border:none; color:var(--danger); cursor:pointer; margin-left:1rem;">✖</button>
+            </div>
+        `).join('');
+    }
+
+    const cartTotalPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+    document.getElementById('cart-total-price').innerText = `R$ ${cartTotalPrice.toFixed(2)}`;
+    checkFormValidity();
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCart();
+}
+
+function checkFormValidity() {
+    const name = document.getElementById('client-name').value;
+    const address = document.getElementById('client-address').value;
+    const finishButton = document.getElementById('finish-order-button');
+    
+    finishButton.disabled = !(name && address && cart.length > 0);
+}
+
+function sendWhatsAppMessage() {
+    const name = document.getElementById('client-name').value;
+    const address = document.getElementById('client-address').value;
+    
+    let message = `Olá Açaí Imperial! 👑\n\nMeu nome é *${name}* e gostaria de fazer um pedido:\n\n`;
+    
+    cart.forEach(item => {
+        message += `*1x ${item.product.name}* - R$ ${item.totalPrice.toFixed(2)}\n`;
+        if(item.toppings.length > 0) {
+            message += `   Adicionais: ${item.toppings.map(t => t.name).join(', ')}\n`;
+        }
+        message += `\n`;
+    });
+    
+    const totalPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+    message += `*Total do Pedido: R$ ${totalPrice.toFixed(2)}*\n\n`;
+    message += `*Endereço de Entrega:*\n${address}\n\n`;
+    message += `Aguardando confirmação. Obrigado!`;
+    
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    
+    window.open(whatsappUrl, '_blank');
+}
+
+// Pequeno truque para FontAwesome, se necessário
+const fas = document.createElement('script');
+fas.src = "https://kit.fontawesome.com/a076d05399.js";
+fas.crossOrigin = "anonymous";
+// Adicionar o ícone do WhatsApp se a lib não carregar
+const fab = document.createElement('link');
+fab.rel = "stylesheet";
+fab.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css";
+document.head.appendChild(fab);
+
+</script>
+
 </body>
 </html>
