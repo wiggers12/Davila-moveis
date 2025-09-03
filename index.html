@@ -9,7 +9,8 @@
 <style>
 :root{--primary:#6a0dad;--secondary:#f39c12;--success:#2ecc71;--info:#3498db;--danger:#e74c3c;
 --bg:#f4f4f9;--light:#fff;--dark:#333;--shadow:0 4px 15px rgba(0,0,0,.1);}
-*{box-sizing:border-box;}body{margin:0;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--dark);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--dark);}
 header{background:linear-gradient(135deg,var(--primary),#8e44ad);color:#fff;padding:1.5rem;text-align:center;border-bottom-left-radius:20px;border-bottom-right-radius:20px;box-shadow:0 4px 10px rgba(0,0,0,.3);}
 header h1{margin:0;}
 /* Splash */
@@ -97,7 +98,7 @@ main{max-width:1200px;margin:auto;padding:2rem 1rem;}
     <button onclick="showAdmin('logistics')">🚚 Logística</button>
   </nav>
   <div id="deliveries" class="admin-view active"><h3>Pedidos</h3><div id="orders-list"></div></div>
-  <div id="finance" class="admin-view"><h3>Financeiro</h3><div class="kpi-card"><h4>Faturamento</h4><p id="kpi-revenue">R$0,00</p></div><canvas id="salesChart"></canvas><button onclick="exportCSV()">Exportar CSV</button></div>
+  <div id="finance" class="admin-view"><h3>Financeiro</h3><div class="kpi-card"><h4>Faturamento</h4><p id="kpi-revenue">R$0,00</p></div><div class="kpi-card"><h4>Lucro Líquido</h4><p id="kpi-profit">R$0,00</p></div><canvas id="salesChart"></canvas><button onclick="exportCSV()">Exportar CSV</button></div>
   <div id="stock" class="admin-view"><h3>Estoque</h3><div id="stock-list"></div></div>
   <div id="logistics" class="admin-view"><h3>Logística</h3><div id="logistics-list"></div></div>
 </main>
@@ -128,12 +129,14 @@ main{max-width:1200px;margin:auto;padding:2rem 1rem;}
 const WHATSAPP_NUMBER="5551999999999";
 const SENHA_ADMIN="1234";
 let currentProduct=null,selectedToppings=[],cart=[],orders=JSON.parse(localStorage.getItem("acaiOrders"))||[];
+
 // Produtos e adicionais com estoque/custo
 const PRODUCTS=[{id:1,name:"Copo 300ml",price:12,cost:6,stock:20,image:"https://source.unsplash.com/400x300/?acai"},
 {id:2,name:"Copo 500ml",price:18,cost:9,stock:15,image:"https://source.unsplash.com/400x301/?acai"},
 {id:3,name:"Barca Açaí",price:35,cost:18,stock:10,image:"https://source.unsplash.com/400x302/?acai"}];
 const TOPPINGS=[{name:"Leite em pó",price:2,cost:1,stock:30},{name:"Leite condensado",price:2.5,cost:1.2,stock:25},{name:"Granola",price:2,cost:0.8,stock:20},
 {name:"Banana",price:1.5,cost:0.7,stock:20},{name:"Morango",price:3,cost:1.5,stock:15},{name:"Kiwi",price:3,cost:1.5,stock:15},{name:"Paçoca",price:1,cost:0.4,stock:25},{name:"Creme de Avelã",price:4,cost:2,stock:10}];
+
 // Render produtos
 function renderProducts(){document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
   <div class="product-card"><img src="${p.image}"><div class="product-info"><h3>${p.name}</h3><p class="price">R$ ${p.price.toFixed(2)}</p>
@@ -166,18 +169,97 @@ window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"
 function showAdmin(view){document.querySelectorAll('.admin-view').forEach(v=>v.classList.remove('active'));document.getElementById(view).classList.add('active');
 document.querySelectorAll('.admin-nav button').forEach(b=>b.classList.remove('active'));document.querySelector(`.admin-nav button[onclick="showAdmin('${view}')"]`).classList.add('active');
 if(view==="deliveries")renderOrders();if(view==="finance")renderFinance();if(view==="stock")renderStock();if(view==="logistics")renderLogistics();}
-function renderOrders(){let c=document.getElementById("orders-list");c.innerHTML=orders.map(o=>`<div class="order-list-item"><strong>Pedido #${o.id}</strong><br>${o.customerName}<br>${o.customerAddress}<br>Status:<span class="order-status status-${o.status.replace(" ","-")}">${o.status}</span><br>Total:R$${o.total.toFixed(2)}<br><select onchange="updateStatus(${o.id},this.value)"><option ${o.status==="Recebido"?"selected":""}>Recebido</option><option ${o.status==="Em Preparação"?"selected":""}>Em Preparação</option><option ${o.status==="Concluído"?"selected":""}>Concluído</option><option ${o.status==="Cancelado"?"selected":""}>Cancelado</option></select></div>`).join("");}
+function renderOrders(){let c=document.getElementById("orders-list");c.innerHTML=orders.map(o=>`<div class="order-list-item"><strong>Pedido #${o.id}</strong><br>${o.customerName}<br>${o.customerAddress}<br>Status:<span class="order-status status-${o.status.replace(" ","-")}">${o.status}</span><br>Total:R$${o.total.toFixed(2)}<br><select onchange="updateStatus(${o.id},this.value)"><option ${o.status==="Recebido"?"selected":""}>Recebido</option><option ${o.status==="Em Preparação"?"selected":""}>Em Preparação</option><option ${o.status==="Saiu para Entrega"?"selected":""}>Saiu para Entrega</option><option ${o.status==="Concluído"?"selected":""}>Concluído</option><option ${o.status==="Cancelado"?"selected":""}>Cancelado</option></select></div>`).join("");}
 function updateStatus(id,s){let o=orders.find(x=>x.id===id);if(o){o.status=s;localStorage.setItem("acaiOrders",JSON.stringify(orders));renderOrders();renderFinance();}}
-function renderFinance(){let done=orders.filter(o=>o.status==="Concluído");let rev=done.reduce((s,o)=>s+o.total,0);document.getElementById("kpi-revenue").innerText="R$"+rev.toFixed(2);
-let ctx=document.getElementById("salesChart").getContext("2d");if(window.salesChart)window.salesChart.destroy();
-window.salesChart=new Chart(ctx,{type:"bar",data:{labels:done.map(o=>new Date(o.createdAt).toLocaleDateString()),datasets:[{label:"Vendas",data:done.map(o=>o.total),backgroundColor:"rgba(106,13,173,.7)"}]},options:{scales:{y:{beginAtZero:true}}}});}
-function exportCSV(){let csv="id,cliente,endereco,total,status,data\n";orders.forEach(o=>{csv+=`${o.id},${o.customerName},${o.customerAddress},${o.total},${o.status},${o.createdAt}\n`;});let blob=new Blob([csv],{type:"text/csv"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="pedidos.csv";a.click();}
+function renderFinance(){let done=orders.filter(o=>o.status==="Concluído");let rev=done.reduce((s,o)=>s+o.total,0);let cost=0;done.forEach(o=>{o.items.forEach(it=>{cost+=it.product.cost;it.toppings.forEach(t=>{let tp=TOPPINGS.find(x=>x.name===t.name);if(tp)cost+=tp.cost;});});});let profit
+= rev - cost;
+let avg = done.length > 0 ? rev / done.length : 0;
+document.getElementById("kpi-revenue").innerText = "R$ " + rev.toFixed(2);
+document.getElementById("kpi-profit").innerText = "R$ " + profit.toFixed(2);
+
+// gráfico
+let ctx = document.getElementById("salesChart").getContext("2d");
+if (window.salesChart) window.salesChart.destroy();
+window.salesChart = new Chart(ctx, {
+  type: "bar",
+  data: {
+    labels: done.map(o => new Date(o.createdAt).toLocaleDateString()),
+    datasets: [{
+      label: "Faturamento",
+      data: done.map(o => o.total),
+      backgroundColor: "rgba(106,13,173,.7)"
+    }]
+  },
+  options: {scales:{y:{beginAtZero:true}}}
+});
+}
+function exportCSV() {
+ let csv = "id,cliente,endereco,total,status,data\n";
+ orders.forEach(o=>{
+   csv += `${o.id},${o.customerName},${o.customerAddress},${o.total},${o.status},${o.createdAt}\n`;
+ });
+ let blob = new Blob([csv],{type:"text/csv"});
+ let a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="pedidos.csv";a.click();
+}
 // Estoque
-function renderStock(){let c=document.getElementById("stock-list");c.innerHTML="<h4>Produtos</h4>"+PRODUCTS.map(p=>`<div>${p.name} - Estoque:${p.stock} - Preço:R$${p.price} - Custo:R$${p.cost} ${p.stock<5?"⚠":""}</div>`).join("")+"<h4>Adicionais</h4>"+TOPPINGS.map(t=>`<div>${t.name} - Estoque:${t.stock} - Preço:R$${t.price} - Custo:R$${t.cost} ${t.stock<5?"⚠":""}</div>`).join("");}
+function renderStock(){
+ let c=document.getElementById("stock-list");
+ c.innerHTML="<h4>Produtos</h4>"+
+   PRODUCTS.map(p=>`<div>${p.name} - Estoque: ${p.stock} - Preço: R$${p.price} - Custo: R$${p.cost} ${p.stock<5?"⚠ Estoque baixo":""}</div>`).join("")
+  +"<h4>Adicionais</h4>"+
+   TOPPINGS.map(t=>`<div>${t.name} - Estoque: ${t.stock} - Preço: R$${t.price} - Custo: R$${t.cost} ${t.stock<5?"⚠ Estoque baixo":""}</div>`).join("");
+}
 // Logística
-function renderLogistics(){let c=document.getElementById("logistics-list");c.innerHTML=orders.filter(o=>o.status==="Saiu para Entrega").map(o=>`<div><strong>Pedido #${o.id}</strong> - ${o.customerName}<br>${o.customerAddress}<br><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.customerAddress)}">Ver no mapa</a></div>`).join("")||"Nenhuma entrega em andamento";}
-function checkView(){if(location.hash==="#admin"){let pass=prompt("Senha do Admin:");if(pass===SENHA_ADMIN){document.getElementById("customer-view").style.display="none";document.getElementById("admin-panel").style.display="block";renderOrders();}else{alert("Senha incorreta");location.hash="";}}else{document.getElementById("customer-view").style.display="block";document.getElementById("admin-panel").style.display="none";renderProducts();updateCart();}}
-window.addEventListener("hashchange",checkView);document.addEventListener("DOMContentLoaded",checkView);
+const entregadores=[{id:1,nome:"Carlos",fone:"5199999999"},{id:2,nome:"Ana",fone:"5198888888"}];
+function renderLogistics(){
+ let c=document.getElementById("logistics-list");
+ let pend=orders.filter(o=>o.status==="Saiu para Entrega");
+ if(pend.length===0){c.innerHTML="Nenhuma entrega em andamento";return;}
+ c.innerHTML=pend.map(o=>`<div class="order-list-item"><strong>Pedido #${o.id}</strong><br>${o.customerName} - ${o.customerAddress}<br>
+   <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.customerAddress)}">Abrir no Maps</a><br>
+   <label>Atribuir entregador:</label>
+   <select onchange="atribuirEntregador(${o.id},this.value)">
+     <option>Selecione</option>
+     ${entregadores.map(e=>`<option value="${e.nome}">${e.nome}</option>`).join("")}
+   </select>
+   </div>`).join("");
+}
+function atribuirEntregador(orderId, nome){
+ let o=orders.find(x=>x.id===orderId);
+ if(o){o.entregador=nome;localStorage.setItem("acaiOrders",JSON.stringify(orders));alert("Entregador "+nome+" atribuído ao pedido #"+orderId);}
+}
+// Baixa de estoque ao concluir pedido
+function baixarEstoque(order){
+ order.items.forEach(it=>{
+   let prod=PRODUCTS.find(p=>p.id===it.product.id);
+   if(prod) prod.stock--;
+   it.toppings.forEach(tp=>{
+     let top=TOPPINGS.find(t=>t.name===tp.name);
+     if(top) top.stock--;
+   });
+ });
+}
+// Inicialização
+function checkView(){
+ if(location.hash==="#admin"){
+   let pass=prompt("Senha do Admin:");
+   if(pass===SENHA_ADMIN){
+     document.getElementById("customer-view").style.display="none";
+     document.getElementById("admin-panel").style.display="block";
+     renderOrders();
+   } else {
+     alert("Senha incorreta");location.hash="";
+   }
+ } else {
+   document.getElementById("customer-view").style.display="block";
+   document.getElementById("admin-panel").style.display="none";
+   renderProducts();updateCart();
+ }
+}
+window.addEventListener("hashchange",checkView);
+document.addEventListener("DOMContentLoaded",checkView);
 </script>
 </body>
 </html>
