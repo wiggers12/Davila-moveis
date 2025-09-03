@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protótipo | Açaí da Barra POA</title>
+    <title>Protótipo v2 | Açaí da Barra POA</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #6a0dad; --secondary: #f39c12; --success: #2ecc71; --danger: #e74c3c;
@@ -14,90 +15,120 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Poppins', sans-serif; background: var(--dark-bg); color: var(--text-light); }
 
-        /* --- Layout Geral --- */
         .container { max-width: 1200px; margin: auto; padding: 1.5rem; }
         .hidden { display: none !important; }
 
-        /* --- Cabeçalho --- */
-        header { background: var(--card-bg); text-align: center; padding: 1rem; border-bottom: 2px solid var(--primary); }
-        
-        /* --- Vitrine de Produtos --- */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .product-card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+        header { background: var(--card-bg); padding: 1rem; border-bottom: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 1.5rem; }
+        .header-nav button { background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; }
+
+        /* --- Cards de Produto Menores --- */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+        .product-card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; cursor: pointer; transition: transform 0.3s; display: flex; flex-direction: column; }
         .product-card:hover { transform: translateY(-8px); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; }
-        .product-info { padding: 1rem; }
-        .product-info h3 { font-size: 1.25rem; }
-        .product-info p { color: var(--text-muted); font-size: 0.9rem; }
-        .product-price { font-weight: 700; color: var(--secondary); font-size: 1.3rem; margin-top: 0.5rem; }
-        
-        /* --- Modal de Personalização --- */
+        .product-card img { width: 100%; height: 150px; object-fit: cover; }
+        .product-info { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-info h3 { font-size: 1.1rem; }
+        .product-price { font-weight: 700; color: var(--secondary); font-size: 1.2rem; margin-top: 0.5rem; }
+
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: var(--dark-bg); padding: 2rem; border-radius: 15px; width: 90%; max-width: 500px; border-top: 5px solid var(--primary); }
-        .modal-content h3 { color: var(--secondary); }
-        .customization-group { margin: 1.5rem 0; }
+        .modal-content { background: var(--dark-bg); padding: 2rem; border-radius: 15px; width: 90%; max-width: 500px; }
         .customization-group label { display: flex; align-items: center; gap: 10px; background: var(--card-bg); padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem; }
         .btn { background: var(--primary); color: #fff; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; display: block; width: 100%; margin-top: 1rem; }
-        .btn:hover { opacity: 0.9; }
-        
-        /* --- Carrinho e Pedidos --- */
-        #cart-summary, #order-tracker { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin-top: 2rem; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #333; padding-bottom: 1rem; }
-        .item-details small { color: var(--text-muted); display: block; }
+
+        #cart-summary, #order-tracker, .content-box { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin-top: 2rem; }
+        .cart-item, .order-history-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #333; padding-bottom: 1rem; }
         .cart-total { text-align: right; font-size: 1.3rem; margin-top: 1rem; font-weight: bold; color: var(--secondary); }
 
-        /* --- Rastreio de Pedido --- */
-        .status-bar { display: flex; justify-content: space-between; margin: 1rem 0; }
-        .status-step { flex: 1; text-align: center; color: var(--text-muted); position: relative; }
-        .status-step.active { color: var(--success); font-weight: bold; }
-        .status-step::before { content: '●'; font-size: 2rem; }
-        .status-step.active::after { content: ''; position: absolute; top: 15px; left: 50%; width: 100%; height: 4px; background: var(--success); z-index: -1; }
-
         /* --- Painel Admin --- */
-        #admin-panel .order-card { background: var(--card-bg); padding: 1rem; margin-bottom: 1rem; border-radius: 8px; }
-        #admin-panel select { background: #333; color: white; border: 1px solid var(--primary); padding: 0.5rem; border-radius: 5px; }
-
+        .admin-nav { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .admin-nav button { background: #333; color: white; padding: 0.6rem 1rem; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+        .admin-nav button.active { background: var(--primary); }
+        .admin-view { display: none; }
+        .admin-view.active { display: block; }
+        
+        /* --- KPIs Financeiros --- */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .kpi-card { background: #2a2a2a; padding: 1rem; border-radius: 10px; text-align: center; }
+        .kpi-card h4 { color: var(--text-muted); font-size: 0.9rem; }
+        .kpi-card p { font-size: 1.6rem; font-weight: bold; color: var(--secondary); }
     </style>
 </head>
 <body>
 
     <main id="customer-view">
         <header>
-            <h1>Açaí da Barra POA 🍧</h1>
-            <p>Escolha e personalize seu pedido!</p>
+            <h1 style="cursor:pointer;" onclick="showView('menu-view')">Açaí da Barra POA 🍧</h1>
+            <nav class="header-nav">
+                <button id="login-btn" onclick="login()">Entrar</button>
+                <button id="account-btn" class="hidden" onclick="showView('account-view')">Minha Conta</button>
+            </nav>
         </header>
-        <div class="container">
+        
+        <div id="menu-view" class="container">
             <section id="menu">
                 <h2>Cardápio</h2>
                 <div class="product-grid" id="product-list"></div>
             </section>
-
             <section id="cart-summary">
                 <h2>Seu Pedido</h2>
                 <div id="cart-items-container"><p>Carrinho vazio.</p></div>
                 <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
                 <button class="btn" id="checkout-btn">Finalizar Pedido</button>
             </section>
+        </div>
 
-            <section id="order-tracker" class="hidden">
-                <h2>Acompanhe seu Pedido</h2>
-                <div id="tracker-info"></div>
-            </section>
+        <div id="account-view" class="container hidden">
+            <div class="content-box">
+                <h2 id="welcome-message">Bem-vindo!</h2>
+                <p>Aqui você pode ver seu histórico de pedidos.</p>
+                <button class="btn" style="background:var(--danger); margin-top:1rem; width: auto;" onclick="logout()">Sair</button>
+            </div>
+            <div class="content-box">
+                <h3>Histórico de Pedidos</h3>
+                <div id="order-history-list"><p>Você ainda não fez nenhum pedido.</p></div>
+            </div>
         </div>
     </main>
     
     <main id="admin-panel" class="hidden">
        <header><h1>Painel de Gestão</h1></header>
        <div class="container">
-            <h2>Pedidos Recebidos</h2>
-            <div id="admin-orders-list"><p>Nenhum pedido recebido ainda.</p></div>
+            <nav class="admin-nav">
+                <button onclick="showAdminView('orders')" class="active">📦 Pedidos</button>
+                <button onclick="showAdminView('finance')">💰 Financeiro</button>
+                <button onclick="showAdminView('logistics')">🚚 Entregas</button>
+            </nav>
+            
+            <div id="orders-view" class="admin-view active">
+                <h2>Pedidos Recebidos</h2>
+                <div id="admin-orders-list"></div>
+            </div>
+
+            <div id="finance-view" class="admin-view">
+                <h2>Desempenho Financeiro</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><h4>Faturamento Bruto</h4><p id="kpi-revenue">R$ 0,00</p></div>
+                    <div class="kpi-card"><h4>Lucro Bruto</h4><p id="kpi-profit">R$ 0,00</p></div>
+                    <div class="kpi-card"><h4>Pedidos Realizados</h4><p id="kpi-orders">0</p></div>
+                    <div class="kpi-card"><h4>Ticket Médio</h4><p id="kpi-ticket">R$ 0,00</p></div>
+                </div>
+                <canvas id="salesChart"></canvas>
+            </div>
+
+            <div id="logistics-view" class="admin-view">
+                <h2>Gestão de Entregas</h2>
+                <div id="delivery-orders-list"><p>Nenhum pedido em rota.</p></div>
+                 <div id="map" style="height:300px;width:100%;background:#333;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#aaa;margin-top:1rem;">
+                    <p>🗺️ Mapa de Entregas (Ilustrativo)</p>
+                </div>
+            </div>
        </div>
     </main>
 
     <div id="customization-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3 id="modal-product-name">Personalize seu Produto</h3>
-            <p id="modal-product-description"></p>
+            <h3 id="modal-product-name">Personalize</h3>
             <form id="customization-form">
                 <input type="hidden" id="modal-product-id">
                 <div id="modal-options"></div>
@@ -109,28 +140,26 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- BANCO DE DADOS FICTÍCIO ---
+    // --- BANCO DE DADOS FICTÍCIO (COM CUSTO) ---
     const PRODUCTS = [
-        { id: 1, name: "Açaí Tradicional", description: "O sabor clássico da Amazônia, puro e delicioso.", price: 15.00, image: "https://i.ibb.co/C0740pX/acai-300ml.jpg", category: "Açaís" },
-        { id: 2, name: "Barca de Açaí Média", description: "Perfeita para compartilhar, cheia de frutas e complementos.", price: 45.00, image: "https://i.ibb.co/rQxM89K/acai-barca.jpg", category: "Barcas" },
-        { id: 3, name: "Açaí com Cupuaçu", description: "A combinação perfeita do azedinho do cupuaçu com o doce do açaí.", price: 18.00, image: "https://i.ibb.co/d5m33jN/acai-500ml.jpg", category: "Açaís" }
+        { id: 1, name: "Açaí Clássico", price: 15.00, costPrice: 7.00, image: "https://i.ibb.co/6gT05zG/acai-card-1.jpg" },
+        { id: 2, name: "Barca Média", price: 45.00, costPrice: 22.00, image: "https://i.ibb.co/hLq0s3h/acai-card-2.jpg" },
+        { id: 3, name: "Tigela com Morango", price: 18.00, costPrice: 9.50, image: "https://i.ibb.co/yqjKzC2/acai-card-3.jpg" },
+        { id: 4, name: "Copo com Ninho", price: 17.00, costPrice: 8.00, image: "https://i.ibb.co/hYQxV7w/acai-card-4.jpg" }
     ];
-
-    const TOPPINGS = [
-        { id: 101, name: "Leite em Pó", price: 2.00 }, { id: 102, name: "Leite Condensado", price: 2.50 },
-        { id: 103, name: "Granola", price: 1.50 }, { id: 104, name: "Banana", price: 1.00 },
-        { id: 105, name: "Morango", price: 2.00 }, { id: 106, name: "Creme de Ninho", price: 3.00 }
-    ];
+    const TOPPINGS = [ { id: 101, name: "Leite em Pó", price: 2.00, costPrice: 0.50 }, { id: 102, name: "Leite Condensado", price: 2.50, costPrice: 0.70 }, { id: 103, name: "Granola", price: 1.50, costPrice: 0.40 }, { id: 104, name: "Banana", price: 1.00, costPrice: 0.30 } ];
 
     let cart = [];
     let orders = [];
-    
-    // --- LÓGICA DE ROTEAMENTO (CLIENTE vs ADMIN) ---
+    let currentUser = null;
+    let salesChart = null;
+
+    // --- LÓGICA DE NAVEGAÇÃO E ESTADO ---
     const checkView = () => {
         if (window.location.hash === "#admin") {
             document.getElementById('customer-view').classList.add('hidden');
             document.getElementById('admin-panel').classList.remove('hidden');
-            renderAdminOrders();
+            showAdminView('orders'); // Inicia na aba de pedidos
         } else {
             document.getElementById('customer-view').classList.remove('hidden');
             document.getElementById('admin-panel').classList.add('hidden');
@@ -140,176 +169,196 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     window.addEventListener('hashchange', checkView);
 
-    // --- FUNÇÕES DA VITRINE E MODAL ---
+    window.showView = (viewId) => {
+        document.getElementById('menu-view').classList.add('hidden');
+        document.getElementById('account-view').classList.add('hidden');
+        document.getElementById(viewId).classList.remove('hidden');
+        if (viewId === 'account-view') renderAccountView();
+    };
+
+    // --- LÓGICA DE AUTENTICAÇÃO (SIMULADA) ---
+    window.login = () => {
+        currentUser = { id: 1, name: "Cliente Fiel", email: "cliente@email.com" };
+        document.getElementById('login-btn').classList.add('hidden');
+        document.getElementById('account-btn').classList.remove('hidden');
+        showView('menu-view'); // Volta pro menu após logar
+    };
+    window.logout = () => {
+        currentUser = null;
+        document.getElementById('login-btn').classList.remove('hidden');
+        document.getElementById('account-btn').classList.add('hidden');
+        showView('menu-view');
+    };
+
+    // --- ÁREA DO CLIENTE ---
+    const renderAccountView = () => {
+        if (!currentUser) return;
+        document.getElementById('welcome-message').innerText = `Bem-vindo, ${currentUser.name}!`;
+        const userOrders = orders.filter(o => o.userId === currentUser.id);
+        const historyList = document.getElementById('order-history-list');
+        if (userOrders.length === 0) {
+            historyList.innerHTML = '<p>Você ainda não fez nenhum pedido.</p>';
+        } else {
+            historyList.innerHTML = userOrders.slice().reverse().map(o => `
+                <div class="order-history-item">
+                    <div>
+                        <b>Pedido #${o.id}</b> (${new Date(o.createdAt).toLocaleDateString('pt-BR')})
+                        <small style="display:block; color:var(--text-muted)">Status: ${o.status}</small>
+                    </div>
+                    <span>R$ ${o.total.toFixed(2)}</span>
+                </div>
+            `).join('');
+        }
+    };
+
+    // --- LÓGICA DE PEDIDOS ---
+    document.getElementById('checkout-btn').onclick = () => {
+        if (!currentUser) return alert('Por favor, entre na sua conta para finalizar o pedido.');
+        if (cart.length === 0) return alert('Seu carrinho está vazio!');
+        
+        const totalCost = cart.reduce((sum, item) => sum + item.totalCost, 0);
+        const newOrder = {
+            id: Date.now(),
+            userId: currentUser.id,
+            userName: currentUser.name,
+            address: "Rua Fictícia, 123 - Porto Alegre, RS", // Endereço simulado
+            items: [...cart],
+            total: cart.reduce((sum, item) => sum + item.totalPrice, 0),
+            cost: totalCost,
+            status: 'Pedido Recebido',
+            createdAt: new Date()
+        };
+        orders.push(newOrder);
+        cart = [];
+        renderCart();
+        alert('Pedido realizado com sucesso!');
+        showView('account-view'); // Leva para o histórico de pedidos
+    };
+    
+    // --- PAINEL DO ADMIN ---
+    window.showAdminView = (viewId) => {
+        document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
+        document.getElementById(`${viewId}-view`).classList.add('active');
+        document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'));
+        document.querySelector(`.admin-nav button[onclick="showAdminView('${viewId}')"]`).classList.add('active');
+
+        if (viewId === 'orders') renderAdminOrders();
+        if (viewId === 'finance') renderFinanceDashboard();
+        if (viewId === 'logistics') renderLogisticsView();
+    };
+
+    const renderAdminOrders = () => {
+        const list = document.getElementById('admin-orders-list');
+        list.innerHTML = orders.length > 0 ? orders.slice().reverse().map(o => `
+            <div class="content-box" style="margin-bottom:1rem;">
+                <h4>Pedido #${o.id} - R$ ${o.total.toFixed(2)}</h4>
+                <p><small>Cliente: ${o.userName}</small></p>
+                <select onchange="updateOrderStatus(${o.id}, this.value)">
+                    ${['Pedido Recebido', 'Em Preparação', 'Saiu para Entrega', 'Entregue'].map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+                </select>
+            </div>
+        `).join('') : '<p>Nenhum pedido recebido.</p>';
+    };
+    
+    window.updateOrderStatus = (orderId, newStatus) => {
+        const order = orders.find(o => o.id === orderId);
+        if (order) order.status = newStatus;
+    };
+    
+    // --- LÓGICA FINANCEIRA ---
+    const renderFinanceDashboard = () => {
+        const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
+        const totalCost = orders.reduce((sum, o) => sum + o.cost, 0);
+        const totalProfit = totalRevenue - totalCost;
+        const totalOrders = orders.length;
+        const avgTicket = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+        document.getElementById('kpi-revenue').innerText = `R$ ${totalRevenue.toFixed(2)}`;
+        document.getElementById('kpi-profit').innerText = `R$ ${totalProfit.toFixed(2)}`;
+        document.getElementById('kpi-orders').innerText = totalOrders;
+        document.getElementById('kpi-ticket').innerText = `R$ ${avgTicket.toFixed(2)}`;
+
+        // Gráfico
+        const salesByDay = orders.reduce((acc, order) => {
+            const date = new Date(order.createdAt).toLocaleDateString('pt-BR');
+            acc[date] = (acc[date] || 0) + order.total;
+            return acc;
+        }, {});
+        
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        if (salesChart) salesChart.destroy();
+        salesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(salesByDay),
+                datasets: [{
+                    label: 'Faturamento Diário',
+                    data: Object.values(salesByDay),
+                    backgroundColor: 'rgba(106, 13, 173, 0.7)'
+                }]
+            }
+        });
+    };
+
+    // --- LÓGICA DE ENTREGAS ---
+    const renderLogisticsView = () => {
+        const deliveryOrders = orders.filter(o => o.status === 'Em Preparação' || o.status === 'Saiu para Entrega');
+        const list = document.getElementById('delivery-orders-list');
+        list.innerHTML = deliveryOrders.length > 0 ? deliveryOrders.map(o => `
+            <div class="content-box" style="margin-bottom:1rem;">
+                <h4>Pedido #${o.id} (${o.status})</h4>
+                <p><b>Cliente:</b> ${o.userName}</p>
+                <p><b>Endereço:</b> ${o.address}</p>
+            </div>
+        `).join('') : '<p>Nenhum pedido em rota.</p>';
+    };
+
+    // --- Funções de Vitrine e Carrinho (com pequenas adaptações) ---
     const renderProducts = () => {
-        const productList = document.getElementById('product-list');
-        productList.innerHTML = PRODUCTS.map(p => `
+        document.getElementById('product-list').innerHTML = PRODUCTS.map(p => `
             <div class="product-card" onclick="openModal(${p.id})">
                 <img src="${p.image}" alt="${p.name}">
                 <div class="product-info">
                     <h3>${p.name}</h3>
-                    <p>${p.description}</p>
                     <div class="product-price">R$ ${p.price.toFixed(2)}</div>
                 </div>
             </div>
         `).join('');
     };
 
-    window.openModal = (productId) => {
+    window.openModal = (productId) => { /* ... sem alterações ... */
         const product = PRODUCTS.find(p => p.id === productId);
         document.getElementById('modal-product-id').value = product.id;
         document.getElementById('modal-product-name').innerText = `Personalize seu ${product.name}`;
-        document.getElementById('modal-product-description').innerText = product.description;
-
-        const optionsContainer = document.getElementById('modal-options');
-        optionsContainer.innerHTML = `
-            <div class="customization-group">
-                <h4>Adicionais (Cobrados à parte):</h4>
-                ${TOPPINGS.map(t => `
-                    <label>
-                        <input type="checkbox" name="topping" value="${t.id}">
-                        ${t.name} (+ R$ ${t.price.toFixed(2)})
-                    </label>
-                `).join('')}
-            </div>
-        `;
+        document.getElementById('modal-options').innerHTML = `<div class="customization-group">${TOPPINGS.map(t => `<label><input type="checkbox" name="topping" value="${t.id}">${t.name} (+ R$ ${t.price.toFixed(2)})</label>`).join('')}</div>`;
         document.getElementById('customization-modal').classList.remove('hidden');
     };
-
-    // --- LÓGICA DO CARRINHO ---
-    const renderCart = () => {
-        const cartContainer = document.getElementById('cart-items-container');
-        if (cart.length === 0) {
-            cartContainer.innerHTML = '<p>Carrinho vazio.</p>';
-        } else {
-            cartContainer.innerHTML = cart.map((item, index) => `
-                <div class="cart-item">
-                    <div class="item-details">
-                        <b>${item.name}</b>
-                        <small>${item.toppings.map(t => t.name).join(', ') || 'Sem adicionais'}</small>
-                    </div>
-                    <span>R$ ${item.totalPrice.toFixed(2)}</span>
-                    <button onclick="removeFromCart(${index})" style="background:transparent; border:none; color:var(--danger); cursor:pointer;">❌</button>
-                </div>
-            `).join('');
-        }
-        
-        const total = cart.reduce((sum, item) => sum + item.totalPrice, 0);
-        document.getElementById('cart-total-price').innerText = `R$ ${total.toFixed(2)}`;
-    };
-
-    window.removeFromCart = (index) => {
-        cart.splice(index, 1);
-        renderCart();
-    };
-
+    document.getElementById('customization-modal').onclick = (e) => { if(e.target.id === 'customization-modal') e.target.classList.add('hidden'); };
+    
     document.getElementById('customization-form').onsubmit = (e) => {
         e.preventDefault();
         const productId = parseInt(document.getElementById('modal-product-id').value);
         const product = PRODUCTS.find(p => p.id === productId);
-
-        const selectedToppingIds = Array.from(e.target.elements.topping)
-            .filter(input => input.checked)
-            .map(input => parseInt(input.value));
+        const selectedToppings = Array.from(e.target.elements.topping).filter(i => i.checked).map(i => TOPPINGS.find(t => t.id === parseInt(i.value)));
         
-        const selectedToppings = TOPPINGS.filter(t => selectedToppingIds.includes(t.id));
-        const toppingsPrice = selectedToppings.reduce((sum, t) => sum + t.price, 0);
-
         cart.push({
-            cartId: Date.now(),
             name: product.name,
             toppings: selectedToppings,
-            totalPrice: product.price + toppingsPrice
+            totalPrice: product.price + selectedToppings.reduce((s, t) => s + t.price, 0),
+            totalCost: product.costPrice + selectedToppings.reduce((s, t) => s + t.costPrice, 0)
         });
-
         renderCart();
         document.getElementById('customization-modal').classList.add('hidden');
     };
-    
-    // Fechar modal ao clicar fora
-    document.getElementById('customization-modal').onclick = (e) => {
-        if (e.target.id === 'customization-modal') {
-            e.target.classList.add('hidden');
-        }
-    };
 
-    // --- LÓGICA DE FINALIZAÇÃO E RASTREIO ---
-    document.getElementById('checkout-btn').onclick = () => {
-        if (cart.length === 0) return alert('Seu carrinho está vazio!');
-        
-        const newOrder = {
-            id: Date.now(),
-            items: [...cart],
-            total: cart.reduce((sum, item) => sum + item.totalPrice, 0),
-            status: 'Pedido Recebido',
-            createdAt: new Date()
-        };
-        orders.push(newOrder);
-        
-        cart = [];
-        renderCart();
-        
-        document.getElementById('cart-summary').classList.add('hidden');
-        document.getElementById('order-tracker').classList.remove('hidden');
-        renderOrderTracker(newOrder.id);
-        
-        // Simula a notificação para o admin
-        if(window.location.hash === '#admin') renderAdminOrders();
-    };
-
-    const renderOrderTracker = (orderId) => {
-        const order = orders.find(o => o.id === orderId);
-        if (!order) return;
-
-        const statuses = ['Pedido Recebido', 'Em Preparação', 'Saiu para Entrega', 'Entregue'];
-        const currentStatusIndex = statuses.indexOf(order.status);
-
-        const trackerInfo = document.getElementById('tracker-info');
-        trackerInfo.innerHTML = `
-            <p>Pedido #${order.id}</p>
-            <p>Total: R$ ${order.total.toFixed(2)}</p>
-            <div class="status-bar">
-                ${statuses.map((s, i) => `
-                    <div class="status-step ${i <= currentStatusIndex ? 'active' : ''}">${s}</div>
-                `).join('')}
-            </div>
-        `;
-
-        // Continuamente checa por atualizações de status
-        setTimeout(() => renderOrderTracker(orderId), 2000);
-    };
-
-    // --- FUNÇÕES DO PAINEL ADMIN ---
-    const renderAdminOrders = () => {
-        const orderList = document.getElementById('admin-orders-list');
-        if (orders.length === 0) {
-            orderList.innerHTML = '<p>Nenhum pedido recebido ainda.</p>';
-            return;
-        }
-
-        orderList.innerHTML = orders.slice().reverse().map(o => `
-            <div class="order-card">
-                <h4>Pedido #${o.id} - R$ ${o.total.toFixed(2)}</h4>
-                <small>${o.items.map(i => `${i.name} (${i.toppings.map(t=>t.name).join(', ') || 'Puro'})`).join('; ')}</small>
-                <div style="margin-top: 1rem;">
-                    <label for="status-${o.id}">Status: </label>
-                    <select id="status-${o.id}" onchange="updateOrderStatus(${o.id}, this.value)">
-                        <option value="Pedido Recebido" ${o.status === 'Pedido Recebido' ? 'selected' : ''}>Recebido</option>
-                        <option value="Em Preparação" ${o.status === 'Em Preparação' ? 'selected' : ''}>Em Preparação</option>
-                        <option value="Saiu para Entrega" ${o.status === 'Saiu para Entrega' ? 'selected' : ''}>Saiu para Entrega</option>
-                        <option value="Entregue" ${o.status === 'Entregue' ? 'selected' : ''}>Entregue</option>
-                    </select>
-                </div>
-            </div>
-        `).join('');
-    };
-
-    window.updateOrderStatus = (orderId, newStatus) => {
-        const order = orders.find(o => o.id === orderId);
-        if (order) {
-            order.status = newStatus;
-            console.log(`Status do pedido ${orderId} atualizado para ${newStatus}`);
-        }
+    const renderCart = () => {
+        const cartContainer = document.getElementById('cart-items-container');
+        cartContainer.innerHTML = cart.length === 0 ? '<p>Carrinho vazio.</p>' : cart.map((item, index) => `
+            <div class="cart-item">
+                <div><b>${item.name}</b><small style="display:block;">${item.toppings.map(t => t.name).join(', ') || 'Sem adicionais'}</small></div>
+                <span>R$ ${item.totalPrice.toFixed(2)}</span>
+            </div>`).join('');
+        document.getElementById('cart-total-price').innerText = `R$ ${cart.reduce((s, i) => s + i.totalPrice, 0).toFixed(2)}`;
     };
 
     // --- INICIALIZAÇÃO ---
