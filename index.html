@@ -1,421 +1,161 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Açaí Imperial - Peça Agora!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --primary: #6a0dad; --secondary: #f39c12; --success: #2ecc71; --info: #3498db;
-            --background: #f4f4f9; --text-dark: #333; --text-light: #fff;
-            --card-bg: #ffffff; --shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        * { box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--background); color: var(--text-dark); }
-        header { background: linear-gradient(135deg, var(--primary), #8e44ad); color: var(--text-light); text-align: center; padding: 2rem 1rem; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        header h1 { margin: 0; font-size: 2.5rem; }
-        header p { margin: 0.5rem 0 0; font-size: 1.1rem; opacity: 0.9; }
-        main { padding: 2rem 1rem; max-width: 1200px; margin: auto; }
-        h2 { text-align: center; color: var(--primary); font-size: 2rem; margin-bottom: 2rem; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .product-card { background-color: var(--card-bg); border-radius: 15px; box-shadow: var(--shadow); overflow: hidden; text-align: center; transition: transform 0.3s, box-shadow 0.3s; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; }
-        .product-info { padding: 1.5rem; }
-        h3 { margin: 0 0 0.5rem; font-size: 1.4rem; }
-        .price { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; }
-        .description { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; min-height: 40px; }
-        .order-button { background-color: var(--primary); color: var(--text-light); border: none; border-radius: 10px; padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s; width: 100%; }
-        .order-button:hover { background-color: #5a0a99; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background: var(--card-bg); border-radius: 20px; width: 90%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.3); transform: scale(0.9); transition: transform 0.3s; }
-        .modal-overlay.active .modal-content { transform: scale(1); }
-        .modal-header { padding: 1.5rem; border-bottom: 1px solid #eee; text-align: center; }
-        .modal-header h2 { margin: 0; }
-        .modal-body { display: flex; flex-wrap: wrap; flex-grow: 1; overflow: hidden; padding: 2rem; gap: 2rem; }
-        .toppings-panel, .cup-panel { flex: 1; min-width: 250px; overflow-y: auto; padding-right: 1rem;}
-        .toppings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
-        .topping-item { border: 2px solid #eee; border-radius: 10px; padding: 0.8rem; text-align: center; cursor: pointer; transition: border-color 0.3s, background-color 0.3s; }
-        .topping-item.selected { border-color: var(--primary); background-color: #f0e6f9; }
-        .topping-item span { font-weight: 500; }
-        .topping-item .price-add { font-size: 0.8rem; color: #888; }
-        .cup-panel .cup-visual { background-color: #eee; border-radius: 10px; padding: 1rem; text-align: center; position: sticky; top: 0; }
-        .cup-visual h4 { margin: 0 0 1rem; }
-        #cup-toppings { min-height: 100px; background: #fff; border-radius: 5px; padding: 0.5rem; }
-        #cup-toppings div { background: #f0e6f9; border-radius: 5px; padding: 0.3rem 0.5rem; margin-bottom: 0.3rem; font-size: 0.9rem; }
-        .modal-footer { padding: 1.5rem; border-top: 1px solid #eee; text-align: right; background: #fafafa; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;}
-        #total-price { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
-        .btn-close { background-color: #ccc; }
-        .cart-container { background-color: var(--card-bg); border-radius: 15px; padding: 2rem; box-shadow: var(--shadow); }
-        .cart-item { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid #eee; }
-        .cart-item-details { flex-grow: 1; }
-        strong { font-size: 1.1rem; }
-        .toppings-list { font-size: 0.8rem; color: #666; margin-left: 1rem; }
-        .cart-item-price { font-weight: 600; }
-        .cart-total { text-align: right; font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; }
-        .cart-actions { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-        #client-info input { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; }
-        .btn-finish { background-color: var(--success); color: var(--text-light); border: none; padding: 1rem; font-size: 1.2rem; font-weight: 700; border-radius: 10px; cursor: pointer; transition: background-color 0.3s; }
-        .btn-finish:hover { background-color: #27ae60; }
-        .btn-finish:disabled { background-color: #95a5a6; cursor: not-allowed; }
-        
-        /* --- ADMIN STYLES --- */
-        #admin-panel { display: none; }
-        .admin-nav { display: flex; justify-content: center; background-color: var(--text-dark); padding: 0.5rem; border-radius: 10px; margin-bottom: 2rem; }
-        .admin-nav button { background: none; border: none; color: var(--text-light); font-size: 1rem; padding: 0.8rem 1.5rem; cursor: pointer; font-weight: 600; border-radius: 8px; }
-        .admin-nav button.active { background-color: var(--primary); }
-        .admin-view { display: none; }
-        .admin-view.active { display: block; }
-        .kpi-container { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 2rem; }
-        .kpi-card { background: var(--card-bg); padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow); text-align: center; flex-grow: 1; }
-        .kpi-card h4 { margin: 0 0 0.5rem; color: #888; font-size: 1rem; }
-        .kpi-card p { margin: 0; font-size: 2rem; font-weight: 700; color: var(--primary); }
-        .chart-container { background: var(--card-bg); padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow); }
-        .order-list-item { background: var(--card-bg); padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow); margin-bottom: 1rem; }
-        .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem; }
-        .order-status { font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 20px; color: white; }
-        .status-Recebido { background-color: var(--info); }
-        .status-Em-Preparação { background-color: var(--secondary); }
-        .status-Saiu-para-Entrega { background-color: #e67e22; }
-        .status-Concluído { background-color: var(--success); }
-        .status-Cancelado { background-color: #e74c3c; }
-        .order-actions select { padding: 0.5rem; border-radius: 5px; border: 1px solid #ddd; margin-left: 1rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Açaí Imperial - Peça Agora!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary:#6a0dad; --secondary:#f39c12; --success:#2ecc71; --info:#3498db;
+      --danger:#e74c3c; --background:#f4f4f9; --text-dark:#333; --text-light:#fff;
+      --card-bg:#fff; --shadow:0 4px 15px rgba(0,0,0,0.1);
+    }
+    *{box-sizing:border-box;}
+    body{font-family:'Poppins',sans-serif;margin:0;background:var(--background);color:var(--text-dark);}
+    header{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,var(--primary),#8e44ad);color:var(--text-light);text-align:center;padding:1.5rem;border-bottom-left-radius:20px;border-bottom-right-radius:20px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+    header h1{margin:0;font-size:2rem;}
+    main{padding:2rem 1rem;max-width:1200px;margin:auto;}
+    h2{text-align:center;color:var(--primary);font-size:1.8rem;margin-bottom:1rem;}
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}
+    .product-card{background:var(--card-bg);border-radius:15px;box-shadow:var(--shadow);overflow:hidden;text-align:center;transition:.3s;}
+    .product-card:hover{transform:translateY(-5px);}
+    .product-card img{width:100%;height:180px;object-fit:cover;}
+    .product-info{padding:1rem;}
+    h3{margin:0;font-size:1.2rem;}
+    .price{font-size:1.3rem;font-weight:700;color:var(--primary);margin:0.5rem 0;}
+    .order-button{background:var(--primary);color:var(--text-light);border:none;border-radius:10px;padding:.7rem 1.2rem;font-size:1rem;cursor:pointer;width:100%;transition:.3s;}
+    .order-button:hover{background:#5a0a99;}
+    /* Botão flutuante WhatsApp */
+    .whatsapp-btn{position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;border-radius:50%;padding:15px;box-shadow:0 4px 15px rgba(0,0,0,.2);cursor:pointer;font-size:1.6rem;z-index:999;transition:.3s;}
+    .whatsapp-btn:hover{transform:scale(1.1);}
+    /* Splash screen */
+    #splash{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,var(--primary),#8e44ad);display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;z-index:2000;animation:fadeOut 1s 2.5s forwards;}
+    #splash h1{font-size:2.5rem;margin:0;}
+    @keyframes fadeOut{to{opacity:0;visibility:hidden;}}
+    /* Loader */
+    .loader{border:5px solid #f3f3f3;border-top:5px solid var(--primary);border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:auto;}
+    @keyframes spin{100%{transform:rotate(360deg);}}
+    /* Modal de confirmação */
+    .confirm-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0;transition:.3s;z-index:1200;}
+    .confirm-overlay.active{visibility:visible;opacity:1;}
+    .confirm-box{background:#fff;padding:2rem;border-radius:15px;max-width:400px;text-align:center;}
+    .confirm-box h3{margin-bottom:1rem;}
+    .confirm-box button{margin:0.5rem;padding:.7rem 1rem;border:none;border-radius:8px;font-weight:600;cursor:pointer;}
+    .btn-ok{background:var(--success);color:#fff;}
+    .btn-cancel{background:#ccc;}
+  </style>
 </head>
 <body>
+  <!-- Splash -->
+  <div id="splash"><h1>Açaí Imperial 👑</h1><p>O sabor que te faz reinar!</p></div>
 
-<header>
+  <header>
     <h1>Açaí Imperial 👑</h1>
-    <p>O sabor que te faz reinar! Peça agora e monte do seu jeito.</p>
-</header>
+    <p>Monte seu pedido e peça pelo WhatsApp!</p>
+  </header>
 
-<main id="customer-view">
+  <main id="customer-view">
     <section id="menu">
-        <h2>Nosso Cardápio</h2>
-        <div class="products-grid" id="products-container"></div>
+      <h2>Nosso Cardápio</h2>
+      <div class="products-grid" id="products-container"></div>
     </section>
 
-    <section id="cart" style="margin-top: 3rem;">
-        <h2>Seu Pedido</h2>
-        <div class="cart-container">
-            <div id="cart-items"><p>Seu carrinho está vazio.</p></div>
-            <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
-            <hr>
-            <div class="cart-actions">
-                <h3>Complete seus Dados</h3>
-                <div id="client-info">
-                    <input type="text" id="client-name" placeholder="Seu nome">
-                    <input type="text" id="client-address" placeholder="Seu endereço completo (Rua, Nº, Bairro)">
-                </div>
-                <button class="btn-finish" id="finish-order-button" disabled>Finalizar Pedido no WhatsApp</button>
-            </div>
+    <section id="cart" style="margin-top:2rem;">
+      <h2>Seu Pedido</h2>
+      <div class="cart-container">
+        <div id="cart-items"><p>Seu carrinho está vazio.</p></div>
+        <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
+        <hr>
+        <div class="cart-actions">
+          <h3>Complete seus Dados</h3>
+          <input type="text" id="client-name" placeholder="Seu nome">
+          <input type="text" id="client-address" placeholder="Endereço completo">
+          <select id="payment-method">
+            <option value="Pix">Pix</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartão">Cartão</option>
+          </select>
+          <button class="btn-finish" id="finish-order-button" disabled>Finalizar Pedido</button>
         </div>
+      </div>
     </section>
-</main>
+  </main>
 
-<main id="admin-panel">
-    <h2>Painel de Controle</h2>
-    <nav class="admin-nav">
-        <button onclick="showAdminView('deliveries')" class="active">📦 Entregas</button>
-        <button onclick="showAdminView('finance')">💰 Financeiro</button>
-    </nav>
+  <!-- Botão flutuante WhatsApp -->
+  <a href="https://wa.me/5551999999999" class="whatsapp-btn">💬</a>
 
-    <div id="deliveries" class="admin-view active">
-        <h3>Pedidos a Fazer</h3>
-        <div id="orders-list"></div>
+  <!-- Modal de confirmação -->
+  <div class="confirm-overlay" id="confirm-modal">
+    <div class="confirm-box">
+      <h3>Deseja enviar este pedido?</h3>
+      <button class="btn-ok" onclick="confirmSend()">Sim</button>
+      <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
     </div>
-    <div id="finance" class="admin-view">
-        <h3>Visão Geral Financeira</h3>
-        <div class="kpi-container">
-            <div class="kpi-card"><h4>Faturamento Total</h4><p id="kpi-revenue">R$ 0,00</p></div>
-            <div class="kpi-card"><h4>Pedidos Concluídos</h4><p id="kpi-orders">0</p></div>
-            <div class="kpi-card"><h4>Ticket Médio</h4><p id="kpi-avg-ticket">R$ 0,00</p></div>
-        </div>
-        <div class="chart-container">
-            <canvas id="salesChart"></canvas>
-        </div>
-    </div>
-</main>
-
-<div class="modal-overlay" id="builder-modal">
-    <div class="modal-content">
-        <div class="modal-header"><h2 id="modal-product-name"></h2></div>
-        <div class="modal-body">
-            <div class="toppings-panel"><h4>Escolha seus adicionais:</h4><div class="toppings-grid" id="toppings-container"></div></div>
-            <div class="cup-panel"><div class="cup-visual"><h4>Seu Copo:</h4><div id="cup-toppings"></div></div></div>
-        </div>
-        <div class="modal-footer">
-            <button class="order-button btn-close" onclick="closeModal()">Cancelar</button>
-            <button class="order-button" onclick="addToCart()">Adicionar: <span id="total-price">R$ 0,00</span></button>
-        </div>
-    </div>
-</div>
+  </div>
 
 <script>
-// --- CONFIGURAÇÕES DA LOJA ---
-const WHATSAPP_NUMBER = "5551999999999"; // <<<<---- COLOQUE SEU NÚMERO DE WHATSAPP
-const SENHA_ADMIN = "1234"; // <<<<---- COLOQUE UMA SENHA PARA O PAINEL ADMIN
+const WHATSAPP_NUMBER="5551999999999";
+let cart=[];
 
-const PRODUCTS = [
-    { id: 1, name: "Copo de Açaí 300ml", price: 12.00, description: "Cremoso e refrescante. Monte com seus adicionais preferidos!", image: "https://source.unsplash.com/random/400x300?acai-bowl" },
-    { id: 2, name: "Copo de Açaí 500ml", price: 18.00, description: "Uma porção generosa do melhor açaí. Monte do seu jeito!", image: "https://source.unsplash.com/random/400x301?acai-bowl" },
-    { id: 3, name: "Barca de Açaí (Serve 2)", price: 35.00, description: "Uma barca recheada para compartilhar. Monte com seus adicionais!", image: "https://source.unsplash.com/random/400x302?acai-bowl" }
+const PRODUCTS=[
+ {id:1,name:"Copo 300ml",price:12.00,image:"https://source.unsplash.com/400x300/?acai"},
+ {id:2,name:"Copo 500ml",price:18.00,image:"https://source.unsplash.com/400x301/?acai"},
+ {id:3,name:"Barca Açaí",price:35.00,image:"https://source.unsplash.com/400x302/?acai"}
 ];
-const TOPPINGS = [
-    { name: 'Leite em Pó', price: 2.00 }, { name: 'Leite Condensado', price: 2.50 }, { name: 'Granola', price: 2.00 },
-    { name: 'Banana', price: 1.50 }, { name: 'Morango', price: 3.00 }, { name: 'Kiwi', price: 3.00 },
-    { name: 'Paçoca', price: 1.00 }, { name: 'Creme de Avelã', price: 4.00 }
-];
-// ------------------------------
 
-let currentProduct = null;
-let selectedToppings = [];
-let cart = [];
-let orders = JSON.parse(localStorage.getItem('acaiOrders')) || [];
+function renderProducts(){
+ document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
+   <div class="product-card">
+     <img src="${p.image}"><div class="product-info">
+     <h3>${p.name}</h3><p class="price">R$ ${p.price.toFixed(2)}</p>
+     <button class="order-button" onclick="addToCart(${p.id})">Adicionar</button>
+   </div></div>`).join("");
+}
+function addToCart(id){
+ const product=PRODUCTS.find(p=>p.id===id);
+ cart.push(product);
+ updateCart();
+}
+function updateCart(){
+ const container=document.getElementById("cart-items");
+ if(cart.length===0){container.innerHTML="<p>Seu carrinho está vazio.</p>";}
+ else{
+   container.innerHTML=cart.map((item,i)=>`
+     <div style="display:flex;justify-content:space-between;align-items:center;">
+       <strong>${item.name}</strong><span>R$ ${item.price.toFixed(2)}</span>
+       <button onclick="removeFromCart(${i})">❌</button>
+     </div>`).join("");
+ }
+ document.getElementById("cart-total-price").innerText=`R$ ${cart.reduce((t,i)=>t+i.price,0).toFixed(2)}`;
+ checkForm();
+}
+function removeFromCart(i){cart.splice(i,1);updateCart();}
+function checkForm(){
+ const name=document.getElementById("client-name").value;
+ const address=document.getElementById("client-address").value;
+ document.getElementById("finish-order-button").disabled=!(name&&address&&cart.length>0);
+}
+document.getElementById("client-name").addEventListener("input",checkForm);
+document.getElementById("client-address").addEventListener("input",checkForm);
 
-function saveOrders() { localStorage.setItem('acaiOrders', JSON.stringify(orders)); }
-
-// --- LÓGICA DE VISUALIZAÇÃO ---
-function checkView() {
-    if (window.location.hash === '#admin') {
-        const password = prompt('Digite a senha para acessar o painel de controle:');
-        if (password === SENHA_ADMIN) {
-            document.getElementById('customer-view').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'block';
-            renderAdminPanel();
-        } else {
-            alert('Senha incorreta!');
-            window.location.hash = '';
-        }
-    } else {
-        document.getElementById('customer-view').style.display = 'block';
-        document.getElementById('admin-panel').style.display = 'none';
-        renderProducts();
-        updateCart();
-    }
-}
-
-// --- LÓGICA DO CLIENTE ---
-function renderProducts() {
-    const container = document.getElementById('products-container');
-    container.innerHTML = PRODUCTS.map(p => `
-        <div class="product-card">
-            <img src="${p.image}" alt="${p.name}"><div class="product-info">
-            <h3>${p.name}</h3><p class="description">${p.description}</p>
-            <p class="price">R$ ${p.price.toFixed(2)}</p>
-            <button class="order-button" onclick='openBuilder(${JSON.stringify(p)})'>Montar meu Açaí</button>
-        </div></div>`).join('');
-}
-function openBuilder(product) {
-    currentProduct = product; selectedToppings = [];
-    document.getElementById('modal-product-name').innerText = `Monte seu ${product.name}`;
-    const toppingsContainer = document.getElementById('toppings-container');
-    toppingsContainer.innerHTML = TOPPINGS.map((t, i) => `
-        <div class="topping-item" id="topping-${i}" onclick='toggleTopping(${i}, ${JSON.stringify(t)})'>
-        <span>${t.name}</span><div class="price-add">+ R$ ${t.price.toFixed(2)}</div></div>`).join('');
-    updateBuilderTotal();
-    document.getElementById('builder-modal').classList.add('active');
-}
-function toggleTopping(index, topping) {
-    const el = document.getElementById(`topping-${index}`);
-    const existingIndex = selectedToppings.findIndex(t => t.name === topping.name);
-    if (existingIndex > -1) { selectedToppings.splice(existingIndex, 1); el.classList.remove('selected'); }
-    else { selectedToppings.push(topping); el.classList.add('selected'); }
-    updateBuilderTotal();
-}
-function updateBuilderTotal() {
-    const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
-    const totalPrice = currentProduct.price + toppingsPrice;
-    document.getElementById('total-price').innerText = `R$ ${totalPrice.toFixed(2)}`;
-    document.getElementById('cup-toppings').innerHTML = selectedToppings.length > 0
-        ? selectedToppings.map(t => `<div>${t.name}</div>`).join('') : '<p style="color:#888; font-size:0.9rem;">Selecione os adicionais!</p>';
-}
-function closeModal() { document.getElementById('builder-modal').classList.remove('active'); }
-function addToCart() {
-    const toppingsPrice = selectedToppings.reduce((total, t) => total + t.price, 0);
-    cart.push({
-        product: currentProduct,
-        toppings: [...selectedToppings],
-        totalPrice: currentProduct.price + toppingsPrice
-    });
-    updateCart();
-    closeModal();
-}
-function updateCart() {
-    const cartItemsContainer = document.getElementById('cart-items');
-    if (cart.length === 0) cartItemsContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
-    else {
-        cartItemsContainer.innerHTML = cart.map((item, index) => `
-            <div class="cart-item">
-                <div class="cart-item-details">
-                    <strong>${item.product.name}</strong>
-                    <div class="toppings-list">${item.toppings.map(t => t.name).join(', ') || 'Sem adicionais'}</div>
-                </div>
-                <div class="cart-item-price">R$ ${item.totalPrice.toFixed(2)}</div>
-                <button onclick="removeFromCart(${index})" style="background:none;border:none;color:var(--danger);cursor:pointer;margin-left:1rem;">✖</button>
-            </div>`).join('');
-    }
-    document.getElementById('cart-total-price').innerText = `R$ ${cart.reduce((t, i) => t + i.totalPrice, 0).toFixed(2)}`;
-    checkFormValidity();
-}
-function removeFromCart(index) { cart.splice(index, 1); updateCart(); }
-function checkFormValidity() {
-    const name = document.getElementById('client-name').value;
-    const address = document.getElementById('client-address').value;
-    document.getElementById('finish-order-button').disabled = !(name && address && cart.length > 0);
-}
-function sendWhatsAppMessage() {
-    const name = document.getElementById('client-name').value;
-    const address = document.getElementById('client-address').value;
-    
-    // Salva o pedido no localStorage para o admin
-    const newOrder = {
-        id: Date.now(),
-        customerName: name,
-        customerAddress: address,
-        items: cart,
-        totalPrice: cart.reduce((t, i) => t + i.totalPrice, 0),
-        status: 'Recebido',
-        createdAt: new Date().toISOString()
-    };
-    orders.push(newOrder);
-    saveOrders();
-
-    // Cria a mensagem para o WhatsApp
-    let message = `Olá Açaí Imperial! 👑\n\nNovo Pedido!\nNome: *${name}*\n\n`;
-    cart.forEach(item => {
-        message += `*1x ${item.product.name}* - R$ ${item.totalPrice.toFixed(2)}\n`;
-        if(item.toppings.length > 0) message += `   Adicionais: ${item.toppings.map(t => t.name).join(', ')}\n`;
-        message += `\n`;
-    });
-    message += `*Total do Pedido: R$ ${newOrder.totalPrice.toFixed(2)}*\n\n*Endereço de Entrega:*\n${address}`;
-    
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
-    
-    // Limpa o carrinho e reseta a página
-    alert('Pedido salvo! Você será redirecionado para o WhatsApp.');
-    cart = [];
-    document.getElementById('client-name').value = '';
-    document.getElementById('client-address').value = '';
-    updateCart();
-}
-
-// --- LÓGICA DO ADMIN ---
-function showAdminView(viewName) {
-    document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
-    document.getElementById(viewName).classList.add('active');
-    document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.admin-nav button[onclick="showAdminView('${viewName}')"]`).classList.add('active');
-    if(viewName === 'finance') renderFinancePanel();
-}
-
-function renderAdminPanel() {
-    renderOrdersList();
-    renderFinancePanel();
-}
-function renderOrdersList() {
-    const container = document.getElementById('orders-list');
-    const pendingOrders = orders.filter(o => o.status !== 'Concluído' && o.status !== 'Cancelado').reverse();
-    if(pendingOrders.length === 0) {
-        container.innerHTML = "<p>Nenhum pedido pendente. Bom trabalho!</p>";
-        return;
-    }
-    container.innerHTML = pendingOrders.map(order => `
-        <div class="order-list-item">
-            <div class="order-header">
-                <div>
-                    <strong>Pedido #${order.id}</strong><br>
-                    <small>${new Date(order.createdAt).toLocaleString('pt-BR')}</small>
-                </div>
-                <div class="order-status status-${order.status.replace(' ', '-')}">${order.status}</div>
-            </div>
-            <p><strong>Cliente:</strong> ${order.customerName}</p>
-            <p><strong>Endereço:</strong> ${order.customerAddress}</p>
-            <div><strong>Itens:</strong></div>
-            ${order.items.map(item => `
-                <div>- ${item.product.name} (R$ ${item.totalPrice.toFixed(2)})
-                    <div class="toppings-list">${item.toppings.map(t => t.name).join(', ') || ''}</div>
-                </div>
-            `).join('')}
-            <div class="cart-total" style="margin-top:1rem;">Total: R$ ${order.totalPrice.toFixed(2)}</div>
-            <div class="order-actions">
-                <span>Mudar Status:</span>
-                <select onchange="updateOrderStatus(${order.id}, this.value)">
-                    <option value="Recebido" ${order.status === 'Recebido' ? 'selected' : ''}>Recebido</option>
-                    <option value="Em Preparação" ${order.status === 'Em Preparação' ? 'selected' : ''}>Em Preparação</option>
-                    <option value="Saiu para Entrega" ${order.status === 'Saiu para Entrega' ? 'selected' : ''}>Saiu para Entrega</option>
-                    <option value="Concluído" ${order.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
-                    <option value="Cancelado" ${order.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
-                </select>
-            </div>
-        </div>
-    `).join('');
-}
-function updateOrderStatus(orderId, newStatus) {
-    const order = orders.find(o => o.id === orderId);
-    if (order) {
-        order.status = newStatus;
-        saveOrders();
-        renderOrdersList();
-        renderFinancePanel(); // Atualiza os KPIs financeiros
-    }
-}
-function renderFinancePanel() {
-    const completedOrders = orders.filter(o => o.status === 'Concluído');
-    const totalRevenue = completedOrders.reduce((total, o) => total + o.totalPrice, 0);
-    const totalOrders = completedOrders.length;
-    const avgTicket = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-    
-    document.getElementById('kpi-revenue').innerText = `R$ ${totalRevenue.toFixed(2)}`;
-    document.getElementById('kpi-orders').innerText = totalOrders;
-    document.getElementById('kpi-avg-ticket').innerText = `R$ ${avgTicket.toFixed(2)}`;
-
-    // Lógica do Gráfico
-    const salesByDay = completedOrders.reduce((acc, order) => {
-        const day = new Date(order.createdAt).toLocaleDateString('pt-BR');
-        acc[day] = (acc[day] || 0) + order.totalPrice;
-        return acc;
-    }, {});
-
-    const chartCtx = document.getElementById('salesChart').getContext('2d');
-    if(window.mySalesChart) window.mySalesChart.destroy(); // Destroi o gráfico anterior para redesenhar
-    
-    window.mySalesChart = new Chart(chartCtx, {
-        type: 'bar',
-        data: {
-            labels: Object.keys(salesByDay),
-            datasets: [{
-                label: 'Faturamento por Dia (R$)',
-                data: Object.values(salesByDay),
-                backgroundColor: 'rgba(106, 13, 173, 0.7)',
-                borderColor: 'rgba(106, 13, 173, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: { scales: { y: { beginAtZero: true } } }
-    });
-}
-
-
-// --- INICIALIZAÇÃO ---
-document.addEventListener('DOMContentLoaded', () => {
-    checkView();
-    // Adiciona listener para mudanças no hash (ex: voltar no navegador)
-    window.addEventListener('hashchange', checkView);
-
-    // Liga os listeners do formulário do cliente
-    ['client-name', 'client-address'].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.addEventListener('input', checkFormValidity);
-    });
-    const finishButton = document.getElementById('finish-order-button');
-    if(finishButton) finishButton.addEventListener('click', sendWhatsAppMessage);
+document.getElementById("finish-order-button").addEventListener("click",()=>{
+ document.getElementById("confirm-modal").classList.add("active");
 });
-</script>
 
+function closeConfirm(){document.getElementById("confirm-modal").classList.remove("active");}
+function confirmSend(){
+ const name=document.getElementById("client-name").value;
+ const address=document.getElementById("client-address").value;
+ const payment=document.getElementById("payment-method").value;
+ let msg=`🍧 Pedido Açaí Imperial 🍧\n\nCliente: ${name}\nEndereço: ${address}\nPagamento: ${payment}\n\nItens:\n`;
+ cart.forEach(p=>{msg+=`- ${p.name} (R$ ${p.price.toFixed(2)})\n`;});
+ msg+=`\nTotal: R$ ${cart.reduce((t,i)=>t+i.price,0).toFixed(2)}\n`;
+ window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank");
+ cart=[];updateCart();closeConfirm();
+}
+document.addEventListener("DOMContentLoaded",renderProducts);
+</script>
 </body>
 </html>
-Consegue transformar esse código em um app com a mais aura tecnologia? Vou enviar a um cliente que vende açaí o nome deles é açaí da barra poa, um app para test com tudo o que é importante para uma loja de açaí, consegue?
