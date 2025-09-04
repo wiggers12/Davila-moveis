@@ -63,35 +63,60 @@
       text-align: center;
       margin-bottom: 20px;
     }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-    }
-    .card {
+
+    /* Card principal */
+    .main-card {
       background: var(--card-bg);
       border: 2px solid var(--gold);
       border-radius: 12px;
       padding: 20px;
       text-align: center;
-      font-weight: bold;
-      color: var(--white);
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transition: transform .2s;
-      opacity: 0; /* começa invisível */
+      margin-bottom: 20px;
+      opacity: 0;
       transform: translateY(20px);
     }
-    .card.show {
+    .main-card.show {
       animation: cardfade 0.6s ease forwards;
     }
+    .main-card h2 {
+      color: var(--gold);
+      margin-bottom: 15px;
+    }
+
+    /* Subcards */
+    .subcards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+    }
+    .subcards .card {
+      background: var(--card-bg);
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 14px;
+      text-align: center;
+      font-weight: bold;
+      color: var(--white);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+      transition: transform .2s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .subcards .card.show {
+      animation: cardfade 0.6s ease forwards;
+    }
+    .subcards .card:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+
     @keyframes cardfade {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .card:hover {
-      transform: scale(1.05);
-      cursor: pointer;
-    }
+
     /* Modal */
     .modal {
       display: none;
@@ -147,18 +172,23 @@
   <!-- Conteúdo -->
   <div id="content">
     <h1>Jiu-Jitsu Puro</h1>
-    <div class="cards">
-      <div class="card" onclick="abrirModal('O começo','comeco')">O começo</div>
-      <div class="card" onclick="abrirModal('Regras do jiu jitsu','regras')">Regras do jiu jitsu</div>
-      <div class="card" onclick="abrirModal('Regras do tatame','tatame')">Regras do tatame</div>
-      <div class="card" onclick="abrirModal('Mentalidade','mentalidade')">Mentalidade</div>
-      <div class="card" onclick="abrirModal('Guarda','guarda')">Guarda</div>
-      <div class="card" onclick="abrirModal('Passagens','passagens')">Passagens</div>
-      <div class="card" onclick="abrirModal('Meia guarda','meiaguarda')">Meia guarda</div>
-      <div class="card" onclick="abrirModal('Finalizações','finalizacoes')">Finalizações</div>
-      <div class="card" onclick="abrirModal('Quedas','quedas')">Quedas</div>
-      <div class="card" onclick="abrirModal('Drills','drills')">Drills</div>
-      <div class="card" onclick="abrirModal('Análise','analise')">Análise</div>
+
+    <!-- Card principal -->
+    <div class="main-card" id="mainCard">
+      <h2>O que você quer aprender?</h2>
+      <div class="subcards">
+        <div class="card" onclick="abrirModal('O começo','comeco')">O começo</div>
+        <div class="card" onclick="abrirModal('Regras do jiu jitsu','regras')">Regras do jiu jitsu</div>
+        <div class="card" onclick="abrirModal('Regras do tatame','tatame')">Regras do tatame</div>
+        <div class="card" onclick="abrirModal('Mentalidade','mentalidade')">Mentalidade</div>
+        <div class="card" onclick="abrirModal('Guarda','guarda')">Guarda</div>
+        <div class="card" onclick="abrirModal('Passagens','passagens')">Passagens</div>
+        <div class="card" onclick="abrirModal('Meia guarda','meiaguarda')">Meia guarda</div>
+        <div class="card" onclick="abrirModal('Finalizações','finalizacoes')">Finalizações</div>
+        <div class="card" onclick="abrirModal('Quedas','quedas')">Quedas</div>
+        <div class="card" onclick="abrirModal('Drills','drills')">Drills</div>
+        <div class="card" onclick="abrirModal('Análise','analise')">Análise</div>
+      </div>
     </div>
   </div>
 
@@ -270,14 +300,17 @@
       `
     };
 
-    // Mostra o conteúdo após o splash
+    // Splash -> mostra conteúdo
     setTimeout(() => {
       document.getElementById('content').style.display = 'block';
 
-      // anima cada card com delay em cascata
-      const cards = document.querySelectorAll('.card');
-      cards.forEach((card, i) => {
-        setTimeout(() => card.classList.add('show'), i * 150);
+      // anima card principal
+      document.getElementById('mainCard').classList.add('show');
+
+      // anima subcards em cascata
+      const subcards = document.querySelectorAll('.subcards .card');
+      subcards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('show'), 500 + i * 150);
       });
     }, 3000);
 
