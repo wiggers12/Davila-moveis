@@ -13,74 +13,19 @@
     height: 100vh; width: 100vw;
   }
 
-  /* Fundo estilo tatame */
+  /* Fundo animado */
   .background {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: repeating-linear-gradient(
-      45deg,
-      #0f0f0f 0px,
-      #0f0f0f 20px,
-      #1a1a1a 20px,
-      #1a1a1a 40px
-    );
-    animation: slide 6s linear infinite;
+    background: #000;
     z-index: -3;
-  }
-  @keyframes slide {
-    from { background-position: 0 0; }
-    to { background-position: 200px 200px; }
-  }
-
-  /* Partículas douradas */
-  #particles {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    overflow: hidden;
-    z-index: -2;
-  }
-  .particle {
-    position: absolute;
-    width: 6px; height: 6px;
-    background: #d4af37;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: float 8s linear infinite;
-  }
-  @keyframes float {
-    from { transform: translateY(100vh) scale(0.5); opacity: 0; }
-    50% { opacity: 1; }
-    to { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-  }
-
-  /* Faixas flutuando */
-  .faixa {
-    position: absolute;
-    width: 80px; height: 15px;
-    border-radius: 5px;
-    opacity: 0.7;
-    transform: rotate(-20deg);
-    animation: fly 10s linear infinite;
-    z-index: -1;
-  }
-  .faixa.branca { background: #fff; top: 20%; left: -20%; animation-delay: 0s; }
-  .faixa.azul { background: #007bff; top: 40%; left: -30%; animation-delay: 2s; }
-  .faixa.roxa { background: #6f42c1; top: 60%; left: -25%; animation-delay: 4s; }
-  .faixa.marrom { background: #8b4513; top: 30%; left: -15%; animation-delay: 6s; }
-  .faixa.preta { background: #000; top: 50%; left: -10%; animation-delay: 8s; }
-  @keyframes fly {
-    from { transform: translateX(-20vw) rotate(-20deg); opacity: 0; }
-    30% { opacity: 1; }
-    to { transform: translateX(120vw) rotate(-20deg); opacity: 0; }
   }
 
   /* Cenas */
   .scene {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -90,15 +35,18 @@
     opacity: 0;
     transition: opacity 1s ease;
     padding: 20px;
+    background-size: cover;
+    background-position: center;
   }
   .scene.active {
     opacity: 1;
     animation: zoomfade 1.2s ease forwards;
   }
   @keyframes zoomfade {
-    from { opacity: 0; transform: scale(1.2); }
+    from { opacity: 0; transform: scale(1.1); }
     to { opacity: 1; transform: scale(1); }
   }
+
   h1, h2 {
     margin: 10px 0;
     text-shadow: 0 0 10px rgba(0,0,0,0.7);
@@ -106,28 +54,44 @@
   h1 { color: #d4af37; font-size: 2em; }
   h2 { color: #fff; font-size: 1.2em; }
 
-  /* Logo com brilho */
+  /* Logo */
   .logo {
     width: 160px;
     max-width: 50%;
     margin-bottom: 20px;
-    position: relative;
     animation: zoom 2s ease forwards;
   }
   @keyframes zoom {
     from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
   }
-  .logo::after {
-    content: "";
-    position: absolute;
-    top: 0; left: -100%;
-    width: 50%; height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
-    animation: shine 3s infinite;
+
+  /* Mockup celular */
+  .phone {
+    position: relative;
+    width: 220px;
+    max-width: 70%;
   }
-  @keyframes shine {
-    to { left: 150%; }
+  .frame {
+    width: 100%; display: block;
+    border: 10px solid #222;
+    border-radius: 30px;
+  }
+  .screen {
+    position: absolute; top: 5%; left: 6%;
+    width: 88%; height: 90%;
+    background: #000;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .screen img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    animation: slideApp 3s infinite alternate;
+  }
+  @keyframes slideApp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10%); }
   }
 
   /* Botão */
@@ -160,44 +124,41 @@
 <body>
 
 <div class="background"></div>
-<div id="particles"></div>
-
-<!-- Faixas -->
-<div class="faixa branca"></div>
-<div class="faixa azul"></div>
-<div class="faixa roxa"></div>
-<div class="faixa marrom"></div>
-<div class="faixa preta"></div>
 
 <!-- Cena 1 -->
-<div class="scene" id="scene1">
+<div class="scene" id="scene1" style="background-image: url('https://images.unsplash.com/photo-1599058917212-d750089bc7f0?auto=format&fit=crop&w=1200&q=80');">
   <img src="DD4E5F7A-87E1-4FA1-AF05-DD942BD89EAD.png" class="logo" alt="Logo">
   <h2>O Jiu-Jitsu é mais do que luta</h2>
 </div>
 
 <!-- Cena 2 -->
-<div class="scene" id="scene2">
+<div class="scene" id="scene2" style="background-image: url('https://images.unsplash.com/photo-1610641818989-770ae7c86f5b?auto=format&fit=crop&w=1200&q=80');">
   <h1>Aprenda do zero</h1>
   <h2>Com o app que te guia passo a passo</h2>
 </div>
 
 <!-- Cena 3 -->
-<div class="scene" id="scene3">
+<div class="scene" id="scene3" style="background-image: url('https://images.unsplash.com/photo-1610641802471-d1ef21f5f22a?auto=format&fit=crop&w=1200&q=80');">
   <h1>Regras • Guarda • Quedas</h1>
   <h2>Finalizações • Mentalidade • Drills</h2>
 </div>
 
-<!-- Cena 4 -->
-<div class="scene" id="scene4">
-  <h1>Do faixa branca ao faixa preta</h1>
-  <h2>Sua jornada começa aqui</h2>
+<!-- Cena 4 (Mockup) -->
+<div class="scene" id="scene4" style="background:#0f0f0f;">
+  <div class="phone">
+    <img src="https://via.placeholder.com/220x400/111/fff?text=Celular" class="frame" alt="Mockup Celular">
+    <div class="screen">
+      <img src="DD4E5F7A-87E1-4FA1-AF05-DD942BD89EAD.png" alt="App">
+    </div>
+  </div>
+  <h2>Veja o app em ação</h2>
 </div>
 
 <!-- Cena final -->
-<div class="scene" id="scene5">
+<div class="scene" id="scene5" style="background-image: url('https://images.unsplash.com/photo-1599058900390-2dd44f4bea7f?auto=format&fit=crop&w=1200&q=80');">
   <img src="DD4E5F7A-87E1-4FA1-AF05-DD942BD89EAD.png" class="logo" alt="Logo">
   <h1>Jiu-Jitsu Puro</h1>
-  <div class="btn" onclick="document.getElementById('impact').play()">Baixe Agora</div>
+  <div class="btn">Baixe Agora</div>
 </div>
 
 <!-- Música -->
@@ -205,23 +166,8 @@
   <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Som de impacto -->
-<audio id="impact">
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b4b4d65f3a.mp3?filename=impact-7054.mp3" type="audio/mpeg">
-</audio>
-
 <script>
-  // Partículas
-  for (let i = 0; i < 25; i++) {
-    let p = document.createElement("div");
-    p.className = "particle";
-    p.style.left = Math.random() * 100 + "vw";
-    p.style.animationDuration = 5 + Math.random() * 5 + "s";
-    p.style.animationDelay = Math.random() * 5 + "s";
-    document.getElementById("particles").appendChild(p);
-  }
-
-  // Cenas sequenciais
+  // Sequência de cenas
   const scenes = document.querySelectorAll('.scene');
   let index = 0;
 
