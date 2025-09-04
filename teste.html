@@ -32,10 +32,12 @@
       z-index: 1000;
       animation: fadeout 2s ease forwards;
       animation-delay: 3s;
+      overflow: hidden;
     }
     #splash img {
-      width: 250px;
-      max-width: 80%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     @keyframes fadeout {
       to { opacity: 0; visibility: hidden; }
@@ -75,6 +77,53 @@
       transform: scale(1.05);
       cursor: pointer;
     }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal.active {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-content {
+      background: #1a1a1a;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 90%;
+      max-height: 80%;
+      overflow-y: auto;
+      text-align: center;
+      animation: zoomin 0.3s ease;
+    }
+    .modal-content h2 {
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .close-btn {
+      background: var(--gold);
+      border: none;
+      color: var(--bg-dark);
+      padding: 10px 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    @keyframes zoomin {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -88,17 +137,26 @@
   <div id="content">
     <h1>Jiu-Jitsu Puro</h1>
     <div class="cards">
-      <div class="card">O começo</div>
-      <div class="card">Regras do jiu jitsu</div>
-      <div class="card">Regras do tatame</div>
-      <div class="card">Mentalidade</div>
-      <div class="card">Guarda</div>
-      <div class="card">Passagens</div>
-      <div class="card">Meia guarda</div>
-      <div class="card">Finalizações</div>
-      <div class="card">Quedas</div>
-      <div class="card">Drills</div>
-      <div class="card">Análise</div>
+      <div class="card" onclick="abrirModal('O começo','História e primeiros passos do Jiu-Jitsu.')">O começo</div>
+      <div class="card" onclick="abrirModal('Regras do jiu jitsu','Regras básicas das competições e treinos.')">Regras do jiu jitsu</div>
+      <div class="card" onclick="abrirModal('Regras do tatame','Respeito, etiqueta e convivência no tatame.')">Regras do tatame</div>
+      <div class="card" onclick="abrirModal('Mentalidade','Disciplina, foco e superação no Jiu-Jitsu.')">Mentalidade</div>
+      <div class="card" onclick="abrirModal('Guarda','Tipos de guarda e estratégias principais.')">Guarda</div>
+      <div class="card" onclick="abrirModal('Passagens','Técnicas de passagem de guarda com controle.')">Passagens</div>
+      <div class="card" onclick="abrirModal('Meia guarda','Controle e transições a partir da meia guarda.')">Meia guarda</div>
+      <div class="card" onclick="abrirModal('Finalizações','Principais finalizações: armlock, triângulo, estrangulamentos.')">Finalizações</div>
+      <div class="card" onclick="abrirModal('Quedas','Técnicas de projeção e quedas para iniciar o combate.')">Quedas</div>
+      <div class="card" onclick="abrirModal('Drills','Exercícios repetitivos para automatizar movimentos.')">Drills</div>
+      <div class="card" onclick="abrirModal('Análise','Estudo de lutas, ajustes técnicos e evolução.')">Análise</div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h2 id="modal-title"></h2>
+      <p id="modal-text"></p>
+      <button class="close-btn" onclick="fecharModal()">Fechar</button>
     </div>
   </div>
 
@@ -107,6 +165,23 @@
     setTimeout(() => {
       document.getElementById('content').style.display = 'block';
     }, 3000);
+
+    // Abre modal
+    function abrirModal(titulo, texto) {
+      document.getElementById("modal-title").innerText = titulo;
+      document.getElementById("modal-text").innerText = texto;
+      document.getElementById("modal").classList.add("active");
+    }
+
+    // Fecha modal
+    function fecharModal() {
+      document.getElementById("modal").classList.remove("active");
+    }
+
+    // Fechar clicando fora também
+    document.getElementById("modal").addEventListener("click", function(e) {
+      if (e.target === this) fecharModal();
+    });
   </script>
 
 </body>
