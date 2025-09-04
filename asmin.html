@@ -13,7 +13,7 @@
     height: 100vh; width: 100vw;
   }
 
-  /* Fundo animado */
+  /* Fundo estilo tatame */
   .background {
     position: fixed;
     top: 0; left: 0;
@@ -26,20 +26,20 @@
       #1a1a1a 40px
     );
     animation: slide 6s linear infinite;
-    z-index: -2;
+    z-index: -3;
   }
   @keyframes slide {
     from { background-position: 0 0; }
     to { background-position: 200px 200px; }
   }
 
-  /* Partículas */
+  /* Partículas douradas */
   #particles {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
     overflow: hidden;
-    z-index: -1;
+    z-index: -2;
   }
   .particle {
     position: absolute;
@@ -55,7 +55,28 @@
     to { transform: translateY(-10vh) scale(1.2); opacity: 0; }
   }
 
-  /* Cena */
+  /* Faixas flutuando */
+  .faixa {
+    position: absolute;
+    width: 80px; height: 15px;
+    border-radius: 5px;
+    opacity: 0.7;
+    transform: rotate(-20deg);
+    animation: fly 10s linear infinite;
+    z-index: -1;
+  }
+  .faixa.branca { background: #fff; top: 20%; left: -20%; animation-delay: 0s; }
+  .faixa.azul { background: #007bff; top: 40%; left: -30%; animation-delay: 2s; }
+  .faixa.roxa { background: #6f42c1; top: 60%; left: -25%; animation-delay: 4s; }
+  .faixa.marrom { background: #8b4513; top: 30%; left: -15%; animation-delay: 6s; }
+  .faixa.preta { background: #000; top: 50%; left: -10%; animation-delay: 8s; }
+  @keyframes fly {
+    from { transform: translateX(-20vw) rotate(-20deg); opacity: 0; }
+    30% { opacity: 1; }
+    to { transform: translateX(120vw) rotate(-20deg); opacity: 0; }
+  }
+
+  /* Cenas */
   .scene {
     position: absolute;
     top: 0; left: 0;
@@ -70,7 +91,14 @@
     transition: opacity 1s ease;
     padding: 20px;
   }
-  .scene.active { opacity: 1; }
+  .scene.active {
+    opacity: 1;
+    animation: zoomfade 1.2s ease forwards;
+  }
+  @keyframes zoomfade {
+    from { opacity: 0; transform: scale(1.2); }
+    to { opacity: 1; transform: scale(1); }
+  }
   h1, h2 {
     margin: 10px 0;
     text-shadow: 0 0 10px rgba(0,0,0,0.7);
@@ -78,23 +106,37 @@
   h1 { color: #d4af37; font-size: 2em; }
   h2 { color: #fff; font-size: 1.2em; }
 
+  /* Logo com brilho */
   .logo {
-    width: 180px;
-    max-width: 60%;
+    width: 160px;
+    max-width: 50%;
     margin-bottom: 20px;
+    position: relative;
     animation: zoom 2s ease forwards;
   }
   @keyframes zoom {
     from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
   }
+  .logo::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
+    animation: shine 3s infinite;
+  }
+  @keyframes shine {
+    to { left: 150%; }
+  }
 
+  /* Botão */
   .btn {
     margin-top: 20px;
     background: #d4af37;
     color: #0f0f0f;
     padding: 15px 30px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     border-radius: 8px;
     text-transform: uppercase;
@@ -106,16 +148,13 @@
     100% { transform: scale(1); }
   }
 
-  /* Texto digitado */
-  .typing {
-    border-right: 3px solid #d4af37;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 0;
-    animation: typing 3s steps(30,end) forwards, blink .8s infinite;
+  /* Responsividade */
+  @media (max-width: 600px) {
+    h1 { font-size: 1.5em; }
+    h2 { font-size: 1em; }
+    .logo { width: 120px; }
+    .btn { font-size: 16px; padding: 12px 20px; }
   }
-  @keyframes typing { to { width: 100%; } }
-  @keyframes blink { 50% { border-color: transparent; } }
 </style>
 </head>
 <body>
@@ -123,27 +162,34 @@
 <div class="background"></div>
 <div id="particles"></div>
 
+<!-- Faixas -->
+<div class="faixa branca"></div>
+<div class="faixa azul"></div>
+<div class="faixa roxa"></div>
+<div class="faixa marrom"></div>
+<div class="faixa preta"></div>
+
 <!-- Cena 1 -->
 <div class="scene" id="scene1">
   <img src="DD4E5F7A-87E1-4FA1-AF05-DD942BD89EAD.png" class="logo" alt="Logo">
-  <h2 class="typing">O Jiu-Jitsu é mais do que luta</h2>
+  <h2>O Jiu-Jitsu é mais do que luta</h2>
 </div>
 
 <!-- Cena 2 -->
 <div class="scene" id="scene2">
-  <h1 class="typing">Aprenda do zero</h1>
+  <h1>Aprenda do zero</h1>
   <h2>Com o app que te guia passo a passo</h2>
 </div>
 
 <!-- Cena 3 -->
 <div class="scene" id="scene3">
-  <h1 class="typing">Regras • Guarda • Quedas</h1>
+  <h1>Regras • Guarda • Quedas</h1>
   <h2>Finalizações • Mentalidade • Drills</h2>
 </div>
 
 <!-- Cena 4 -->
 <div class="scene" id="scene4">
-  <h1 class="typing">Do faixa branca ao faixa preta</h1>
+  <h1>Do faixa branca ao faixa preta</h1>
   <h2>Sua jornada começa aqui</h2>
 </div>
 
@@ -151,12 +197,17 @@
 <div class="scene" id="scene5">
   <img src="DD4E5F7A-87E1-4FA1-AF05-DD942BD89EAD.png" class="logo" alt="Logo">
   <h1>Jiu-Jitsu Puro</h1>
-  <div class="btn">Baixe Agora</div>
+  <div class="btn" onclick="document.getElementById('impact').play()">Baixe Agora</div>
 </div>
 
 <!-- Música -->
 <audio autoplay loop>
   <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Som de impacto -->
+<audio id="impact">
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b4b4d65f3a.mp3?filename=impact-7054.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -185,7 +236,7 @@
     if (index < scenes.length) {
       setTimeout(nextScene, 5000); // cada cena 5s
     } else {
-      index = 0; // reinicia (loop infinito)
+      index = 0; // reinicia loop
       setTimeout(nextScene, 5000);
     }
   }
