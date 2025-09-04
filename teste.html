@@ -144,6 +144,44 @@
 
     .content-box h2 { color: var(--gold); text-align: center; margin-bottom: 15px; }
 
+    /* ================= QUIZ ================= */
+    .quiz { margin-top: 20px; }
+    .quiz h3 { color: var(--gold); }
+    .quiz .option {
+      background: #2c2c2c;
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+    .quiz .option:hover { background: #3a3a3a; }
+    .quiz .correct { background: #2ecc71; color: #fff; }
+    .quiz .wrong { background: #e74c3c; color: #fff; }
+    .quiz-result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: var(--gold);
+    }
+    .quiz button {
+      margin-top: 10px;
+      background: var(--gold);
+      border: none;
+      color: var(--bg-dark);
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* ================= PLACAR ================= */
+    #placar {
+      text-align: center;
+      margin: 15px 0;
+      font-weight: bold;
+      color: var(--gold);
+    }
+
     /* ================= UPLOAD DE VÍDEO ================= */
     .upload-box {
       background: #1a1a1a;
@@ -212,6 +250,7 @@
   <!-- ================ TELA DE OPÇÕES ================ -->
   <div id="menu" class="screen">
     <h1>Escolha uma opção</h1>
+    <div id="placar">Placar: 0 acertos</div>
     <div class="cards">
       <div class="card" onclick="abrirConteudo('O começo','comeco')"><i class="fa-solid fa-flag-checkered"></i>O começo</div>
       <div class="card" onclick="abrirConteudo('Regras do Jiu Jitsu','regras')"><i class="fa-solid fa-scroll"></i>Regras do Jiu Jitsu</div>
@@ -223,7 +262,6 @@
       <div class="card" onclick="abrirConteudo('Finalizações','finalizacoes')"><i class="fa-solid fa-lock"></i>Finalizações</div>
       <div class="card" onclick="abrirConteudo('Quedas','quedas')"><i class="fa-solid fa-arrow-down"></i>Quedas</div>
       <div class="card" onclick="abrirConteudo('Drills','drills')"><i class="fa-solid fa-sync-alt"></i>Drills</div>
-      <!-- Alterado para abrir tela exclusiva -->
       <div class="card" onclick="showScreen('analise')"><i class="fa-solid fa-chart-line"></i>Análise de Luta</div>
     </div>
     <button class="back-btn" onclick="showScreen('home')">Voltar</button>
@@ -234,6 +272,7 @@
     <div class="content-box">
       <h2 id="conteudo-titulo"></h2>
       <p id="conteudo-texto"></p>
+      <div id="quiz-area" class="quiz"></div>
       <button class="back-btn" onclick="showScreen('menu')">Voltar</button>
     </div>
   </div>
@@ -250,19 +289,79 @@
   </div>
 
   <script>
-    /* ================= CONTEÚDOS DETALHADOS ================= */
+    /* ================= CONTEÚDOS ================= */
     const conteudos = {
-      comeco: `<strong>O Começo:</strong><br> Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é evolução.`,
-      regras: `<strong>Regras:</strong><br> Pontuação, finalizações e foco na técnica.`,
-      tatame: `<strong>Tatame:</strong><br> Cumprimente sempre, mantenha higiene, respeite colegas e professor.`,
-      mentalidade: `<strong>Mentalidade:</strong><br> Paciência, resiliência, humildade e controle emocional.`,
-      guarda: `<strong>Guarda:</strong><br> Fechada, aberta, aranha, de la Riva, X-Guard.`,
-      passagens: `<strong>Passagens:</strong><br> De joelho, torre, pressão, explosiva.`,
-      meiaguarda: `<strong>Meia Guarda:</strong><br> Profunda, invertida, usada para ataque e defesa.`,
-      finalizacoes: `<strong>Finalizações:</strong><br> Armlock, triângulo, mata-leão, kimura, americana.`,
-      quedas: `<strong>Quedas:</strong><br> O Soto Gari, single leg, double leg, Tomoe Nage.`,
-      drills: `<strong>Drills:</strong><br> Hip escape, troca de base, passagens dinâmicas.`
+      comeco: `<strong>O Começo:</strong> Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é evolução.`,
+      regras: `<strong>Regras:</strong> Pontuação, finalizações e foco na técnica.`,
+      tatame: `<strong>Tatame:</strong> Cumprimente sempre, mantenha higiene, respeite colegas e professor.`,
+      mentalidade: `<strong>Mentalidade:</strong> Paciência, resiliência, humildade e controle emocional.`,
+      guarda: `<strong>Guarda:</strong> Fechada, aberta, aranha, de la Riva, X-Guard.`,
+      passagens: `<strong>Passagens:</strong> De joelho, torre, pressão, explosiva.`,
+      meiaguarda: `<strong>Meia Guarda:</strong> Profunda, invertida, usada para ataque e defesa.`,
+      finalizacoes: `<strong>Finalizações:</strong> Armlock, triângulo, mata-leão, kimura, americana.`,
+      quedas: `<strong>Quedas:</strong> O Soto Gari, single leg, double leg, Tomoe Nage.`,
+      drills: `<strong>Drills:</strong> Hip escape, troca de base, passagens dinâmicas.`
     };
+
+    /* ================= QUIZZES ================= */
+    const quizzes = {
+      comeco: {
+        pergunta: "Qual é o item essencial para começar no Jiu-Jitsu?",
+        opcoes: ["Luvas", "Kimono", "Capacete", "Caneleira"],
+        correta: 1
+      },
+      regras: {
+        pergunta: "Quantos pontos vale uma passagem de guarda?",
+        opcoes: ["2", "3", "4", "5"],
+        correta: 1
+      },
+      tatame: {
+        pergunta: "O que deve ser feito ao entrar no tatame?",
+        opcoes: ["Nada", "Cumprimentar", "Gritar", "Correr"],
+        correta: 1
+      },
+      mentalidade: {
+        pergunta: "Qual qualidade NÃO faz parte da mentalidade do Jiu-Jitsu?",
+        opcoes: ["Humildade", "Resiliência", "Impaciência", "Controle emocional"],
+        correta: 2
+      },
+      guarda: {
+        pergunta: "Qual dessas NÃO é um tipo de guarda?",
+        opcoes: ["X-Guard", "Aranha", "De la Riva", "Montada"],
+        correta: 3
+      },
+      passagens: {
+        pergunta: "Quantos pontos vale passar a guarda?",
+        opcoes: ["2", "3", "4", "Nenhum"],
+        correta: 1
+      },
+      meiaguarda: {
+        pergunta: "A meia guarda é conhecida como?",
+        opcoes: ["Defesa total", "Posição intermediária", "Golpe final", "Montada"],
+        correta: 1
+      },
+      finalizacoes: {
+        pergunta: "Qual destas NÃO é uma finalização?",
+        opcoes: ["Armlock", "Kimura", "Double leg", "Mata-leão"],
+        correta: 2
+      },
+      quedas: {
+        pergunta: "Qual técnica derruba o adversário com as duas pernas?",
+        opcoes: ["Single leg", "Double leg", "Tomoe Nage", "X-Guard"],
+        correta: 1
+      },
+      drills: {
+        pergunta: "O hip escape também é chamado de?",
+        opcoes: ["Shrimp", "Sweep", "Triangle", "Stack pass"],
+        correta: 0
+      }
+    };
+
+    /* ================= PLACAR GLOBAL ================= */
+    let pontos = 0;
+    function atualizarPlacar() {
+      document.getElementById("placar").innerText = `Placar: ${pontos} acertos`;
+    }
 
     /* ================= FUNÇÕES ================= */
     function showScreen(id) {
@@ -270,6 +369,7 @@
       document.getElementById(id).classList.add('active');
 
       if (id === 'menu') {
+        atualizarPlacar();
         const cards = document.querySelectorAll('.card');
         cards.forEach((c, i) => {
           c.classList.remove('show');
@@ -281,7 +381,37 @@
     function abrirConteudo(titulo, chave) {
       document.getElementById("conteudo-titulo").innerText = titulo;
       document.getElementById("conteudo-texto").innerHTML = conteudos[chave];
+
+      const quiz = quizzes[chave];
+      const quizArea = document.getElementById("quiz-area");
+      quizArea.innerHTML = "";
+
+      if (quiz) {
+        let html = `<h3>${quiz.pergunta}</h3>`;
+        quiz.opcoes.forEach((op, i) => {
+          html += `<div class="option" onclick="responderQuiz('${chave}',${i},this)">${op}</div>`;
+        });
+        html += `<div id="quiz-result" class="quiz-result"></div>`;
+        quizArea.innerHTML = html;
+      }
+
       showScreen('conteudo');
+    }
+
+    function responderQuiz(chave, escolha, elemento) {
+      const quiz = quizzes[chave];
+      const options = elemento.parentNode.querySelectorAll(".option");
+      options.forEach(opt => opt.onclick = null);
+
+      if (escolha === quiz.correta) {
+        elemento.classList.add("correct");
+        document.getElementById("quiz-result").innerText = "Correto! Boa 👊";
+        pontos++;
+        atualizarPlacar();
+      } else {
+        elemento.classList.add("wrong");
+        document.getElementById("quiz-result").innerText = "Errado ❌";
+      }
     }
 
     // Início automático após splash
