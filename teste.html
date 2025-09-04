@@ -308,62 +308,185 @@
       comeco: {
         pergunta: "Qual é o item essencial para começar no Jiu-Jitsu?",
         opcoes: ["Luvas", "Kimono", "Capacete", "Caneleira"],
-        correta: 1
+        correta: 1,
+        extras: [
+          {pergunta: "Quantas vezes por semana é recomendado treinar no início?", opcoes: ["1", "2 a 3", "5", "Todos os dias"], correta: 1},
+          {pergunta: "Qual deve ser a principal atitude no começo?", opcoes: ["Força", "Humildade", "Velocidade", "Competição"], correta: 1},
+          {pergunta: "O que é mais importante nos primeiros treinos?", opcoes: ["Ganhar", "Aprender", "Lutar forte", "Evitar colegas"], correta: 1},
+          {pergunta: "O que vestir se não tiver kimono?", opcoes: ["Roupa confortável", "Short jeans", "Jaqueta", "Sapato"], correta: 0},
+          {pergunta: "Qual a melhor forma de evoluir?", opcoes: ["Repetição", "Força bruta", "Competição imediata", "Dormir"], correta: 0},
+          {pergunta: "O que significa ser finalizado?", opcoes: ["Ganhar pontos", "Perder o treino", "Aprender", "Ser expulso"], correta: 2},
+          {pergunta: "O que NÃO deve ser feito?", opcoes: ["Respeitar colegas", "Faltar sempre", "Ser paciente", "Ter disciplina"], correta: 1},
+          {pergunta: "Qual parte do corpo deve estar limpa?", opcoes: ["Unhas", "Mãos", "Pés", "Todas"], correta: 3},
+          {pergunta: "O que cada treino representa?", opcoes: ["Derrota", "Vitória pessoal", "Nada", "Competição"], correta: 1}
+        ]
       },
       regras: {
         pergunta: "Quantos pontos vale uma passagem de guarda?",
         opcoes: ["2", "3", "4", "5"],
-        correta: 1
+        correta: 1,
+        extras: [
+          {pergunta: "Quantos pontos vale uma queda?", opcoes: ["1", "2", "3", "4"], correta: 1},
+          {pergunta: "Quantos pontos vale uma raspagem?", opcoes: ["2", "3", "4", "5"], correta: 0},
+          {pergunta: "Quantos pontos vale montar?", opcoes: ["2", "3", "4", "5"], correta: 2},
+          {pergunta: "Qual ação encerra a luta?", opcoes: ["Pontuar", "Finalização", "Passar a guarda", "Nada"], correta: 1},
+          {pergunta: "Qual golpe é proibido?", opcoes: ["Mão nos olhos", "Queda", "Passagem", "Raspagem"], correta: 0},
+          {pergunta: "Quem define as regras oficiais?", opcoes: ["CBJJ/IBJJF", "CBF", "FIFA", "NBA"], correta: 0},
+          {pergunta: "Qual é o foco da luta?", opcoes: ["Força", "Domínio técnico", "Velocidade", "Peso"], correta: 1},
+          {pergunta: "Quantos pontos vale pegar as costas?", opcoes: ["2", "3", "4", "5"], correta: 2},
+          {pergunta: "Qual atitude é desclassificação?", opcoes: ["Morder", "Raspar", "Montar", "Passar guarda"], correta: 0}
+        ]
       },
       tatame: {
         pergunta: "O que deve ser feito ao entrar no tatame?",
         opcoes: ["Nada", "Cumprimentar", "Gritar", "Correr"],
-        correta: 1
+        correta: 1,
+        extras: [
+          {pergunta: "Qual a postura ideal no tatame?", opcoes: ["Respeito", "Arrogância", "Desrespeito", "Gritar"], correta: 0},
+          {pergunta: "O que fazer com as unhas?", opcoes: ["Deixar crescer", "Cortar", "Pintar", "Ignorar"], correta: 1},
+          {pergunta: "Quem deve ser ouvido sempre?", opcoes: ["Colega", "Professor", "Inimigo", "Amigo"], correta: 1},
+          {pergunta: "O que não se deve fazer?", opcoes: ["Discutir", "Respeitar", "Cumprir regras", "Ouvir"], correta: 0},
+          {pergunta: "Qual valor é essencial?", opcoes: ["Respeito", "Desrespeito", "Violência", "Orgulho"], correta: 0},
+          {pergunta: "Por que higienizar-se?", opcoes: ["Saúde", "Moda", "Força", "Nada"], correta: 0},
+          {pergunta: "Quem deve ser respeitado?", opcoes: ["Graduados", "Colegas", "Todos", "Ninguém"], correta: 2},
+          {pergunta: "Qual prática é proibida?", opcoes: ["Brincar", "Treinar limpo", "Discutir", "Aprender"], correta: 2},
+          {pergunta: "O que representa o tatame?", opcoes: ["Sagrado", "Qualquer lugar", "Brincadeira", "Nada"], correta: 0}
+        ]
       },
       mentalidade: {
         pergunta: "Qual qualidade NÃO faz parte da mentalidade do Jiu-Jitsu?",
         opcoes: ["Humildade", "Resiliência", "Impaciência", "Controle emocional"],
-        correta: 2
-      },
-      guarda: {
+        correta: 2,
+        extras: [
+          {pergunta: "O que é essencial para evoluir?", opcoes: ["Paciência", "Raiva", "Impaciência", "Força"], correta: 0},
+          {pergunta: "Qual qualidade ajuda a persistir?", opcoes: ["Resiliência", "Medo", "Orgulho", "Nada"], correta: 0},
+          {pergunta: "O que o tatame reflete?", opcoes: ["A vida", "O futebol", "A escola", "Nada"], correta: 0},
+          {pergunta: "O que acontece quando você perde?", opcoes: ["Fracasso", "Aprendizado", "Nada", "Fim"], correta: 1},
+          {pergunta: "O que define evolução?", opcoes: ["Humildade", "Força", "Velocidade", "Raiva"], correta: 0},
+          {pergunta: "Qual atitude atrapalha?", opcoes: ["Impaciência", "Humildade", "Respeito", "Controle"], correta: 0},
+          {pergunta: "Qual controle é importante?", opcoes: ["Emocional", "Financeiro", "Físico", "Nenhum"], correta: 0},
+          {pergunta: "O que se aprende todo dia?", opcoes: ["Nada", "Tudo", "Sempre algo", "Nunca"], correta: 2},
+          {pergunta: "Qual virtude é essencial?", opcoes: ["Orgulho", "Respeito", "Humildade", "Raiva"], correta: 2}
+        ]
+      },      guarda: {
         pergunta: "Qual dessas NÃO é um tipo de guarda?",
         opcoes: ["X-Guard", "Aranha", "De la Riva", "Montada"],
-        correta: 3
+        correta: 3,
+        extras: [
+          {pergunta: "Qual guarda usa ganchos nas pernas?", opcoes: ["Fechada", "Aberta", "De la Riva", "Montada"], correta: 2},
+          {pergunta: "Qual guarda usa os pés nos bíceps?", opcoes: ["Aranha", "X-Guard", "Fechada", "Montada"], correta: 0},
+          {pergunta: "Qual guarda prende o adversário entre as pernas?", opcoes: ["Fechada", "Aberta", "Aranha", "X-Guard"], correta: 0},
+          {pergunta: "Qual guarda é comum para raspeios?", opcoes: ["De la Riva", "X-Guard", "Aranha", "Fechada"], correta: 1},
+          {pergunta: "Qual guarda é usada de costas no chão?", opcoes: ["Todas", "Nenhuma", "Só X-Guard", "Só Aranha"], correta: 0},
+          {pergunta: "Qual guarda facilita ataques de triângulo?", opcoes: ["Aranha", "Fechada", "Aberta", "De la Riva"], correta: 1},
+          {pergunta: "Qual guarda exige muita flexibilidade?", opcoes: ["Aranha", "Fechada", "Aberta", "Nenhuma"], correta: 0},
+          {pergunta: "Qual guarda é mais simples para iniciantes?", opcoes: ["Fechada", "Aranha", "De la Riva", "X-Guard"], correta: 0},
+          {pergunta: "Qual guarda usa controle duplo dos braços?", opcoes: ["Aranha", "De la Riva", "X-Guard", "Aberta"], correta: 0}
+        ]
       },
       passagens: {
         pergunta: "Quantos pontos vale passar a guarda?",
         opcoes: ["2", "3", "4", "Nenhum"],
-        correta: 1
+        correta: 1,
+        extras: [
+          {pergunta: "Qual passagem usa o joelho para abrir espaço?", opcoes: ["De joelho", "Torre", "Explosiva", "Pressão"], correta: 0},
+          {pergunta: "Qual passagem empilha o adversário?", opcoes: ["Torre", "Explosiva", "Pressão", "De joelho"], correta: 0},
+          {pergunta: "Qual passagem usa peso do corpo?", opcoes: ["Pressão", "Explosiva", "De joelho", "Torre"], correta: 0},
+          {pergunta: "Qual passagem é rápida e dinâmica?", opcoes: ["Explosiva", "Pressão", "Torre", "Joelho"], correta: 0},
+          {pergunta: "Qual passagem é mais usada por iniciantes?", opcoes: ["Joelho", "Explosiva", "Pressão", "Torre"], correta: 0},
+          {pergunta: "Qual passagem exige mais condicionamento físico?", opcoes: ["Explosiva", "Pressão", "Torre", "Nenhuma"], correta: 0},
+          {pergunta: "Qual passagem busca sempre estabilizar?", opcoes: ["Pressão", "Explosiva", "Joelho", "Todas"], correta: 0},
+          {pergunta: "Qual passagem resulta em 3 pontos?", opcoes: ["Qualquer uma bem-sucedida", "Só Torre", "Só Explosiva", "Nenhuma"], correta: 0},
+          {pergunta: "Qual passagem é estratégica contra guarda aberta?", opcoes: ["Joelho", "Explosiva", "Pressão", "Torre"], correta: 0}
+        ]
       },
       meiaguarda: {
         pergunta: "A meia guarda é conhecida como?",
         opcoes: ["Defesa total", "Posição intermediária", "Golpe final", "Montada"],
-        correta: 1
-      },
-      finalizacoes: {
+        correta: 1,
+        extras: [
+          {pergunta: "Qual meia guarda é usada para raspeios?", opcoes: ["Profunda", "Invertida", "Simples", "Nenhuma"], correta: 0},
+          {pergunta: "Qual meia guarda usa gancho invertido?", opcoes: ["Invertida", "Profunda", "Clássica", "X-Guard"], correta: 0},
+          {pergunta: "Qual é a vantagem da meia guarda?", opcoes: ["Transição", "Finalização direta", "Nada", "Só defesa"], correta: 0},
+          {pergunta: "Qual técnica nasce da meia guarda?", opcoes: ["Raspagens", "Chaves", "Quedas", "Todas"], correta: 3},
+          {pergunta: "A meia guarda é comum em qual nível?", opcoes: ["Avançado", "Iniciante", "Todos", "Nenhum"], correta: 2},
+          {pergunta: "Qual risco da meia guarda?", opcoes: ["Ser passado", "Finalizar", "Montar", "Nenhum"], correta: 0},
+          {pergunta: "Qual meia guarda dá mais ataque?", opcoes: ["Profunda", "Invertida", "Simples", "Todas"], correta: 0},
+          {pergunta: "O que ajuda na meia guarda?", opcoes: ["Mobilidade de quadril", "Força bruta", "Nada", "Velocidade"], correta: 0},
+          {pergunta: "Qual estilo usa meia guarda com frequência?", opcoes: ["Brasileiro", "Japonês", "Europeu", "Todos"], correta: 0}
+        ]
+      },      finalizacoes: {
         pergunta: "Qual destas NÃO é uma finalização?",
         opcoes: ["Armlock", "Kimura", "Double leg", "Mata-leão"],
-        correta: 2
+        correta: 2,
+        extras: [
+          {pergunta: "Qual finalização ataca o braço?", opcoes: ["Armlock", "Triângulo", "Mata-leão", "Nenhuma"], correta: 0},
+          {pergunta: "Qual finalização envolve as pernas no pescoço?", opcoes: ["Triângulo", "Kimura", "Americana", "Armlock"], correta: 0},
+          {pergunta: "Qual finalização estrangula pelas costas?", opcoes: ["Mata-leão", "Armlock", "Kimura", "Nenhuma"], correta: 0},
+          {pergunta: "Qual finalização torce o ombro?", opcoes: ["Kimura", "Americana", "Triângulo", "Armlock"], correta: 0},
+          {pergunta: "Qual finalização é feita da montada?", opcoes: ["Americana", "Mata-leão", "Triângulo", "X-Guard"], correta: 0},
+          {pergunta: "Qual finalização pressiona o pescoço com o braço?", opcoes: ["Ezequiel", "Kimura", "Armlock", "Nenhuma"], correta: 0},
+          {pergunta: "Qual finalização é típica do Jiu-Jitsu sem kimono?", opcoes: ["Guillotine", "Armlock", "Triângulo", "Kimura"], correta: 0},
+          {pergunta: "Qual finalização usa lapela?", opcoes: ["Estrangulamento de lapela", "Armlock", "Kimura", "Nenhuma"], correta: 0},
+          {pergunta: "Qual finalização é considerada básica?", opcoes: ["Armlock", "Todas", "Triângulo", "Mata-leão"], correta: 1}
+        ]
       },
       quedas: {
         pergunta: "Qual técnica derruba o adversário com as duas pernas?",
         opcoes: ["Single leg", "Double leg", "Tomoe Nage", "X-Guard"],
-        correta: 1
+        correta: 1,
+        extras: [
+          {pergunta: "Qual queda usa uma perna só?", opcoes: ["Single leg", "Double leg", "Tomoe Nage", "Nenhuma"], correta: 0},
+          {pergunta: "Qual queda é de sacrifício?", opcoes: ["Tomoe Nage", "Single leg", "Double leg", "Nenhuma"], correta: 0},
+          {pergunta: "Qual queda vem do judô?", opcoes: ["O Soto Gari", "Single leg", "Double leg", "Todas"], correta: 0},
+          {pergunta: "Qual queda usa quadril?", opcoes: ["Seoi Nage", "Double leg", "Tomoe Nage", "Nenhuma"], correta: 0},
+          {pergunta: "Qual queda é mais comum no Jiu-Jitsu?", opcoes: ["Single leg", "Double leg", "Tomoe Nage", "O Soto Gari"], correta: 1},
+          {pergunta: "Qual queda é indicada para iniciantes?", opcoes: ["O Soto Gari", "Double leg", "Single leg", "Nenhuma"], correta: 0},
+          {pergunta: "Qual queda busca desequilibrar antes de derrubar?", opcoes: ["Kuzushi", "Single leg", "Double leg", "Nenhuma"], correta: 0},
+          {pergunta: "Qual queda exige mais explosão?", opcoes: ["Double leg", "Tomoe Nage", "Single leg", "Nenhuma"], correta: 0},
+          {pergunta: "Qual queda é arriscada se mal feita?", opcoes: ["Tomoe Nage", "Double leg", "Single leg", "Todas"], correta: 0}
+        ]
       },
       drills: {
         pergunta: "O hip escape também é chamado de?",
         opcoes: ["Shrimp", "Sweep", "Triangle", "Stack pass"],
-        correta: 0
+        correta: 0,
+        extras: [
+          {pergunta: "Qual drill melhora movimentação de quadril?", opcoes: ["Hip escape", "Triângulo", "Passagem", "Queda"], correta: 0},
+          {pergunta: "Qual drill ensina base?", opcoes: ["Troca de base", "Hip escape", "Sweep", "Kimura"], correta: 0},
+          {pergunta: "Qual drill simula raspagem?", opcoes: ["Sweep drill", "Hip escape", "Queda", "Guarda"], correta: 0},
+          {pergunta: "Qual drill é repetitivo para memória muscular?", opcoes: ["Todos", "Nenhum", "Só Hip escape", "Só Troca de base"], correta: 0},
+          {pergunta: "Qual drill é mais usado para iniciantes?", opcoes: ["Hip escape", "Sweep", "Triângulo", "Queda"], correta: 0},
+          {pergunta: "Qual drill simula movimentos de guarda?", opcoes: ["Guarda drill", "Passagem", "Sweep", "Kimura"], correta: 0},
+          {pergunta: "Qual drill ajuda na velocidade?", opcoes: ["Troca de base", "Hip escape", "Sweep", "Queda"], correta: 0},
+          {pergunta: "Qual drill pode ser feito em duplas?", opcoes: ["Todos", "Nenhum", "Só Sweep", "Só Troca de base"], correta: 0},
+          {pergunta: "Qual drill fortalece fundamentos?", opcoes: ["Todos", "Nenhum", "Só Triângulo", "Só Armlock"], correta: 0}
+        ]
+      },      analise: {
+        pergunta: "Por que analisar suas lutas é importante?",
+        opcoes: ["Corrigir erros", "Aumentar ego", "Esquecer treino", "Nenhuma"],
+        correta: 0,
+        extras: [
+          {pergunta: "O que você deve assistir?", opcoes: ["Seus vídeos", "Novelas", "Jogos", "Nada"], correta: 0},
+          {pergunta: "Quem pode dar feedback?", opcoes: ["Professor", "Colega", "Ambos", "Ninguém"], correta: 2},
+          {pergunta: "Qual objetivo da análise?", opcoes: ["Evolução", "Fama", "Orgulho", "Nada"], correta: 0},
+          {pergunta: "O que estudar em campeões?", opcoes: ["Técnicas", "Erros", "Nada", "Vida pessoal"], correta: 0},
+          {pergunta: "Quando revisar uma luta?", opcoes: ["Sempre", "Nunca", "Só vitórias", "Só derrotas"], correta: 0},
+          {pergunta: "O que a análise melhora?", opcoes: ["Técnica", "Força", "Sono", "Comida"], correta: 0},
+          {pergunta: "A análise ajuda em?", opcoes: ["Estratégia", "Moda", "Sono", "Nada"], correta: 0},
+          {pergunta: "Quem mais pode se beneficiar da análise?", opcoes: ["Você", "Parceiros", "Todos", "Ninguém"], correta: 2},
+          {pergunta: "Qual atitude atrapalha na análise?", opcoes: ["Orgulho", "Humildade", "Respeito", "Paciência"], correta: 0}
+        ]
       }
     };
 
-    /* ================= PLACAR GLOBAL ================= */
+    /* =================== PLACAR GLOBAL =================== */
     let pontos = 0;
     function atualizarPlacar() {
       document.getElementById("placar").innerText = `Placar: ${pontos} acertos`;
     }
 
-    /* ================= FUNÇÕES ================= */
+    /* =================== FUNÇÕES DE TELA =================== */
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
@@ -378,9 +501,10 @@
       }
     }
 
+    /* =================== ABRIR CONTEÚDO =================== */
     function abrirConteudo(titulo, chave) {
       document.getElementById("conteudo-titulo").innerText = titulo;
-      document.getElementById("conteudo-texto").innerHTML = conteudos[chave];
+      document.getElementById("conteudo-texto").innerHTML = conteudos[chave] || "";
 
       const quiz = quizzes[chave];
       const quizArea = document.getElementById("quiz-area");
@@ -391,6 +515,17 @@
         quiz.opcoes.forEach((op, i) => {
           html += `<div class="option" onclick="responderQuiz('${chave}',${i},this)">${op}</div>`;
         });
+
+        // extras
+        if (quiz.extras) {
+          quiz.extras.forEach((q, idx) => {
+            html += `<h3>${q.pergunta}</h3>`;
+            q.opcoes.forEach((op, i) => {
+              html += `<div class="option" onclick="responderExtra('${chave}',${idx},${i},this)">${op}</div>`;
+            });
+          });
+        }
+
         html += `<div id="quiz-result" class="quiz-result"></div>`;
         quizArea.innerHTML = html;
       }
@@ -398,6 +533,7 @@
       showScreen('conteudo');
     }
 
+    /* =================== RESPONDER QUIZ =================== */
     function responderQuiz(chave, escolha, elemento) {
       const quiz = quizzes[chave];
       const options = elemento.parentNode.querySelectorAll(".option");
@@ -405,7 +541,7 @@
 
       if (escolha === quiz.correta) {
         elemento.classList.add("correct");
-        document.getElementById("quiz-result").innerText = "Correto! Boa 👊";
+        document.getElementById("quiz-result").innerText = "Correto! 👊";
         pontos++;
         atualizarPlacar();
       } else {
@@ -414,21 +550,38 @@
       }
     }
 
-    // Início automático após splash
+    /* =================== RESPONDER EXTRA =================== */
+    function responderExtra(chave, idx, escolha, elemento) {
+      const extra = quizzes[chave].extras[idx];
+      const options = elemento.parentNode.querySelectorAll(".option");
+      options.forEach(opt => opt.onclick = null);
+
+      if (escolha === extra.correta) {
+        elemento.classList.add("correct");
+        pontos++;
+        atualizarPlacar();
+      } else {
+        elemento.classList.add("wrong");
+      }
+    }
+
+    /* =================== SPLASH -> HOME =================== */
     setTimeout(() => { showScreen('home'); }, 4000);
 
-    /* ================= UPLOAD DE VÍDEO ================= */
+    /* =================== UPLOAD DE VÍDEO =================== */
     const videoUpload = document.getElementById('videoUpload');
     const videoPreview = document.getElementById('videoPreview');
 
-    videoUpload.addEventListener('change', function() {
-      const file = this.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        videoPreview.src = url;
-        videoPreview.style.display = 'block';
-      }
-    });
+    if (videoUpload) {
+      videoUpload.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+          const url = URL.createObjectURL(file);
+          videoPreview.src = url;
+          videoPreview.style.display = 'block';
+        }
+      });
+    }
   </script>
 </body>
 </html>
