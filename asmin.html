@@ -10,311 +10,340 @@
 <style>
 :root{
   --primary:#9d4edd;--secondary:#ffb347;--success:#2ecc71;--info:#4dabf7;--danger:#ff4d6d;
-  --dark-bg:#0f0f1a;--card-bg:rgba(255,255,255,.05);--input-bg:rgba(255,255,255,.1);
-  --light:#fff;--shadow:0 8px 30px rgba(0,0,0,.3);
+  --dark-bg:#0f0f1a;--card-bg:rgba(255,255,255,.08);
+  --light:#fff;--shadow:0 8px 25px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Poppins',sans-serif;background:var(--dark-bg);color:var(--light);-webkit-font-smoothing: antialiased;}
+body{font-family:'Poppins',sans-serif;background:var(--dark-bg);color:var(--light);}
 header{background:linear-gradient(135deg,#7b2cbf,#5a189a);color:#fff;padding:1.5rem;text-align:center;box-shadow:var(--shadow);}
-nav{background:rgba(20,20,40,.8);backdrop-filter:blur(12px);display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;border-bottom: 1px solid rgba(255,255,255,.1);}
-nav button{flex:1;min-width:120px;border:none;background:none;padding:1rem;font-weight:600;cursor:pointer;color:#aaa;transition:.2s;position:relative;border-bottom: 3px solid transparent;}
-nav button.active{color:var(--primary);border-bottom: 3px solid var(--primary);}
+nav{background:rgba(20,20,40,.8);backdrop-filter:blur(12px);display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;}
+nav button{flex:1;min-width:120px;border:none;background:none;padding:1rem;font-weight:600;cursor:pointer;color:#aaa;transition:.2s;position:relative;}
+nav button.active{color:var(--primary);text-shadow:0 0 8px var(--primary);}
 nav button:hover{background:rgba(255,255,255,.05);}
-.badge{position:absolute;top:5px;right:10px;background:var(--danger);color:#fff;font-size:.7rem;padding:2px 6px;border-radius:50%;display:none;font-weight: 700;animation: pop .3s;}
-@keyframes pop { 0%{transform:scale(0.8)} 80%{transform:scale(1.2)} 100%{transform:scale(1)} }
-section{display:none;padding:1.5rem;max-width:1200px;margin:auto;animation: fadeIn .5s;}
+.badge{position:absolute;top:5px;right:20px;background:var(--danger);color:#fff;font-size:.7rem;padding:2px 6px;border-radius:50%;display:none;}
+section{display:none;padding:1.5rem;max-width:1200px;margin:auto;}
 section.active{display:block;}
-h2{border-bottom: 2px solid var(--primary); display:inline-block; padding-bottom: 5px; margin-bottom: 2rem;}
-input, select, textarea { width:100%; padding:.8rem; border-radius:8px; border:1px solid #555; background:var(--input-bg); color:#fff; margin-bottom:.5rem; font-family:'Poppins';}
-button { font-family:'Poppins'; font-weight:600; cursor:pointer; }
-.container-box{background:var(--card-bg);padding:1.5rem;border-radius:16px;box-shadow:var(--shadow);}
-.item-row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.1);padding:.8rem 0;}
-.order-card{background:var(--card-bg);padding:1.5rem;margin:.8rem 0;border-radius:12px;box-shadow:var(--shadow);border-left: 4px solid var(--primary);}
-.status{padding:.3rem .6rem;border-radius:20px;font-size:.8rem;font-weight:600;display:inline-block;}
-.status-Recebido{background:var(--info);} .status-Preparação{background:var(--secondary);} .status-Saiu{background:#ffa94d;}
-.status-Concluído{background:var(--success); color:var(--dark-bg)} .status-Cancelado{background:var(--danger);}
-.kpi-container{display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:1rem;margin-bottom:1.5rem;}
-.kpi-card{background:var(--card-bg);padding:1.5rem;border-radius:12px;box-shadow:var(--shadow);text-align:center;}
-.kpi-card h4{font-size:.9rem;color:#ccc;margin:0 0 .5rem;}
-.kpi-card p{font-size:1.5rem;font-weight:700;color:var(--primary);margin:0;}
-#splash{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#7b2cbf,#ffb347);display:flex;align-items:center;justify-content:center;z-index:2000;color:#fff;animation:fadeIn 1s;}
+/* Produtos */
+.swiper{width:100%;padding:1rem 0;}
+.swiper-slide{background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;text-align:center;transition:0.2s;}
+.swiper-slide.added{box-shadow:0 0 15px var(--success);}
+.product-info{padding:1rem;}
+.order-button{background:linear-gradient(145deg,#9d4edd,#5a189a);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;transition:.2s;}
+.order-button:disabled{background:#555;cursor:not-allowed;}
+.order-button:active{transform:scale(0.95);}
+/* Media container para imagens e vídeos */
+.media-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+.media-container img,
+.media-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+/* Modal complementos */
+#modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1500;animation:fadeIn .3s;}
+#modal-content{background:#fff;color:#000;padding:1.5rem;border-radius:12px;width:90%;max-width:400px;animation:zoomIn .3s;}
+#modal-content h3{margin-bottom:1rem;}
+.topping{margin:.3rem 0;}
+/* Carrinho */
+.cart-container{background:var(--card-bg);padding:1.5rem;border-radius:16px;box-shadow:var(--shadow);}
+.cart-item{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);padding:.5rem 0;}
+.cart-total{font-weight:700;color:var(--secondary);text-align:right;margin-top:1rem;font-size:1.1rem;}
+.btn-finish{background:linear-gradient(145deg,#2ecc71,#208d4e);color:#fff;border:none;padding:1rem;border-radius:10px;width:100%;margin-top:1rem;font-weight:700;cursor:pointer;transition:.2s;}
+.btn-finish:active{transform:scale(0.95);}
+/* Logística e Pedidos */
+.order-card{background:var(--card-bg);padding:1rem;margin:.8rem 0;border-radius:12px;box-shadow:var(--shadow);}
+.status{padding:.3rem .6rem;border-radius:8px;font-size:.8rem;font-weight:600;display:inline-block;}
+.status-Recebido{background:var(--info);}
+.status-Preparação{background:var(--secondary);}
+.status-Saiu{background:#ffa94d;}
+.status-Concluído{background:var(--success);}
+.status-Cancelado{background:var(--danger);}
+.status-Encerrado{background:#666;}
+.action-btn{margin:.2rem;padding:.4rem .7rem;border:none;border-radius:6px;cursor:pointer;font-size:.8rem;}
+.remove-btn{background:var(--danger);color:#fff;}
+/* Financeiro */
+.kpi-container{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
+.kpi-card{flex:1;min-width:200px;background:var(--card-bg);padding:1rem;border-radius:12px;box-shadow:var(--shadow);text-align:center;}
+.kpi-card h4{font-size:1rem;color:#ccc;}
+.kpi-card p{font-size:1.4rem;font-weight:700;color:var(--primary);}
+/* Splash */
+#splash{position:fixed;top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(135deg,#7b2cbf,#ffb347);
+  display:flex;align-items:center;justify-content:center;
+  z-index:2000;color:#fff;animation:fadeIn 1s;}
 .splash-content{text-align:center;animation:zoomIn 1s;}
-.splash-content h1, .splash-content h2 {margin:0;}
-#toast{position:fixed;bottom:20px;right:20px;background:var(--card-bg);color:#fff;padding:1rem 1.5rem;border-radius:8px;box-shadow:var(--shadow);display:none;z-index:3000;animation:fadeIn .5s;}
-.logistics-actions a{color:var(--primary);text-decoration:none;font-weight:600;margin-right:1rem; font-size: 0.9rem;}
+.splash-content h1{font-size:4rem;margin:0;}
+.splash-content h2{margin:0;font-size:2rem;}
+/* Toast */
+#toast{position:fixed;bottom:20px;right:20px;background:var(--card-bg);color:#fff;padding:1rem 1.5rem;border-radius:8px;box-shadow:var(--shadow);display:none;z-index:3000;}
 @keyframes zoomIn{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 </style>
 </head>
 <body>
 
-<div id="splash"><div class="splash-content"><h1>👑</h1><h2>Açaí da Barra Poa</h2></div></div>
-<div id="toast"></div>
-<div id="modal">
-  <div id="modal-content">
-    <h3 id="modal-title"></h3>
-    <div id="toppings" style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;"></div>
-    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-        <button style="flex:1; padding:0.8rem; border-radius:8px; border:none; background:#555; color:#fff;" onclick="closeModal()">Cancelar</button>
-        <button style="flex:1; padding:0.8rem; border-radius:8px; border:none; background:var(--primary); color:#fff;" onclick="confirmAdd()">Adicionar</button>
-    </div>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-content">
+    <h1>👑</h1>
+    <h2>Açaí da Barra Poa</h2>
+    <p>Carregando...</p>
   </div>
 </div>
 
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- MODAL COMPLEMENTOS -->
+<div id="modal">
+  <div id="modal-content">
+    <h3>Escolha complementos</h3>
+    <div id="toppings"></div>
+    <button onclick="confirmAdd()">Adicionar</button>
+    <button onclick="closeModal()">Cancelar</button>
+  </div>
+</div>
+
+<!-- APP -->
 <div id="app" style="display:none;">
-<header><h1>Açaí da Barra Poa 👑</h1></header>
+
+<header>
+  <h1>Açaí da Barra Poa 👑</h1>
+  <p>Gestão completa: Vitrine, Estoque, Pedidos, Financeiro e Logística</p>
+</header>
+
 <nav>
- <button class="active" onclick="showTab('catalogo', this)">🛒 Catálogo</button>
- <button onclick="showTab('carrinho', this)">🛍 Carrinho <span id="cart-badge" class="badge"></span></button>
- <button onclick="showTab('pedidos', this)">📦 Meus Pedidos <span id="orders-badge" class="badge"></span></button>
- <button onclick="showTab('logistica', this)">🚚 Logística</button>
- <button onclick="showTab('financeiro', this)">💰 Financeiro</button>
- <button onclick="showTab('estoque', this)">📊 Estoque</button>
+  <button class="active" onclick="showTab('catalogo')">🛒 Catálogo</button>
+  <button onclick="showTab('carrinho')">🛍 Carrinho <span id="cart-badge" class="badge"></span></button>
+  <button onclick="showTab('pedidos')">📦 Pedidos <span id="orders-badge" class="badge"></span></button>
+  <button onclick="showTab('financeiro')">💰 Financeiro</button>
+  <button onclick="showTab('estoque')">📊 Estoque</button>
+  <button onclick="showTab('logistica')">🚚 Logística</button>
 </nav>
 
+<!-- Catálogo -->
 <section id="catalogo" class="active">
- <h2>Nossos Produtos</h2>
- <div class="swiper"><div class="swiper-wrapper" id="products-container"></div></div>
+  <h2>Monte seu Açaí</h2>
+  <div class="swiper">
+    <div class="swiper-wrapper" id="products-container"></div>
+  </div>
 </section>
 
+<!-- Carrinho -->
 <section id="carrinho">
- <h2>🛍 Seu Pedido</h2>
- <div class="container-box">
-   <div id="cart-items"><p>Seu carrinho está vazio.</p></div>
-   <div class="total-row">Total: <span id="cart-total-price">R$ 0,00</span></div>
-   <hr style="border-color:rgba(255,255,255,.1); margin: 1.5rem 0;">
-   <div class="input-group">
-     <input id="customerName" placeholder="Seu nome completo *" oninput="render()">
-     <input id="customerPhone" placeholder="Seu WhatsApp (ex: 519...)*" type="tel" oninput="render()">
-   </div>
-   <button class="btn-finish" id="finish-order-button" disabled>Confirmar e Registrar Pedido</button>
- </div>
+  <h2>🛍 Seu Pedido</h2>
+  <div class="cart-container">
+    <div id="cart-items"><p>Seu carrinho está vazio</p></div>
+    <div class="cart-total">Total: <span id="cart-total-price">R$ 0,00</span></div>
+    <button class="btn-finish" id="finish-order-button" disabled>Finalizar Pedido</button>
+  </div>
 </section>
 
-<section id="pedidos"><h2>📦 Meus Pedidos</h2><div id="orders-list"></div></section>
-<section id="logistica"><h2>🚚 Logística de Entregas</h2><div id="logistics-list"></div></section>
+<!-- Pedidos -->
+<section id="pedidos"><h2>📦 Pedidos</h2><div id="orders-list"></div></section>
+
+<!-- Financeiro -->
 <section id="financeiro">
- <h2>💰 Financeiro</h2>
- <div class="kpi-container">
-   <div class="kpi-card"><h4>Faturamento</h4><p id="kpi-revenue">R$ 0,00</p></div>
-   <div class="kpi-card"><h4>Custo Total</h4><p id="kpi-cost">R$ 0,00</p></div>
-   <div class="kpi-card"><h4>Lucro Total</h4><p id="kpi-profit">R$ 0,00</p></div>
-   <div class="kpi-card"><h4>Pedidos Concluídos</h4><p id="kpi-orders">0</p></div>
- </div>
- <div class="container-box"><canvas id="salesChart"></canvas></div>
+  <h2>💰 Financeiro</h2>
+  <div class="kpi-container">
+    <div class="kpi-card"><h4>Faturamento Total</h4><p id="kpi-revenue">R$ 0,00</p></div>
+    <div class="kpi-card"><h4>Pedidos Concluídos</h4><p id="kpi-orders">0</p></div>
+    <div class="kpi-card"><h4>Ticket Médio</h4><p id="kpi-avg">R$ 0,00</p></div>
+    <div class="kpi-card"><h4>Total de Frete</h4><p id="kpi-frete">R$ 0,00</p></div>
+  </div>
+  <canvas id="salesChart"></canvas>
 </section>
+
+<!-- Estoque -->
 <section id="estoque">
- <h2>📊 Estoque</h2>
- <div class="container-box" style="margin-bottom:1rem;">
-   <h3>Novo Item</h3>
-   <input id="new-name" placeholder="Nome do produto/item"><input id="new-price" placeholder="Preço de venda" type="number"><input id="new-cost" placeholder="Custo de compra" type="number"><input id="new-stock" placeholder="Estoque inicial" type="number">
-   <button class="order-button" onclick="addProduct()">Adicionar Produto</button>
- </div>
- <div id="stock-list" class="container-box"></div>
+  <h2>📊 Estoque</h2>
+  <div style="margin-bottom:1rem;">
+    <input id="new-name" placeholder="Nome do produto">
+    <input id="new-price" placeholder="Preço" type="number">
+    <input id="new-cost" placeholder="Custo" type="number">
+    <input id="new-stock" placeholder="Estoque inicial" type="number">
+    <input id="new-media" type="file" accept="image/*,video/*">
+    <button onclick="addProduct()">Adicionar Produto</button>
+  </div>
+  <div id="stock-list"></div>
 </section>
-</div>
+
+<!-- Logística -->
+<section id="logistica"><h2>🚚 Logística</h2><div id="logistics-list"></div></section>
+
+</div> <!-- fim app -->
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-// --- CONFIGURAÇÕES DA LOJA ---
-const STORE_CONFIG = {
-    name: "Açaí da Barra Poa",
-    whatsappNumber: "5551999999999", // << SEU NÚMERO DE WHATSAPP AQUI
-    storeAddress: "Avenida Ipiranga, 6681, Porto Alegre, RS", // << SEU ENDEREÇO AQUI
-    deliveryFee: 5.0,
-    notificationSound: "https://actions.google.com/sounds/v1/alarms/notification_high_intensity.ogg"
-};
-const state = { cart: [], orders: [], products: [], toppings: [], selectedProduct: null, selectedToppings: [] };
+/* Splash */
+window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").style.display="none";document.getElementById("app").style.display="block";},2000);});
 
-function loadState() {
-    state.orders = JSON.parse(localStorage.getItem("acaiOrders")) || [];
-    state.products = JSON.parse(localStorage.getItem("acaiProducts")) || [
-        {id: 1, name: "Açaí 300ml", price: 12, cost: 6, stock: 50, media: "https://source.unsplash.com/random/400x300?acai"},
-        {id: 2, name: "Açaí 500ml", price: 18, cost: 9, stock: 30, media: "https://source.unsplash.com/random/400x301?acai"}
-    ];
-    state.toppings = JSON.parse(localStorage.getItem("acaiToppings")) || [
-        {name: "Leite em pó", price: 2, cost: 0.5}, {name: "Morango", price: 3, cost: 1},
-        {name: "Granola", price: 2, cost: 0.5}, {name: "Leite condensado", price: 2.5, cost: 0.8}
-    ];
-}
-function saveState() {
-    localStorage.setItem("acaiOrders", JSON.stringify(state.orders));
-    localStorage.setItem("acaiProducts", JSON.stringify(state.products));
-    localStorage.setItem("acaiToppings", JSON.stringify(state.toppings));
+/* Toast */
+function showToast(msg){
+  let t=document.getElementById("toast");
+  t.innerText=msg;t.style.display="block";
+  setTimeout(()=>{t.style.display="none";},3000);
 }
 
-// --- LÓGICA PRINCIPAL ---
-function showTab(id, el) {
-    document.querySelectorAll("section.active, nav button.active").forEach(e => e.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    if (el) el.classList.add("active");
-    render();
-}
-function render() {
-    const activeTab = document.querySelector('section.active').id;
-    if (activeTab === 'catalogo') renderProducts();
-    if (activeTab === 'carrinho') renderCart();
-    if (activeTab === 'pedidos') renderOrders();
-    if (activeTab === 'logistica') renderLogistics();
-    if (activeTab === 'financeiro') renderFinance();
-    if (activeTab === 'estoque') renderStock();
-    updateBadges();
-}
-function updateBadges() {
-    const cartBadge = document.getElementById("cart-badge");
-    const ordersBadge = document.getElementById("orders-badge");
-    cartBadge.style.display = state.cart.length > 0 ? "inline-block" : "none";
-    cartBadge.innerText = state.cart.length;
-    const pendingOrders = state.orders.filter(o => o.status !== 'Concluído' && o.status !== 'Cancelado').length;
-    ordersBadge.style.display = pendingOrders > 0 ? "inline-block" : "none";
-    ordersBadge.innerText = pendingOrders;
-}
-function showToast(msg, duration = 3000) { let t = document.getElementById("toast"); t.innerText = msg; t.style.display="block"; setTimeout(() => { t.style.display="none"; }, duration); }
+/* Dados */
+let cart=[],orders=JSON.parse(localStorage.getItem("acaiOrders"))||[];
+let PRODUCTS=JSON.parse(localStorage.getItem("acaiProducts"))||[];
+const FRETE_FIXO=5.0;
+const TOPPINGS=[{name:"Leite em pó",price:2},{name:"Morango",price:3},{name:"Granola",price:2},{name:"Leite condensado",price:2.5}];
 
-// --- CATÁLOGO & MODAL ---
-function renderProducts() {
-    document.getElementById("products-container").innerHTML = state.products.map(p => `
-       <div class="swiper-slide">
-         <img src="${p.media}" alt="${p.name}">
-         <div class="product-info">
-           <h3>${p.name}</h3><p><strong>R$ ${p.price.toFixed(2)}</strong></p>
-           <button class="order-button" onclick="openModal(${p.id})" ${p.stock <= 0 ? "disabled" : ""}>${p.stock <= 0 ? "Sem estoque" : "Montar Pedido"}</button>
-         </div>
-       </div>`).join("");
-    if(window.mySwiper) window.mySwiper.destroy(true, true);
-    window.mySwiper = new Swiper(".swiper", { slidesPerView: "auto", spaceBetween: 20, pagination: { clickable: true } });
+/* Navegação */
+function showTab(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");render();}
+
+/* Modal complementos */
+let selectedProduct=null,selectedToppings=[];
+function openModal(id){
+  selectedProduct=PRODUCTS.find(p=>p.id===id);selectedToppings=[];
+  document.getElementById("toppings").innerHTML=TOPPINGS.map((t,i)=>`<div class="topping"><label><input type="checkbox" value="${i}">${t.name} (+R$ ${t.price})</label></div>`).join("");
+  document.getElementById("modal").style.display="flex";
 }
-function openModal(id) {
-    state.selectedProduct = state.products.find(p => p.id === id);
-    state.selectedToppings = [];
-    document.getElementById("modal-title").innerText = `Adicionais para ${state.selectedProduct.name}`;
-    document.getElementById("toppings").innerHTML = state.toppings.map((t, i) => `<div class="topping"><label><input type="checkbox" onchange="toggleTopping(${i})"> <span>${t.name} (+R$ ${t.price.toFixed(2)})</span></label></div>`).join("");
-    document.getElementById("modal").style.display="flex";
-}
-function closeModal() { document.getElementById("modal").style.display="none"; }
-function toggleTopping(toppingIndex) { const topping = state.toppings[toppingIndex]; const index = state.selectedToppings.findIndex(t => t.name === topping.name); if (index > -1) state.selectedToppings.splice(index, 1); else state.selectedToppings.push(topping); }
-function confirmAdd() {
-    let subtotal = state.selectedProduct.price; let subcost = state.selectedProduct.cost;
-    state.selectedToppings.forEach(t => { subtotal += t.price; subcost += t.cost; });
-    state.cart.push({product: state.selectedProduct, toppings: [...state.selectedToppings], total: subtotal, cost: subcost});
-    const productInStock = state.products.find(p => p.id === state.selectedProduct.id);
-    if (productInStock) productInStock.stock--;
-    state.selectedToppings = []; closeModal(); saveState(); render(); showToast("Item adicionado ao carrinho!");
+function closeModal(){document.getElementById("modal").style.display="none";}
+function confirmAdd(){
+  let checkboxes=document.querySelectorAll("#toppings input:checked");
+  let total=selectedProduct.price;let toppingsChosen=[];
+  checkboxes.forEach(c=>{let t=TOPPINGS[c.value];toppingsChosen.push(t);total+=t.price;});
+  cart.push({product:selectedProduct,toppings:toppingsChosen,total:total});
+  selectedProduct.stock--;saveProducts();closeModal();updateCart();
+  showToast("Produto adicionado ao carrinho!");
 }
 
-// --- CARRINHO & PEDIDOS ---
-function renderCart() {
-    const c = document.getElementById("cart-items");
-    const subtotal = state.cart.reduce((s, i) => s + i.total, 0);
-    document.getElementById("cart-total-price").innerText = `R$ ${subtotal.toFixed(2)}`;
-    const isFormValid = document.getElementById("customerName").value && document.getElementById("customerPhone").value;
-    document.getElementById("finish-order-button").disabled = state.cart.length === 0 || !isFormValid;
-    if(state.cart.length === 0) c.innerHTML = "<p>Seu carrinho está vazio</p>";
-    else c.innerHTML = state.cart.map((it, i) => `<div class="item-row"><div><strong>${it.product.name}</strong><br><small style="color:#ccc;">${it.toppings.map(t => t.name).join(", ")}</small></div><span>R$ ${it.total.toFixed(2)}</span><button class="remove-btn" onclick="removeFromCart(${i})">X</button></div>`).join("");
-}
-function removeFromCart(index) { const item = state.cart[index]; const productInStock = state.products.find(p => p.id === item.product.id); if(productInStock) productInStock.stock++; state.cart.splice(index, 1); saveState(); render(); }
-function finalizeOrder() {
-    const subtotal = state.cart.reduce((s, i) => s + i.total, 0);
-    const totalcost = state.cart.reduce((s, i) => s + i.cost, 0);
-    const newOrder = {
-        id: Date.now(), customerName: document.getElementById("customerName").value, phone: document.getElementById("customerPhone").value,
-        items: [...state.cart], subtotal: subtotal, totalCost: totalcost, deliveryType: "Retirada", address: "", notes: "",
-        payment: "Não definido", deliveryFee: 0, total: subtotal, status: "Recebido", createdAt: new Date().toISOString()
-    };
-    state.orders.push(newOrder); state.cart = [];
-    document.getElementById("customerName").value = ""; document.getElementById("customerPhone").value = "";
-    saveState();
-    showTab('pedidos', document.querySelector('button[onclick*="pedidos"]'));
-    render(); showToast("Pedido #" + newOrder.id + " recebido! Veja em Logística.");
-    new Audio(STORE_CONFIG.notificationSound).play();
-}
-function renderOrders() {
-    document.getElementById("orders-list").innerHTML = state.orders.slice().reverse().map(o => `
-       <div class="order-card">
-         <strong>Pedido #${o.id}</strong> (${new Date(o.createdAt).toLocaleTimeString('pt-BR')}) - ${o.customerName}<br>
-         <span class="status status-${o.status.replace(/\s+/g, '')}">${o.status}</span> | Total: R$ ${o.total.toFixed(2)}
-       </div>`).join("") || "<p>Nenhum pedido feito ainda.</p>";
+/* Render produtos */
+function renderProducts(){
+ document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
+   <div class="swiper-slide">
+     <div class="media-container">
+       ${p.media.includes("video")?`<video src="${p.media}" controls></video>`:`<img src="${p.media}" alt="${p.name}">`}
+     </div>
+     <div class="product-info">
+       <h3>${p.name}</h3><p><strong>R$ ${p.price}</strong></p>
+       <button class="order-button" onclick="openModal(${p.id})" ${p.stock<=0?"disabled":""}>${p.stock<=0?"Sem estoque":"Selecionar"}</button>
+     </div>
+   </div>`).join("");
+ new Swiper(".swiper",{slidesPerView:1,loop:true});
 }
 
-// --- LOGÍSTICA ---
-function renderLogistics() {
-    const c = document.getElementById("logistics-list");
-    const activeOrders = state.orders.filter(o => o.status !== 'Concluído' && o.status !== 'Cancelado').slice().reverse();
-    if(activeOrders.length === 0) { c.innerHTML = "<p>Nenhum pedido ativo na logística.</p>"; return; }
-    c.innerHTML = activeOrders.map(o => `
-       <div class="order-card">
-         <strong>Pedido #${o.id}</strong> - ${o.customerName} <span class="status status-${o.status.replace(/\s+/g, '')}">${o.status}</span>
-         <div class="input-group">
-            <input placeholder="Endereço Completo" value="${o.address || ''}" onchange="updateOrder(${o.id}, 'address', this.value)">
-            <textarea placeholder="Observações" onchange="updateOrder(${o.id}, 'notes', this.value)">${o.notes || ''}</textarea>
-            <div>
-              <select onchange="setDelivery(${o.id}, this.value)" style="width:48%; display:inline-block;">
-                <option value="Retirada" ${o.deliveryType === "Retirada" ? "selected" : ""}>Retirada</option>
-                <option value="Entrega" ${o.deliveryType === "Entrega" ? "selected" : ""}>Entrega</option>
-              </select>
-              <select onchange="updateOrder(${o.id}, 'payment', this.value)" style="width:48%; display:inline-block;">
-                <option ${o.payment === "Pix" ? "selected" : ""}>Pix</option><option ${o.payment === "Dinheiro" ? "selected" : ""}>Dinheiro</option><option ${o.payment === "Cartão" ? "selected" : ""}>Cartão</option>
-              </select>
-            </div>
-         </div>
-         Subtotal: R$ ${o.subtotal.toFixed(2)} | Frete: R$ ${o.deliveryFee.toFixed(2)} | <strong>Total: R$ ${o.total.toFixed(2)}</strong>
-         <div class="logistics-actions">
-            <a href="https://wa.me/${STORE_CONFIG.whatsappNumber.replace(/\D/g,'')}?text=Olá, sobre o pedido #${o.id}..." target="_blank">WhatsApp</a>
-            ${o.address ? `<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(STORE_CONFIG.storeAddress)}&destination=${encodeURIComponent(o.address)}" target="_blank">Ver Rota</a>` : ''}
-         </div>
-         <select onchange="updateOrderStatus(${o.id}, this.value)">
-            <option ${o.status === "Recebido" ? "selected" : ""}>Recebido</option><option ${o.status === "Preparação" ? "selected" : ""}>Preparação</option>
-            <option ${o.status === "Saiu" ? "selected" : ""}>Saiu</option><option ${o.status === "Concluído" ? "selected" : ""}>Concluído</option><option ${o.status === "Cancelado" ? "selected" : ""}>Cancelado</option>
-         </select>
-       </div>`).join("");
+/* Carrinho */
+function updateCart(){
+ let c=document.getElementById("cart-items");
+ if(cart.length==0){c.innerHTML="<p>Seu carrinho está vazio</p>";}
+ else{c.innerHTML=cart.map(it=>`<div class="cart-item">${it.product.name} ${it.toppings.length?"+ "+it.toppings.map(t=>t.name).join(", "):""} <span>R$ ${it.total}</span></div>`).join("");}
+ document.getElementById("cart-total-price").innerText="R$ "+cart.reduce((s,i)=>s+i.total,0).toFixed(2);
+ document.getElementById("finish-order-button").disabled=cart.length==0;
+ document.getElementById("cart-badge").style.display=cart.length>0?"inline-block":"none";
+ document.getElementById("cart-badge").innerText=cart.length;
 }
-function updateOrder(id, key, value) { const order = state.orders.find(o => o.id === id); if(order) order[key] = value; saveState(); render(); }
-function setDelivery(id, type) { const order = state.orders.find(o => o.id === id); if(!order) return; order.deliveryType = type; order.deliveryFee = type === "Entrega" ? STORE_CONFIG.deliveryFee : 0; order.total = order.subtotal + order.deliveryFee; saveState(); render(); }
-function updateOrderStatus(id, newStatus) { const order = state.orders.find(o => o.id === id); if(order) order.status = newStatus; saveState(); render(); showToast(`Pedido #${id} atualizado para ${newStatus}!`); }
+document.getElementById("finish-order-button").addEventListener("click",finalizarPedido);
 
-// --- ESTOQUE E FINANCEIRO ---
-function renderStock() {
-    document.getElementById("stock-list").innerHTML = [...state.products, ...state.toppings].map(p => `
-        <div class="item-row">
-            <span>${p.name} - Venda: R$${p.price.toFixed(2)} (Custo: R$${(p.cost||0).toFixed(2)})</span>
-            <span>Estoque: ${p.stock !== undefined ? p.stock : 'N/A'}</span>
-            <button class="remove-btn" onclick="removeProduct(${p.id})">X</button>
-        </div>`).join("");
-}
-function addProduct() {
-    const newProduct = {
-        id: Date.now(), name: document.getElementById("new-name").value, price: parseFloat(document.getElementById("new-price").value) || 0,
-        cost: parseFloat(document.getElementById("new-cost").value) || 0, stock: parseInt(document.getElementById("new-stock").value) || 0,
-        media: "https://source.unsplash.com/random/400x300?food"
-    };
-    if(!newProduct.name || !newProduct.price) return showToast("Nome e preço são obrigatórios!");
-    state.products.push(newProduct); saveState(); render(); clearStockForm();
-}
-function removeProduct(id) { if(confirm("Tem certeza?")) { state.products = state.products.filter(p => p.id !== id); saveState(); render(); }}
-function renderFinance() {
-    const concluded = state.orders.filter(o => o.status === "Concluído");
-    const revenue = concluded.reduce((s, o) => s + o.total, 0);
-    const cost = concluded.reduce((s, o) => s + o.totalCost, 0);
-    const profit = revenue - cost;
-    const avg = concluded.length ? revenue / concluded.length : 0;
-    
-    document.getElementById("kpi-revenue").innerText = "R$ " + revenue.toFixed(2);
-    document.getElementById("kpi-cost").innerText = "R$ " + cost.toFixed(2);
-    document.getElementById("kpi-profit").innerText = "R$ " + profit.toFixed(2);
-    document.getElementById("kpi-orders").innerText = concluded.length;
-    
-    const salesByDay = concluded.reduce((acc, o) => { let d = new Date(o.createdAt).toLocaleDateString('pt-BR'); acc[d] = (acc[d] || 0) + o.total; return acc; }, {});
-    const ctx = document.getElementById("salesChart").getContext("2d");
-    if(window.salesChart) window.salesChart.destroy();
-    window.salesChart = new Chart(ctx, { type: "line", data: { labels: Object.keys(salesByDay), datasets: [{ label: "Faturamento diário", data: Object.values(salesByDay), backgroundColor: "rgba(157,77,237,0.2)", borderColor: "rgba(157,77,237,1)", tension: 0.3, fill: true }] }, options: { scales: { y: { beginAtZero: true } } } });
+function finalizarPedido(){
+ let subtotal=cart.reduce((s,i)=>s+i.total,0);
+ let o={id:Date.now(),customerName:"",phone:"",deliveryType:"",address:"",notes:"",payment:"",items:cart,totalItems:subtotal,frete:0,total:subtotal,status:"Recebido",createdAt:new Date().toLocaleString()};
+ orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));cart=[];updateCart();showTab('logistica');render();
+ showToast("Pedido registrado e enviado para logística!");
 }
 
-// --- INICIALIZAÇÃO ---
-document.addEventListener("DOMContentLoaded", () => {
-    loadState();
-    document.getElementById("finish-order-button").addEventListener("click", finalizeOrder);
-    window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").style.display="none";document.getElementById("app").style.display="block"; render();},1500);});
-});
+/* Estoque */
+function addProduct(){
+ let file=document.getElementById("new-media").files[0];let reader=new FileReader();
+ reader.onload=function(e){let p={id:Date.now(),name:document.getElementById("new-name").value,price:parseFloat(document.getElementById("new-price").value),cost:parseFloat(document.getElementById("new-cost").value),stock:parseInt(document.getElementById("new-stock").value),media:e.target.result};PRODUCTS.push(p);saveProducts();render();};
+ if(file) reader.readAsDataURL(file);
+}
+function saveProducts(){localStorage.setItem("acaiProducts",JSON.stringify(PRODUCTS));}
+function removeProduct(id){PRODUCTS=PRODUCTS.filter(p=>p.id!==id);saveProducts();render();}
+function renderStock(){document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`${p.name} - R$ ${p.price} - Estoque:${p.stock} <button class="remove-btn" onclick="removeProduct(${p.id})">Remover</button>`).join("<br>");}
+
+/* Pedidos */
+function renderOrders(){
+ let ativos = orders.filter(o=>o.status!=="Encerrado");
+ document.getElementById("orders-list").innerHTML=ativos.length
+ ? ativos.map(o=>`
+   <div class="order-card">
+     <strong>Pedido #${o.id}</strong><br>
+     Itens:<ul>${o.items.map(i=>`<li>${i.product.name} ${i.toppings.length?`+ ${i.toppings.map(t=>t.name).join(", ")}`:""} - R$ ${i.total}</li>`).join("")}</ul>
+     Subtotal: R$ ${o.totalItems.toFixed(2)} | Total: R$ ${o.total.toFixed(2)}<br>
+     <span class="status status-${o.status}">${o.status}</span><br>
+     <button class="remove-btn" onclick="encerrarPedido(${o.id})">Encerrar</button>
+   </div>`).join("")
+ : "<p>Nenhum pedido ativo</p>";
+ document.getElementById("orders-badge").style.display=ativos.length>0?"inline-block":"none";
+ document.getElementById("orders-badge").innerText=ativos.length;
+}
+function encerrarPedido(id){
+  let o=orders.find(x=>x.id===id);
+  if(o){
+    o.status="Encerrado";
+    saveOrders();
+    renderOrders();
+    renderLogistics();
+    renderFinance();
+    showToast("Pedido #"+id+" encerrado!");
+  }
+}
+
+/* Logística */
+function renderLogistics(){
+ let c=document.getElementById("logistics-list");
+ if(orders.length===0){c.innerHTML="<p>Nenhum pedido na logística.</p>";return;}
+ c.innerHTML=orders.map(o=>`
+   <div class="order-card">
+     <strong>Pedido #${o.id}</strong><br>
+     Cliente: <input placeholder="Nome" value="${o.customerName}" onchange="o.customerName=this.value;saveOrders()"> 
+     Tel: <input placeholder="Telefone" value="${o.phone}" onchange="o.phone=this.value;saveOrders()"><br>
+     Entrega: <select onchange="setDelivery(${o.id},this.value)">
+       <option ${o.deliveryType==="Retirada"?"selected":""}>Retirada</option>
+       <option ${o.deliveryType==="Entrega"?"selected":""}>Entrega</option>
+     </select><br>
+     ${o.deliveryType==="Entrega"?`Endereço:<input value="${o.address}" onchange="o.address=this.value;saveOrders()"><br>Observações:<input value="${o.notes}" onchange="o.notes=this.value;saveOrders()">`:``}
+     Pagamento: <select onchange="o.payment=this.value;saveOrders()"><option>Pix</option><option>Dinheiro</option><option>Cartão</option></select><br>
+     Subtotal: R$ ${o.totalItems.toFixed(2)} | Frete: R$ ${o.frete.toFixed(2)} | <strong>Total: R$ ${o.total.toFixed(2)}</strong><br>
+     <small>Data: ${o.createdAt}</small><br>
+     <span class="status status-${o.status}">${o.status}</span>
+   </div>`).join("");
+}
+function setDelivery(id,val){
+ let o=orders.find(x=>x.id===id);if(!o)return;
+ o.deliveryType=val;
+ if(val==="Entrega"){o.frete=FRETE_FIXO;o.total=o.totalItems+o.frete;}
+ else{o.frete=0;o.total=o.totalItems;}
+ saveOrders();renderLogistics();
+}
+function updateStatus(id,newStatus){
+ let o=orders.find(x=>x.id===id);if(o){o.status=newStatus;saveOrders();renderLogistics();renderOrders();showToast("Status do pedido atualizado para "+newStatus);}
+}
+function saveOrders(){localStorage.setItem("acaiOrders",JSON.stringify(orders));}
+
+/* Financeiro */
+function renderFinance(){
+ let concluidos=orders.filter(o=>o.status==="Concluído" || o.status==="Encerrado");
+ let faturamento=concluidos.reduce((s,o)=>s+o.total,0);
+ let freteTotal=concluidos.reduce((s,o)=>s+o.frete,0);
+ let avg=concluidos.length?faturamento/concluidos.length:0;
+ document.getElementById("kpi-revenue").innerText="R$ "+faturamento.toFixed(2);
+ document.getElementById("kpi-orders").innerText=concluidos.length;
+ document.getElementById("kpi-avg").innerText="R$ "+avg.toFixed(2);
+ document.getElementById("kpi-frete").innerText="R$ "+freteTotal.toFixed(2);
+ let salesByDay=concluidos.reduce((acc,o)=>{let d=new Date(o.createdAt).toLocaleDateString();acc[d]=(acc[d]||0)+o.total;return acc;},{});  
+ let ctx=document.getElementById("salesChart").getContext("2d");
+ if(window.salesChart)window.salesChart.destroy();
+ window.salesChart=new Chart(ctx,{type:"bar",data:{labels:Object.keys(salesByDay),datasets:[{label:"Faturamento diário",data:Object.values(salesByDay),backgroundColor:"rgba(157,77,237,0.7)"}]},options:{scales:{y:{beginAtZero:true}}}});
+}
+
+/* Render */
+function render(){renderProducts();renderStock();renderOrders();renderLogistics();renderFinance();}
+render();
 </script>
 </body>
 </html>
