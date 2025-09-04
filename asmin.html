@@ -10,10 +10,10 @@
     background: #000;
     font-family: Arial, sans-serif;
     overflow: hidden;
-    height: 100vh;
-    width: 100vw;
+    height: 100vh; width: 100vw;
   }
-  /* Fundo animado simulando tatame */
+
+  /* Fundo animado */
   .background {
     position: fixed;
     top: 0; left: 0;
@@ -26,12 +26,35 @@
       #1a1a1a 40px
     );
     animation: slide 6s linear infinite;
-    z-index: -1;
+    z-index: -2;
   }
   @keyframes slide {
     from { background-position: 0 0; }
     to { background-position: 200px 200px; }
   }
+
+  /* Partículas */
+  #particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    z-index: -1;
+  }
+  .particle {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #d4af37;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: float 8s linear infinite;
+  }
+  @keyframes float {
+    from { transform: translateY(100vh) scale(0.5); opacity: 0; }
+    50% { opacity: 1; }
+    to { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+  }
+
   /* Cena */
   .scene {
     position: absolute;
@@ -54,6 +77,7 @@
   }
   h1 { color: #d4af37; font-size: 2em; }
   h2 { color: #fff; font-size: 1.2em; }
+
   .logo {
     width: 180px;
     max-width: 60%;
@@ -64,6 +88,7 @@
     from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
   }
+
   .btn {
     margin-top: 20px;
     background: #d4af37;
@@ -80,33 +105,45 @@
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
   }
+
+  /* Texto digitado */
+  .typing {
+    border-right: 3px solid #d4af37;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    animation: typing 3s steps(30,end) forwards, blink .8s infinite;
+  }
+  @keyframes typing { to { width: 100%; } }
+  @keyframes blink { 50% { border-color: transparent; } }
 </style>
 </head>
 <body>
 
 <div class="background"></div>
+<div id="particles"></div>
 
 <!-- Cena 1 -->
 <div class="scene" id="scene1">
   <img src="DD4E5F7A-87E1-4FA1-AF05-DD942BD89EAD.png" class="logo" alt="Logo">
-  <h2>O Jiu-Jitsu é mais do que luta</h2>
+  <h2 class="typing">O Jiu-Jitsu é mais do que luta</h2>
 </div>
 
 <!-- Cena 2 -->
 <div class="scene" id="scene2">
-  <h1>Aprenda do zero</h1>
+  <h1 class="typing">Aprenda do zero</h1>
   <h2>Com o app que te guia passo a passo</h2>
 </div>
 
 <!-- Cena 3 -->
 <div class="scene" id="scene3">
-  <h1>Regras • Guarda • Quedas</h1>
+  <h1 class="typing">Regras • Guarda • Quedas</h1>
   <h2>Finalizações • Mentalidade • Drills</h2>
 </div>
 
 <!-- Cena 4 -->
 <div class="scene" id="scene4">
-  <h1>Do faixa branca ao faixa preta</h1>
+  <h1 class="typing">Do faixa branca ao faixa preta</h1>
   <h2>Sua jornada começa aqui</h2>
 </div>
 
@@ -117,12 +154,28 @@
   <div class="btn">Baixe Agora</div>
 </div>
 
+<!-- Música -->
+<audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+  // Partículas
+  for (let i = 0; i < 25; i++) {
+    let p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = 5 + Math.random() * 5 + "s";
+    p.style.animationDelay = Math.random() * 5 + "s";
+    document.getElementById("particles").appendChild(p);
+  }
+
+  // Cenas sequenciais
   const scenes = document.querySelectorAll('.scene');
   let index = 0;
 
   function showScene(i) {
-    scenes.forEach((s, j) => s.classList.remove('active'));
+    scenes.forEach((s) => s.classList.remove('active'));
     if (scenes[i]) scenes[i].classList.add('active');
   }
 
@@ -130,7 +183,10 @@
     showScene(index);
     index++;
     if (index < scenes.length) {
-      setTimeout(nextScene, 4000); // cada cena dura 4s
+      setTimeout(nextScene, 5000); // cada cena 5s
+    } else {
+      index = 0; // reinicia (loop infinito)
+      setTimeout(nextScene, 5000);
     }
   }
 
