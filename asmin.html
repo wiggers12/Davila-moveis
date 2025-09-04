@@ -27,28 +27,14 @@ section.active{display:block;}
 .swiper{width:100%;padding:1rem 0;}
 .swiper-slide{background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;text-align:center;transition:0.2s;}
 .swiper-slide.added{box-shadow:0 0 15px var(--success);}
+.swiper-slide img,.swiper-slide video{
+  width:100%;height:220px;object-fit:cover;display:block;
+  border-radius:12px 12px 0 0; /* bordas arredondadas */
+}
 .product-info{padding:1rem;}
 .order-button{background:linear-gradient(145deg,#9d4edd,#5a189a);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;transition:.2s;}
 .order-button:disabled{background:#555;cursor:not-allowed;}
 .order-button:active{transform:scale(0.95);}
-/* Media container para imagens e vídeos */
-.media-container {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 12px 12px 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-}
-.media-container img,
-.media-container video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px 12px 0 0;
-}
 /* Modal complementos */
 #modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1500;animation:fadeIn .3s;}
 #modal-content{background:#fff;color:#000;padding:1.5rem;border-radius:12px;width:90%;max-width:400px;animation:zoomIn .3s;}
@@ -68,7 +54,7 @@ section.active{display:block;}
 .status-Saiu{background:#ffa94d;}
 .status-Concluído{background:var(--success);}
 .status-Cancelado{background:var(--danger);}
-.status-Encerrado{background:#666;}
+.status-Encerrado{background:#777;color:#fff;}
 .action-btn{margin:.2rem;padding:.4rem .7rem;border:none;border-radius:6px;cursor:pointer;font-size:.8rem;}
 .remove-btn{background:var(--danger);color:#fff;}
 /* Financeiro */
@@ -91,7 +77,6 @@ section.active{display:block;}
 </style>
 </head>
 <body>
-
 <!-- SPLASH -->
 <div id="splash">
   <div class="splash-content">
@@ -100,10 +85,8 @@ section.active{display:block;}
     <p>Carregando...</p>
   </div>
 </div>
-
 <!-- TOAST -->
 <div id="toast"></div>
-
 <!-- MODAL COMPLEMENTOS -->
 <div id="modal">
   <div id="modal-content">
@@ -113,15 +96,12 @@ section.active{display:block;}
     <button onclick="closeModal()">Cancelar</button>
   </div>
 </div>
-
 <!-- APP -->
 <div id="app" style="display:none;">
-
 <header>
   <h1>Açaí da Barra Poa 👑</h1>
   <p>Gestão completa: Vitrine, Estoque, Pedidos, Financeiro e Logística</p>
 </header>
-
 <nav>
   <button class="active" onclick="showTab('catalogo')">🛒 Catálogo</button>
   <button onclick="showTab('carrinho')">🛍 Carrinho <span id="cart-badge" class="badge"></span></button>
@@ -130,7 +110,6 @@ section.active{display:block;}
   <button onclick="showTab('estoque')">📊 Estoque</button>
   <button onclick="showTab('logistica')">🚚 Logística</button>
 </nav>
-
 <!-- Catálogo -->
 <section id="catalogo" class="active">
   <h2>Monte seu Açaí</h2>
@@ -138,7 +117,6 @@ section.active{display:block;}
     <div class="swiper-wrapper" id="products-container"></div>
   </div>
 </section>
-
 <!-- Carrinho -->
 <section id="carrinho">
   <h2>🛍 Seu Pedido</h2>
@@ -148,10 +126,8 @@ section.active{display:block;}
     <button class="btn-finish" id="finish-order-button" disabled>Finalizar Pedido</button>
   </div>
 </section>
-
 <!-- Pedidos -->
 <section id="pedidos"><h2>📦 Pedidos</h2><div id="orders-list"></div></section>
-
 <!-- Financeiro -->
 <section id="financeiro">
   <h2>💰 Financeiro</h2>
@@ -163,7 +139,6 @@ section.active{display:block;}
   </div>
   <canvas id="salesChart"></canvas>
 </section>
-
 <!-- Estoque -->
 <section id="estoque">
   <h2>📊 Estoque</h2>
@@ -177,33 +152,26 @@ section.active{display:block;}
   </div>
   <div id="stock-list"></div>
 </section>
-
 <!-- Logística -->
 <section id="logistica"><h2>🚚 Logística</h2><div id="logistics-list"></div></section>
-
 </div> <!-- fim app -->
-
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 /* Splash */
 window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").style.display="none";document.getElementById("app").style.display="block";},2000);});
-
 /* Toast */
 function showToast(msg){
   let t=document.getElementById("toast");
   t.innerText=msg;t.style.display="block";
   setTimeout(()=>{t.style.display="none";},3000);
 }
-
 /* Dados */
 let cart=[],orders=JSON.parse(localStorage.getItem("acaiOrders"))||[];
 let PRODUCTS=JSON.parse(localStorage.getItem("acaiProducts"))||[];
 const FRETE_FIXO=5.0;
 const TOPPINGS=[{name:"Leite em pó",price:2},{name:"Morango",price:3},{name:"Granola",price:2},{name:"Leite condensado",price:2.5}];
-
 /* Navegação */
 function showTab(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");render();}
-
 /* Modal complementos */
 let selectedProduct=null,selectedToppings=[];
 function openModal(id){
@@ -220,14 +188,11 @@ function confirmAdd(){
   selectedProduct.stock--;saveProducts();closeModal();updateCart();
   showToast("Produto adicionado ao carrinho!");
 }
-
 /* Render produtos */
 function renderProducts(){
  document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
    <div class="swiper-slide">
-     <div class="media-container">
-       ${p.media.includes("video")?`<video src="${p.media}" controls></video>`:`<img src="${p.media}" alt="${p.name}">`}
-     </div>
+     ${p.media.includes("video")?`<video src="${p.media}" controls></video>`:`<img src="${p.media}" alt="${p.name}">`}
      <div class="product-info">
        <h3>${p.name}</h3><p><strong>R$ ${p.price}</strong></p>
        <button class="order-button" onclick="openModal(${p.id})" ${p.stock<=0?"disabled":""}>${p.stock<=0?"Sem estoque":"Selecionar"}</button>
@@ -235,7 +200,6 @@ function renderProducts(){
    </div>`).join("");
  new Swiper(".swiper",{slidesPerView:1,loop:true});
 }
-
 /* Carrinho */
 function updateCart(){
  let c=document.getElementById("cart-items");
@@ -247,14 +211,12 @@ function updateCart(){
  document.getElementById("cart-badge").innerText=cart.length;
 }
 document.getElementById("finish-order-button").addEventListener("click",finalizarPedido);
-
 function finalizarPedido(){
  let subtotal=cart.reduce((s,i)=>s+i.total,0);
  let o={id:Date.now(),customerName:"",phone:"",deliveryType:"",address:"",notes:"",payment:"",items:cart,totalItems:subtotal,frete:0,total:subtotal,status:"Recebido",createdAt:new Date().toLocaleString()};
  orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));cart=[];updateCart();showTab('logistica');render();
  showToast("Pedido registrado e enviado para logística!");
 }
-
 /* Estoque */
 function addProduct(){
  let file=document.getElementById("new-media").files[0];let reader=new FileReader();
@@ -264,35 +226,23 @@ function addProduct(){
 function saveProducts(){localStorage.setItem("acaiProducts",JSON.stringify(PRODUCTS));}
 function removeProduct(id){PRODUCTS=PRODUCTS.filter(p=>p.id!==id);saveProducts();render();}
 function renderStock(){document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`${p.name} - R$ ${p.price} - Estoque:${p.stock} <button class="remove-btn" onclick="removeProduct(${p.id})">Remover</button>`).join("<br>");}
-
 /* Pedidos */
 function renderOrders(){
- let ativos = orders.filter(o=>o.status!=="Encerrado");
- document.getElementById("orders-list").innerHTML=ativos.length
- ? ativos.map(o=>`
+ document.getElementById("orders-list").innerHTML=orders.filter(o=>o.status!=="Encerrado").map(o=>`
    <div class="order-card">
      <strong>Pedido #${o.id}</strong><br>
      Itens:<ul>${o.items.map(i=>`<li>${i.product.name} ${i.toppings.length?`+ ${i.toppings.map(t=>t.name).join(", ")}`:""} - R$ ${i.total}</li>`).join("")}</ul>
      Subtotal: R$ ${o.totalItems.toFixed(2)} | Total: R$ ${o.total.toFixed(2)}<br>
      <span class="status status-${o.status}">${o.status}</span><br>
-     <button class="remove-btn" onclick="encerrarPedido(${o.id})">Encerrar</button>
-   </div>`).join("")
- : "<p>Nenhum pedido ativo</p>";
- document.getElementById("orders-badge").style.display=ativos.length>0?"inline-block":"none";
- document.getElementById("orders-badge").innerText=ativos.length;
+     <button class="remove-btn" onclick="encerrarPedido(${o.id})">Encerrar Pedido</button>
+   </div>`).join("");
+ document.getElementById("orders-badge").style.display=orders.length>0?"inline-block":"none";
+ document.getElementById("orders-badge").innerText=orders.filter(o=>o.status!=="Concluído"&&o.status!=="Cancelado"&&o.status!=="Encerrado").length;
 }
 function encerrarPedido(id){
-  let o=orders.find(x=>x.id===id);
-  if(o){
-    o.status="Encerrado";
-    saveOrders();
-    renderOrders();
-    renderLogistics();
-    renderFinance();
-    showToast("Pedido #"+id+" encerrado!");
-  }
+ let o=orders.find(x=>x.id===id);
+ if(o){o.status="Encerrado";saveOrders();render();showToast("Pedido encerrado!");}
 }
-
 /* Logística */
 function renderLogistics(){
  let c=document.getElementById("logistics-list");
@@ -311,6 +261,14 @@ function renderLogistics(){
      Subtotal: R$ ${o.totalItems.toFixed(2)} | Frete: R$ ${o.frete.toFixed(2)} | <strong>Total: R$ ${o.total.toFixed(2)}</strong><br>
      <small>Data: ${o.createdAt}</small><br>
      <span class="status status-${o.status}">${o.status}</span>
+     <br><select onchange="updateStatus(${o.id},this.value)">
+       <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
+       <option ${o.status==="Preparação"?"selected":""}>Preparação</option>
+       <option ${o.status==="Saiu"?"selected":""}>Saiu</option>
+       <option ${o.status==="Concluído"?"selected":""}>Concluído</option>
+       <option ${o.status==="Cancelado"?"selected":""}>Cancelado</option>
+       <option ${o.status==="Encerrado"?"selected":""}>Encerrado</option>
+     </select>
    </div>`).join("");
 }
 function setDelivery(id,val){
@@ -324,7 +282,6 @@ function updateStatus(id,newStatus){
  let o=orders.find(x=>x.id===id);if(o){o.status=newStatus;saveOrders();renderLogistics();renderOrders();showToast("Status do pedido atualizado para "+newStatus);}
 }
 function saveOrders(){localStorage.setItem("acaiOrders",JSON.stringify(orders));}
-
 /* Financeiro */
 function renderFinance(){
  let concluidos=orders.filter(o=>o.status==="Concluído" || o.status==="Encerrado");
@@ -340,7 +297,6 @@ function renderFinance(){
  if(window.salesChart)window.salesChart.destroy();
  window.salesChart=new Chart(ctx,{type:"bar",data:{labels:Object.keys(salesByDay),datasets:[{label:"Faturamento diário",data:Object.values(salesByDay),backgroundColor:"rgba(157,77,237,0.7)"}]},options:{scales:{y:{beginAtZero:true}}}});
 }
-
 /* Render */
 function render(){renderProducts();renderStock();renderOrders();renderLogistics();renderFinance();}
 render();
