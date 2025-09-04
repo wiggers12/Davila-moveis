@@ -28,21 +28,38 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
       z-index: 1000;
       animation: fadeout 2s ease forwards;
-      animation-delay: 3s;
+      animation-delay: 4s;
       overflow: hidden;
     }
-    #splash img {
-      width: 220px;
-      max-width: 80%;
-      height: auto;
-      animation: zoomin 2s ease forwards;
+    #splash h1 {
+      font-size: 48px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-align: center;
+      background: linear-gradient(90deg, white, #007bff, #6f42c1, #8b4513, black);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% 300%;
+      animation: faixaAnim 3s linear infinite;
+      position: relative;
     }
-    @keyframes zoomin {
-      from { transform: scale(0.9); opacity: 0.7; }
-      to { transform: scale(1); opacity: 1; }
+    #splash h1::after {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.7), transparent);
+      animation: brilho 2s infinite;
+    }
+    @keyframes faixaAnim {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes brilho {
+      to { left: 150%; }
     }
     @keyframes fadeout {
       from { opacity: 1; }
@@ -63,7 +80,6 @@
       text-align: center;
       margin-bottom: 20px;
     }
-
     /* Card principal */
     .main-card {
       background: var(--card-bg);
@@ -83,7 +99,6 @@
       color: var(--gold);
       margin-bottom: 15px;
     }
-
     /* Subcards */
     .subcards {
       display: grid;
@@ -111,12 +126,10 @@
       transform: scale(1.05);
       cursor: pointer;
     }
-
     @keyframes cardfade {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     /* Modal */
     .modal {
       display: none;
@@ -166,13 +179,12 @@
 
   <!-- Splash -->
   <div id="splash">
-    <img src="DD4E5F7A-87E1-4FA1-AF05-DD942BD89EAD.png" alt="Logo Jiu-Jitsu Puro">
+    <h1>Jiu-Jitsu Puro</h1>
   </div>
 
   <!-- Conteúdo -->
   <div id="content">
     <h1>Jiu-Jitsu Puro</h1>
-
     <!-- Card principal -->
     <div class="main-card" id="mainCard">
       <h2>O que você quer aprender?</h2>
@@ -203,127 +215,58 @@
 
   <script>
     const conteudos = {
-      comeco: `
-        Começar no Jiu-Jitsu pode parecer intimidador, mas é uma experiência transformadora.
-        <br><br>
-        <strong>1. Escolha a academia certa:</strong> procure professores experientes e ambiente amigável.<br>
-        <strong>2. Tenha o equipamento básico:</strong> um kimono simples ou roupa confortável para treinar no início.<br>
-        <strong>3. Frequência:</strong> 2 a 3 treinos por semana já trazem evolução.<br>
-        <strong>4. Seja paciente:</strong> você será finalizado muitas vezes — isso faz parte do aprendizado.<br>
-        <strong>5. Respeite o tatame:</strong> humildade é essencial.<br><br>
-        <em>Dica:</em> encare cada treino como uma vitória pessoal.
-      `,
-      regras: `
-        As regras variam de acordo com a federação (CBJJ, IBJJF), mas os princípios são comuns:<br><br>
-        ✅ Pontos: 2 (queda, raspagem), 3 (passagem de guarda), 4 (montada, costas).<br>
-        ✅ Finalizações: encerram a luta imediatamente.<br>
-        ❌ Golpes perigosos são proibidos (mãos nos olhos, puxar cabelo, etc.).<br><br>
-        <em>O objetivo é dominar o adversário com técnica, não com força bruta.</em>
-      `,
-      tatame: `
-        O tatame é um espaço sagrado no Jiu-Jitsu. Algumas regras de etiqueta:<br><br>
-        • Cumprimentar ao entrar e sair do tatame.<br>
-        • Manter unhas cortadas e higiene em dia.<br>
-        • Respeitar os colegas, independentemente da graduação.<br>
-        • Não discutir durante o treino.<br>
-        • Ouvir sempre as instruções do professor.<br><br>
-        <em>Respeito vem antes da vitória.</em>
-      `,
-      mentalidade: `
-        A mentalidade no Jiu-Jitsu é o que define sua evolução:<br><br>
-        • <strong>Paciência:</strong> cada técnica exige repetição.<br>
-        • <strong>Resiliência:</strong> você vai perder muitas vezes.<br>
-        • <strong>Humildade:</strong> até os mais graduados aprendem todo dia.<br>
-        • <strong>Controle emocional:</strong> manter a calma em situações de pressão.<br><br>
-        <em>O tatame é um espelho da vida.</em>
-      `,
-      guarda: `
-        A guarda é a posição em que você luta de costas no chão, controlando o adversário.<br><br>
-        • Guarda fechada.<br>
-        • Guarda aberta.<br>
-        • Guarda aranha.<br>
-        • Guarda de la Riva.<br>
-        • Guarda X.<br><br>
-        <em>Dominar a guarda é essencial para se defender e atacar.</em>
-      `,
-      passagens: `
-        Passar a guarda é um dos maiores desafios.<br><br>
-        • Passagem de joelho.<br>
-        • Torre (stack pass).<br>
-        • Passagem por pressão.<br>
-        • Passagem explosiva.<br><br>
-        <em>Quem passa bem a guarda, controla a luta.</em>
-      `,
-      meiaguarda: `
-        A meia guarda é uma posição de transição poderosa.<br><br>
-        • Meia guarda profunda.<br>
-        • Meia guarda invertida.<br>
-        • Ataques (sweeps, finalizações).<br>
-        • Defesas contra passagens.<br><br>
-        <em>É uma das posições mais usadas no Jiu-Jitsu moderno.</em>
-      `,
-      finalizacoes: `
-        As finalizações encerram a luta de forma imediata.<br><br>
-        • Armlock (chave de braço).<br>
-        • Triângulo.<br>
-        • Mata-leão.<br>
-        • Kimura.<br>
-        • Americana.<br>
-        • Estrangulamentos diversos.<br><br>
-        <em>A beleza do Jiu-Jitsu está em vencer pela técnica.</em>
-      `,
-      quedas: `
-        Toda luta começa em pé. As quedas são fundamentais:<br><br>
-        • O Soto Gari (projeção frontal).<br>
-        • Single leg.<br>
-        • Double leg.<br>
-        • Tomoe Nage (queda circular).<br>
-        • Sacrifício com rolamento.<br><br>
-        <em>Uma boa queda abre caminho para o domínio no chão.</em>
-      `,
-      drills: `
-        Drills são exercícios repetitivos que criam memória muscular:<br><br>
-        • Hip escape (saída de quadril).<br>
-        • Troca de base.<br>
-        • Passagem em movimento.<br>
-        • Raspe e volte.<br>
-        • Sequências de finalizações.<br><br>
-        <em>Quanto mais repetir, mais natural ficará o movimento.</em>
-      `,
-      analise: `
-        A análise é parte essencial da evolução:<br><br>
-        • Rever suas lutas em vídeo.<br>
-        • Identificar erros e acertos.<br>
-        • Estudar campeões e ídolos.<br>
-        • Conversar com o professor sobre ajustes.<br><br>
-        <em>No Jiu-Jitsu, pensar é tão importante quanto lutar.</em>
-      `
+      comeco: `Começar no Jiu-Jitsu pode parecer intimidador, mas é uma experiência transformadora.
+      <br><br><strong>1. Escolha a academia certa:</strong> procure professores experientes e ambiente amigável.<br>
+      <strong>2. Tenha o equipamento básico:</strong> um kimono simples ou roupa confortável.<br>
+      <strong>3. Frequência:</strong> 2 a 3 treinos por semana já trazem evolução.<br>
+      <strong>4. Seja paciente:</strong> você será finalizado muitas vezes.<br>
+      <strong>5. Respeite o tatame:</strong> humildade é essencial.`,
+      regras: `As regras variam de acordo com a federação (CBJJ, IBJJF).<br><br>
+      ✅ Pontos: 2 (queda, raspagem), 3 (passagem de guarda), 4 (montada, costas).<br>
+      ✅ Finalizações: encerram a luta imediatamente.<br>
+      ❌ Golpes perigosos são proibidos.`,
+      tatame: `O tatame é um espaço sagrado.<br><br>
+      • Cumprimentar ao entrar e sair.<br>
+      • Manter unhas cortadas e higiene.<br>
+      • Respeitar todos os colegas.<br>
+      • Não discutir durante o treino.<br>
+      • Ouvir sempre o professor.`,
+      mentalidade: `A mentalidade no Jiu-Jitsu define sua evolução:<br><br>
+      • Paciência.<br> • Resiliência.<br> • Humildade.<br> • Controle emocional.`,
+      guarda: `A guarda é lutar de costas controlando o adversário.<br><br>
+      • Fechada<br> • Aberta<br> • Aranha<br> • De la Riva<br> • X`,
+      passagens: `Passar a guarda é um grande desafio:<br><br>
+      • De joelho<br> • Torre<br> • Por pressão<br> • Explosiva`,
+      meiaguarda: `Meia guarda é posição de transição poderosa:<br><br>
+      • Profunda<br> • Invertida<br> • Ataques<br> • Defesas`,
+      finalizacoes: `Finalizações encerram a luta:<br><br>
+      • Armlock<br> • Triângulo<br> • Mata-leão<br> • Kimura<br> • Americana`,
+      quedas: `Toda luta começa em pé:<br><br>
+      • O Soto Gari<br> • Single leg<br> • Double leg<br> • Tomoe Nage<br> • Sacrifício`,
+      drills: `Drills são exercícios repetitivos:<br><br>
+      • Hip escape<br> • Troca de base<br> • Passagens em movimento<br> • Raspe e volte`,
+      analise: `A análise é essencial:<br><br>
+      • Rever lutas<br> • Identificar erros<br> • Estudar campeões<br> • Conversar com professor`
     };
 
-    // Splash -> mostra conteúdo
+    // Mostra conteúdo após splash
     setTimeout(() => {
       document.getElementById('content').style.display = 'block';
-
-      // anima card principal
       document.getElementById('mainCard').classList.add('show');
-
-      // anima subcards em cascata
       const subcards = document.querySelectorAll('.subcards .card');
       subcards.forEach((card, i) => {
         setTimeout(() => card.classList.add('show'), 500 + i * 150);
       });
-    }, 3000);
+    }, 4000);
 
     function abrirModal(titulo, chave) {
       document.getElementById("modal-title").innerText = titulo;
       document.getElementById("modal-text").innerHTML = conteudos[chave];
       document.getElementById("modal").classList.add("active");
     }
-
     function fecharModal() {
       document.getElementById("modal").classList.remove("active");
     }
-
     document.getElementById("modal").addEventListener("click", function(e) {
       if (e.target === this) fecharModal();
     });
