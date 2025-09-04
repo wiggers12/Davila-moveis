@@ -35,9 +35,9 @@
       overflow: hidden;
     }
     #splash img {
-      width: 220px;     /* tamanho fixo da logo */
-      max-width: 80%;  /* responsivo */
-      height: auto;    /* mantém proporção */
+      width: 220px;
+      max-width: 80%;
+      height: auto;
       animation: zoomin 2s ease forwards;
     }
     @keyframes zoomin {
@@ -78,6 +78,15 @@
       color: var(--white);
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transition: transform .2s;
+      opacity: 0; /* começa invisível */
+      transform: translateY(20px);
+    }
+    .card.show {
+      animation: cardfade 0.6s ease forwards;
+    }
+    @keyframes cardfade {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .card:hover {
       transform: scale(1.05);
@@ -126,10 +135,6 @@
       margin-left: auto;
       margin-right: auto;
     }
-    @keyframes zoomin {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
   </style>
 </head>
 <body>
@@ -167,7 +172,6 @@
   </div>
 
   <script>
-    // Conteúdos detalhados
     const conteudos = {
       comeco: `
         Começar no Jiu-Jitsu pode parecer intimidador, mas é uma experiência transformadora.
@@ -269,21 +273,24 @@
     // Mostra o conteúdo após o splash
     setTimeout(() => {
       document.getElementById('content').style.display = 'block';
+
+      // anima cada card com delay em cascata
+      const cards = document.querySelectorAll('.card');
+      cards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('show'), i * 150);
+      });
     }, 3000);
 
-    // Abre modal
     function abrirModal(titulo, chave) {
       document.getElementById("modal-title").innerText = titulo;
       document.getElementById("modal-text").innerHTML = conteudos[chave];
       document.getElementById("modal").classList.add("active");
     }
 
-    // Fecha modal
     function fecharModal() {
       document.getElementById("modal").classList.remove("active");
     }
 
-    // Fechar clicando fora também
     document.getElementById("modal").addEventListener("click", function(e) {
       if (e.target === this) fecharModal();
     });
