@@ -144,6 +144,31 @@
 
     .content-box h2 { color: var(--gold); text-align: center; margin-bottom: 15px; }
 
+    /* ================= UPLOAD DE VÍDEO ================= */
+    .upload-box {
+      background: #1a1a1a;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+    }
+    .upload-box input, .upload-box textarea {
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--gold);
+      background: #2c2c2c;
+      color: var(--white);
+    }
+    .upload-box video {
+      margin-top: 15px;
+      width: 100%;
+      border-radius: 8px;
+    }
+
     /* ================= BOTÕES ================= */
     .back-btn {
       display: block;
@@ -198,12 +223,13 @@
       <div class="card" onclick="abrirConteudo('Finalizações','finalizacoes')"><i class="fa-solid fa-lock"></i>Finalizações</div>
       <div class="card" onclick="abrirConteudo('Quedas','quedas')"><i class="fa-solid fa-arrow-down"></i>Quedas</div>
       <div class="card" onclick="abrirConteudo('Drills','drills')"><i class="fa-solid fa-sync-alt"></i>Drills</div>
-      <div class="card" onclick="abrirConteudo('Análise','analise')"><i class="fa-solid fa-chart-line"></i>Análise</div>
+      <!-- Alterado para abrir tela exclusiva -->
+      <div class="card" onclick="showScreen('analise')"><i class="fa-solid fa-chart-line"></i>Análise de Luta</div>
     </div>
     <button class="back-btn" onclick="showScreen('home')">Voltar</button>
   </div>
 
-  <!-- ================ TELA DE CONTEÚDO ================ -->
+  <!-- ================ TELA DE CONTEÚDO ================= -->
   <div id="conteudo" class="screen">
     <div class="content-box">
       <h2 id="conteudo-titulo"></h2>
@@ -212,88 +238,30 @@
     </div>
   </div>
 
+  <!-- ================ TELA DE ANÁLISE DE LUTA ================= -->
+  <div id="analise" class="screen">
+    <h1>Análise de Luta</h1>
+    <div class="upload-box">
+      <input type="file" id="videoUpload" accept="video/*">
+      <video id="videoPreview" controls style="display:none;"></video>
+      <textarea id="videoDesc" rows="5" placeholder="Escreva suas observações sobre o vídeo..."></textarea>
+      <button class="back-btn" onclick="showScreen('menu')">Voltar</button>
+    </div>
+  </div>
+
   <script>
     /* ================= CONTEÚDOS DETALHADOS ================= */
     const conteudos = {
-      comeco: `
-        <strong>O Começo:</strong><br><br>
-        Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é um passo para evolução.<br><br>
-        • <strong>Academia:</strong> procure um lugar com ambiente respeitoso.<br>
-        • <strong>Equipamento:</strong> um kimono básico já basta.<br>
-        • <strong>Frequência:</strong> 2 a 3 vezes por semana.<br>
-        • <strong>Respeito:</strong> acima de tudo, humildade e disciplina.<br>
-      `,
-      regras: `
-        <strong>Regras do Jiu-Jitsu:</strong><br><br>
-        • Pontuação: 2 (queda/raspagem), 3 (passagem), 4 (montada/costas).<br>
-        • <strong>Finalização:</strong> encerra a luta imediatamente.<br>
-        • <strong>Foco:</strong> técnica, não força bruta.<br>
-      `,
-      tatame: `
-        <strong>Regras do Tatame:</strong><br><br>
-        • Cumprimente sempre ao entrar.<br>
-        • Higiene pessoal é essencial.<br>
-        • Respeite colegas e professor.<br>
-        • Não discuta durante treinos.<br>
-      `,
-      mentalidade: `
-        <strong>Mentalidade:</strong><br><br>
-        • Paciência para aprender.<br>
-        • Resiliência para persistir.<br>
-        • Humildade para evoluir.<br>
-        • Controle emocional.<br>
-      `,
-      guarda: `
-        <strong>A Guarda:</strong><br><br>
-        Tipos principais:<br>
-        • Fechada.<br>
-        • Aberta.<br>
-        • Aranha.<br>
-        • De la Riva.<br>
-        • X-Guard.<br>
-      `,
-      passagens: `
-        <strong>Passagens de Guarda:</strong><br><br>
-        • De joelho.<br>
-        • Torre (stack pass).<br>
-        • Por pressão.<br>
-        • Explosiva.<br>
-      `,
-      meiaguarda: `
-        <strong>Meia Guarda:</strong><br><br>
-        Posição intermediária muito usada.<br>
-        • Profunda.<br>
-        • Invertida.<br>
-        • Ataques e defesas.<br>
-      `,
-      finalizacoes: `
-        <strong>Finalizações:</strong><br><br>
-        • Armlock.<br>
-        • Triângulo.<br>
-        • Mata-leão.<br>
-        • Kimura.<br>
-        • Americana.<br>
-      `,
-      quedas: `
-        <strong>Quedas:</strong><br><br>
-        • O Soto Gari.<br>
-        • Single leg.<br>
-        • Double leg.<br>
-        • Tomoe Nage.<br>
-      `,
-      drills: `
-        <strong>Drills:</strong><br><br>
-        Exercícios repetitivos para memória muscular.<br>
-        • Hip escape.<br>
-        • Troca de base.<br>
-        • Passagens dinâmicas.<br>
-      `,
-      analise: `
-        <strong>Análise:</strong><br><br>
-        • Revise vídeos de lutas.<br>
-        • Estude campeões.<br>
-        • Identifique erros e corrija.<br>
-      `
+      comeco: `<strong>O Começo:</strong><br> Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é evolução.`,
+      regras: `<strong>Regras:</strong><br> Pontuação, finalizações e foco na técnica.`,
+      tatame: `<strong>Tatame:</strong><br> Cumprimente sempre, mantenha higiene, respeite colegas e professor.`,
+      mentalidade: `<strong>Mentalidade:</strong><br> Paciência, resiliência, humildade e controle emocional.`,
+      guarda: `<strong>Guarda:</strong><br> Fechada, aberta, aranha, de la Riva, X-Guard.`,
+      passagens: `<strong>Passagens:</strong><br> De joelho, torre, pressão, explosiva.`,
+      meiaguarda: `<strong>Meia Guarda:</strong><br> Profunda, invertida, usada para ataque e defesa.`,
+      finalizacoes: `<strong>Finalizações:</strong><br> Armlock, triângulo, mata-leão, kimura, americana.`,
+      quedas: `<strong>Quedas:</strong><br> O Soto Gari, single leg, double leg, Tomoe Nage.`,
+      drills: `<strong>Drills:</strong><br> Hip escape, troca de base, passagens dinâmicas.`
     };
 
     /* ================= FUNÇÕES ================= */
@@ -318,6 +286,19 @@
 
     // Início automático após splash
     setTimeout(() => { showScreen('home'); }, 4000);
+
+    /* ================= UPLOAD DE VÍDEO ================= */
+    const videoUpload = document.getElementById('videoUpload');
+    const videoPreview = document.getElementById('videoPreview');
+
+    videoUpload.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        videoPreview.src = url;
+        videoPreview.style.display = 'block';
+      }
+    });
   </script>
 </body>
 </html>
