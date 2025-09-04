@@ -4,16 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sua Marca Aqui 👑</title>
-
-<!-- Fontes e Ícones -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<!-- Swiper e Chart.js -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 <style>
 :root{
   --primary:#9d4edd;--secondary:#ffb347;--success:#2ecc71;--info:#4dabf7;--danger:#ff4d6d;
@@ -24,30 +17,27 @@
 body{font-family:'Poppins',sans-serif;background:var(--dark-bg);color:var(--light);}
 header{background:linear-gradient(135deg,#7b2cbf,#5a189a);color:#fff;padding:1.5rem;text-align:center;box-shadow:var(--shadow);}
 nav{background:rgba(20,20,40,.8);backdrop-filter:blur(12px);display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;}
-nav button{flex:1;min-width:120px;border:none;background:none;padding:1rem;font-weight:600;cursor:pointer;color:#aaa;transition:.2s;position:relative;}
+nav button{flex:1;min-width:120px;border:none;background:none;padding:1rem;font-weight:600;cursor:pointer;color:#aaa;transition:.2s;}
 nav button.active{color:var(--primary);text-shadow:0 0 8px var(--primary);}
-nav button:hover{background:rgba(255,255,255,.05);}
-.badge{position:absolute;top:5px;right:20px;background:var(--danger);color:#fff;font-size:.7rem;padding:2px 6px;border-radius:50%;display:none;}
 section{display:none;padding:1.5rem;max-width:1200px;margin:auto;}
 section.active{display:block;}
 /* Produtos */
 .swiper{width:100%;padding:1rem 0;}
-.swiper-slide{background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;text-align:center;transition:0.2s;}
+.swiper-slide{background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;text-align:center;}
 .swiper-slide img,.swiper-slide video{width:100%;height:220px;object-fit:cover;}
 .product-info{padding:1rem;}
-.order-button{background:linear-gradient(145deg,#9d4edd,#5a189a);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;transition:.2s;}
+.order-button{background:linear-gradient(145deg,#9d4edd,#5a189a);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;}
 .order-button:disabled{background:#555;cursor:not-allowed;}
-/* Modal complementos */
+/* Modal */
 #modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1500;}
 #modal-content{background:#fff;color:#000;padding:1.5rem;border-radius:12px;width:90%;max-width:400px;}
-#modal-content h3{margin-bottom:1rem;}
 .topping{margin:.3rem 0;}
 /* Carrinho */
 .cart-container{background:var(--card-bg);padding:1.5rem;border-radius:16px;box-shadow:var(--shadow);}
 .cart-item{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);padding:.5rem 0;}
 .cart-total{font-weight:700;color:var(--secondary);text-align:right;margin-top:1rem;font-size:1.1rem;}
 .btn-finish{background:linear-gradient(145deg,#2ecc71,#208d4e);color:#fff;border:none;padding:1rem;border-radius:10px;width:100%;margin-top:1rem;font-weight:700;cursor:pointer;}
-/* Cards gerais */
+/* Pedidos & Logística */
 .order-card{background:var(--card-bg);padding:1rem;margin:.8rem 0;border-radius:12px;box-shadow:var(--shadow);}
 .status{padding:.3rem .6rem;border-radius:8px;font-size:.8rem;font-weight:600;display:inline-block;}
 .status-Recebido{background:var(--info);}
@@ -61,33 +51,11 @@ section.active{display:block;}
 .kpi-card{flex:1;min-width:200px;background:var(--card-bg);padding:1rem;border-radius:12px;box-shadow:var(--shadow);text-align:center;}
 .kpi-card h4{font-size:1rem;color:#ccc;}
 .kpi-card p{font-size:1.4rem;font-weight:700;color:var(--primary);}
-/* Splash */
-#splash{position:fixed;top:0;left:0;width:100%;height:100%;
-  background:linear-gradient(135deg,#7b2cbf,#ffb347);
-  display:flex;align-items:center;justify-content:center;
-  z-index:2000;color:#fff;}
-.splash-content{text-align:center;}
-.splash-content h1{font-size:4rem;margin:0;}
-.splash-content h2{margin:0;font-size:2rem;}
-/* Toast */
-#toast{position:fixed;bottom:20px;right:20px;background:var(--card-bg);color:#fff;padding:1rem 1.5rem;border-radius:8px;box-shadow:var(--shadow);display:none;z-index:3000;}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
-<div id="splash">
-  <div class="splash-content">
-    <h1>👑</h1>
-    <h2>Sua Marca Aqui</h2>
-    <p>Carregando...</p>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div id="toast"></div>
-
-<!-- MODAL COMPLEMENTOS -->
+<!-- MODAL -->
 <div id="modal">
   <div id="modal-content">
     <h3>Escolha complementos</h3>
@@ -97,21 +65,18 @@ section.active{display:block;}
   </div>
 </div>
 
-<!-- APP -->
-<div id="app" style="display:none;">
-
 <header>
   <h1>Sua Marca Aqui 👑</h1>
   <p>Gestão completa: Vitrine, Estoque, Pedidos, Financeiro e Logística</p>
 </header>
 
 <nav>
-  <button id="btn-catalogo" class="active" onclick="showTab('catalogo',this)">🛒 Catálogo</button>
-  <button id="btn-carrinho" onclick="showTab('carrinho',this)">🛍 Carrinho <span id="cart-badge" class="badge"></span></button>
-  <button id="btn-pedidos" onclick="showTab('pedidos',this)">📦 Pedidos <span id="orders-badge" class="badge"></span></button>
-  <button id="btn-financeiro" onclick="showTab('financeiro',this)">💰 Financeiro</button>
-  <button id="btn-estoque" onclick="showTab('estoque',this)">📊 Estoque</button>
-  <button id="btn-logistica" onclick="showTab('logistica',this)">🚚 Logística</button>
+  <button class="active" onclick="showTab('catalogo',this)">🛒 Catálogo</button>
+  <button onclick="showTab('carrinho',this)">🛍 Carrinho</button>
+  <button onclick="showTab('pedidos',this)">📦 Pedidos</button>
+  <button onclick="showTab('financeiro',this)">💰 Financeiro</button>
+  <button onclick="showTab('estoque',this)">📊 Estoque</button>
+  <button onclick="showTab('logistica',this)">🚚 Logística</button>
 </nav>
 
 <!-- Catálogo -->
@@ -153,37 +118,27 @@ section.active{display:block;}
   <div style="margin-bottom:1rem;">
     <input id="new-name" placeholder="Nome do produto">
     <input id="new-price" placeholder="Preço" type="number">
-    <input id="new-cost" placeholder="Custo" type="number
-      </div>
+    <input id="new-cost" placeholder="Custo" type="number">
+    <input id="new-stock" placeholder="Estoque inicial" type="number">
+    <input id="new-media" type="file" accept="image/*,video/*">
+    <button onclick="addProduct()">Adicionar Produto</button>
+  </div>
   <div id="stock-list"></div>
 </section>
 
 <!-- Logística -->
 <section id="logistica"><h2>🚚 Logística</h2><div id="logistics-list"></div></section>
 
-</div> <!-- fim app -->
-
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-/* Splash */
-window.addEventListener("load",()=>{setTimeout(()=>{
-  document.getElementById("splash").style.display="none";
-  document.getElementById("app").style.display="block";
-},2000);});
-
-/* Toast */
-function showToast(msg){
-  let t=document.getElementById("toast");
-  t.innerText=msg;t.style.display="block";
-  setTimeout(()=>{t.style.display="none";},3000);
-}
-
-/* Dados */
 let cart=[],orders=JSON.parse(localStorage.getItem("acaiOrders"))||[];
-let PRODUCTS=JSON.parse(localStorage.getItem("acaiProducts"))||[];
+let PRODUCTS=JSON.parse(localStorage.getItem("acaiProducts"))||[
+  {id:1,name:"Copo 300ml",price:12,cost:6,stock:5,media:"https://images.unsplash.com/photo-1617196039897-d68e4f5a5a2c"},
+  {id:2,name:"Barca de Açaí",price:35,cost:18,stock:3,media:"https://images.unsplash.com/photo-1598514982419-1cbcb2f3c1b9"}
+];
 const FRETE_FIXO=5.0;
 const TOPPINGS=[{name:"Leite em pó",price:2},{name:"Morango",price:3},{name:"Granola",price:2},{name:"Leite condensado",price:2.5}];
 
-/* Navegação */
 function showTab(id,btn){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -193,54 +148,52 @@ function showTab(id,btn){
 }
 
 /* Modal complementos */
-let selectedProduct=null,selectedToppings=[];
+let selectedProduct=null;
 function openModal(id){
-  selectedProduct=PRODUCTS.find(p=>p.id===id);selectedToppings=[];
+  selectedProduct=PRODUCTS.find(p=>p.id===id);
   document.getElementById("toppings").innerHTML=TOPPINGS.map((t,i)=>`<div class="topping"><label><input type="checkbox" value="${i}">${t.name} (+R$ ${t.price})</label></div>`).join("");
   document.getElementById("modal").style.display="flex";
 }
 function closeModal(){document.getElementById("modal").style.display="none";}
 function confirmAdd(){
   let checkboxes=document.querySelectorAll("#toppings input:checked");
-  let total=selectedProduct.price;let toppingsChosen=[];
+  let total=selectedProduct.price;
+  let toppingsChosen=[];
   checkboxes.forEach(c=>{let t=TOPPINGS[c.value];toppingsChosen.push(t);total+=t.price;});
   cart.push({product:selectedProduct,toppings:toppingsChosen,total:total});
   selectedProduct.stock--;saveProducts();closeModal();updateCart();
-  showToast("Produto adicionado ao carrinho!");
 }
 
-/* Render produtos */
-let swiperInstance=null;
+/* Produtos */
+let swiperInstance;
 function renderProducts(){
- document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
-   <div class="swiper-slide">
-     ${p.media && p.media.includes("video")?`<video src="${p.media}" controls></video>`:`<img src="${p.media}" alt="${p.name}">`}
-     <div class="product-info">
-       <h3>${p.name}</h3><p><strong>R$ ${p.price.toFixed(2)}</strong></p>
-       <button class="order-button" onclick="openModal(${p.id})" ${p.stock<=0?"disabled":""}>${p.stock<=0?"Sem estoque":"Selecionar"}</button>
-     </div>
-   </div>`).join("");
- if(swiperInstance){swiperInstance.destroy();}
- swiperInstance=new Swiper(".swiper",{slidesPerView:1,loop:true});
+  document.getElementById("products-container").innerHTML=PRODUCTS.map(p=>`
+    <div class="swiper-slide">
+      ${p.media.includes("video")?`<video src="${p.media}" controls></video>`:`<img src="${p.media}" alt="${p.name}">`}
+      <div class="product-info">
+        <h3>${p.name}</h3><p><strong>R$ ${p.price.toFixed(2)}</strong></p>
+        <button class="order-button" onclick="openModal(${p.id})" ${p.stock<=0?"disabled":""}>${p.stock<=0?"Sem estoque":"Selecionar"}</button>
+      </div>
+    </div>`).join("");
+  if(swiperInstance) swiperInstance.destroy();
+  swiperInstance=new Swiper(".swiper",{slidesPerView:1,loop:true});
 }
 
 /* Carrinho */
 function updateCart(){
- let c=document.getElementById("cart-items");
- if(cart.length==0){c.innerHTML="<p>Seu carrinho está vazio</p>";}
- else{c.innerHTML=cart.map(it=>`<div class="cart-item">${it.product.name} ${it.toppings.length?"+ "+it.toppings.map(t=>t.name).join(", "):""} <span>R$ ${it.total.toFixed(2)}</span></div>`).join("");}
- document.getElementById("cart-total-price").innerText="R$ "+cart.reduce((s,i)=>s+i.total,0).toFixed(2);
- document.getElementById("finish-order-button").disabled=cart.length==0;
- document.getElementById("cart-badge").style.display=cart.length>0?"inline-block":"none";
- document.getElementById("cart-badge").innerText=cart.length;
+  let c=document.getElementById("cart-items");
+  if(cart.length==0){c.innerHTML="<p>Seu carrinho está vazio</p>";}
+  else{c.innerHTML=cart.map(it=>`<div class="cart-item">${it.product.name} ${it.toppings.length?"+ "+it.toppings.map(t=>t.name).join(", "):""} <span>R$ ${it.total.toFixed(2)}</span></div>`).join("");}
+  document.getElementById("cart-total-price").innerText="R$ "+cart.reduce((s,i)=>s+i.total,0).toFixed(2);
+  document.getElementById("finish-order-button").disabled=cart.length==0;
 }
 document.getElementById("finish-order-button").addEventListener("click",finalizarPedido);
 
 function finalizarPedido(){
- let subtotal=cart.reduce((s,i)=>s+i.total,0);
- let o={id:Date.now(),customerName:"",phone:"",deliveryType:"",address:"",notes:"",payment:"",items:cart,totalItems:subtotal,frete:0,total:subtotal,status:"Recebido",createdAt:new Date().toLocaleString()};
- orders.push(o);localStorage.setItem("acaiOrders",JSON.stringify(orders));cart=[];updateCart();showTab('logistica',document.getElementById("btn-logistica"));render();
- showToast("Pedido registrado e enviado para logística!");
+  let subtotal=cart.reduce((s,i)=>s+i.total,0);
+  let o={id:Date.now(),customerName:"Cliente",phone:"",deliveryType:"",address:"",notes:"",payment:"",items:cart,totalItems:subtotal,frete:0,total:subtotal,status:"Recebido",createdAt:new Date().toLocaleString()};
+  orders.push(o);saveOrders();
+  cart=[];updateCart();showTab('logistica',document.querySelector("nav button:last-child"));
 }
 
 /* Estoque */
@@ -255,10 +208,7 @@ function addProduct(){
 function saveProducts(){localStorage.setItem("acaiProducts",JSON.stringify(PRODUCTS));}
 function removeProduct(id){PRODUCTS=PRODUCTS.filter(p=>p.id!==id);saveProducts();render();}
 function renderStock(){
- document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`
-   ${p.name} - R$ ${p.price.toFixed(2)} - Estoque:${p.stock}
-   <button class="remove-btn" onclick="removeProduct(${p.id})">Remover</button>
- `).join("<br>");
+ document.getElementById("stock-list").innerHTML=PRODUCTS.map(p=>`${p.name} - R$ ${p.price.toFixed(2)} - Estoque:${p.stock} <button class="remove-btn" onclick="removeProduct(${p.id})">Remover</button>`).join("<br>");
 }
 
 /* Pedidos */
@@ -269,10 +219,10 @@ function renderOrders(){
      Itens:<ul>${o.items.map(i=>`<li>${i.product.name} ${i.toppings.length?`+ ${i.toppings.map(t=>t.name).join(", ")}`:""} - R$ ${i.total.toFixed(2)}</li>`).join("")}</ul>
      Subtotal: R$ ${o.totalItems.toFixed(2)} | Total: R$ ${o.total.toFixed(2)}<br>
      <span class="status status-${o.status}">${o.status}</span>
+     <button class="remove-btn" onclick="removeOrder(${o.id})">Remover</button>
    </div>`).join("");
- document.getElementById("orders-badge").style.display=orders.length>0?"inline-block":"none";
- document.getElementById("orders-badge").innerText=orders.filter(o=>o.status!=="Concluído"&&o.status!=="Cancelado").length;
 }
+function removeOrder(id){orders=orders.filter(o=>o.id!==id);saveOrders();render();}
 
 /* Logística */
 function renderLogistics(){
@@ -281,18 +231,15 @@ function renderLogistics(){
  c.innerHTML=orders.map(o=>`
    <div class="order-card">
      <strong>Pedido #${o.id}</strong><br>
-     Cliente: <input placeholder="Nome" value="${o.customerName}" onchange="o.customerName=this.value;saveOrders()"> 
-     Tel: <input placeholder="Telefone" value="${o.phone}" onchange="o.phone=this.value;saveOrders()"><br>
-     Entrega: <select onchange="setDelivery(${o.id},this.value)">
+     Tipo: <select onchange="setDelivery(${o.id},this.value)">
        <option ${o.deliveryType==="Retirada"?"selected":""}>Retirada</option>
        <option ${o.deliveryType==="Entrega"?"selected":""}>Entrega</option>
      </select><br>
-     ${o.deliveryType==="Entrega"?`Endereço:<input value="${o.address}" onchange="o.address=this.value;saveOrders()"><br>Observações:<input value="${o.notes}" onchange="o.notes=this.value;saveOrders()">`:``}
+     ${o.deliveryType==="Entrega"?`Endereço:<input value="${o.address}" onchange="o.address=this.value;saveOrders()">`:``}<br>
      Pagamento: <select onchange="o.payment=this.value;saveOrders()"><option>Pix</option><option>Dinheiro</option><option>Cartão</option></select><br>
      Subtotal: R$ ${o.totalItems.toFixed(2)} | Frete: R$ ${o.frete.toFixed(2)} | <strong>Total: R$ ${o.total.toFixed(2)}</strong><br>
      <small>Data: ${o.createdAt}</small><br>
-     <span class="status status-${o.status}">${o.status}</span>
-     <br><select onchange="updateStatus(${o.id},this.value)">
+     <select onchange="updateStatus(${o.id},this.value)">
        <option ${o.status==="Recebido"?"selected":""}>Recebido</option>
        <option ${o.status==="Preparação"?"selected":""}>Preparação</option>
        <option ${o.status==="Saiu"?"selected":""}>Saiu</option>
@@ -309,28 +256,60 @@ function setDelivery(id,val){
  saveOrders();renderLogistics();
 }
 function updateStatus(id,newStatus){
- let o=orders.find(x=>x.id===id);if(o){o.status=newStatus;saveOrders();renderLogistics();renderOrders();showToast("Status do pedido atualizado para "+newStatus);}
+ let o=orders.find(x=>x.id===id);
+ if(o){o.status=newStatus;saveOrders();renderLogistics();renderOrders();renderFinance();}
 }
-function saveOrders(){localStorage.setItem("acaiOrders",JSON.stringify(orders));}
 
 /* Financeiro */
 function renderFinance(){
  let concluidos=orders.filter(o=>o.status==="Concluído");
  let faturamento=concluidos.reduce((s,o)=>s+o.total,0);
  let freteTotal=concluidos.reduce((s,o)=>s+o.frete,0);
+ let avg=concluidos.length?f
+unction renderFinance(){
+ let concluidos=orders.filter(o=>o.status==="Concluído");
+ let faturamento=concluidos.reduce((s,o)=>s+o.total,0);
+ let freteTotal=concluidos.reduce((s,o)=>s+o.frete,0);
  let avg=concluidos.length?faturamento/concluidos.length:0;
+
  document.getElementById("kpi-revenue").innerText="R$ "+faturamento.toFixed(2);
  document.getElementById("kpi-orders").innerText=concluidos.length;
  document.getElementById("kpi-avg").innerText="R$ "+avg.toFixed(2);
  document.getElementById("kpi-frete").innerText="R$ "+freteTotal.toFixed(2);
- let salesByDay=concluidos.reduce((acc,o)=>{let d=new Date(o.createdAt).toLocaleDateString();acc[d]=(acc[d]||0)+o.total;return acc;},{});  
+
+ let salesByDay=concluidos.reduce((acc,o)=>{
+   let d=new Date(o.createdAt).toLocaleDateString();
+   acc[d]=(acc[d]||0)+o.total;
+   return acc;
+ },{});
+
  let ctx=document.getElementById("salesChart").getContext("2d");
  if(window.salesChart)window.salesChart.destroy();
- window.salesChart=new Chart(ctx,{type:"bar",data:{labels:Object.keys(salesByDay),datasets:[{label:"Faturamento diário",data:Object.values(salesByDay),backgroundColor:"rgba(157,77,237,0.7)"}]},options:{scales:{y:{beginAtZero:true}}}});
+ window.salesChart=new Chart(ctx,{
+   type:"bar",
+   data:{
+     labels:Object.keys(salesByDay),
+     datasets:[{
+       label:"Faturamento diário",
+       data:Object.values(salesByDay),
+       backgroundColor:"rgba(157,77,237,0.7)"
+     }]
+   },
+   options:{scales:{y:{beginAtZero:true}}}
+ });
 }
 
-/* Render */
-function render(){renderProducts();renderStock();renderOrders();renderLogistics();renderFinance();}
+/* Helpers */
+function saveOrders(){localStorage.setItem("acaiOrders",JSON.stringify(orders));}
+
+/* Render inicial */
+function render(){
+  renderProducts();
+  renderStock();
+  renderOrders();
+  renderLogistics();
+  renderFinance();
+}
 render();
 </script>
 </body>
