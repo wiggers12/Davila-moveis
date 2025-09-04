@@ -103,12 +103,13 @@
       max-width: 90%;
       max-height: 80%;
       overflow-y: auto;
-      text-align: center;
+      text-align: left;
       animation: zoomin 0.3s ease;
     }
     .modal-content h2 {
       color: var(--gold);
       margin-bottom: 10px;
+      text-align: center;
     }
     .close-btn {
       background: var(--gold);
@@ -119,6 +120,9 @@
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
     @keyframes zoomin {
       from { transform: scale(0.8); opacity: 0; }
@@ -137,17 +141,17 @@
   <div id="content">
     <h1>Jiu-Jitsu Puro</h1>
     <div class="cards">
-      <div class="card" onclick="abrirModal('O começo','História e primeiros passos do Jiu-Jitsu.')">O começo</div>
-      <div class="card" onclick="abrirModal('Regras do jiu jitsu','Regras básicas das competições e treinos.')">Regras do jiu jitsu</div>
-      <div class="card" onclick="abrirModal('Regras do tatame','Respeito, etiqueta e convivência no tatame.')">Regras do tatame</div>
-      <div class="card" onclick="abrirModal('Mentalidade','Disciplina, foco e superação no Jiu-Jitsu.')">Mentalidade</div>
-      <div class="card" onclick="abrirModal('Guarda','Tipos de guarda e estratégias principais.')">Guarda</div>
-      <div class="card" onclick="abrirModal('Passagens','Técnicas de passagem de guarda com controle.')">Passagens</div>
-      <div class="card" onclick="abrirModal('Meia guarda','Controle e transições a partir da meia guarda.')">Meia guarda</div>
-      <div class="card" onclick="abrirModal('Finalizações','Principais finalizações: armlock, triângulo, estrangulamentos.')">Finalizações</div>
-      <div class="card" onclick="abrirModal('Quedas','Técnicas de projeção e quedas para iniciar o combate.')">Quedas</div>
-      <div class="card" onclick="abrirModal('Drills','Exercícios repetitivos para automatizar movimentos.')">Drills</div>
-      <div class="card" onclick="abrirModal('Análise','Estudo de lutas, ajustes técnicos e evolução.')">Análise</div>
+      <div class="card" onclick="abrirModal('O começo', conteudos.comeco)">O começo</div>
+      <div class="card" onclick="abrirModal('Regras do jiu jitsu', conteudos.regras)">Regras do jiu jitsu</div>
+      <div class="card" onclick="abrirModal('Regras do tatame', conteudos.tatame)">Regras do tatame</div>
+      <div class="card" onclick="abrirModal('Mentalidade', conteudos.mentalidade)">Mentalidade</div>
+      <div class="card" onclick="abrirModal('Guarda', conteudos.guarda)">Guarda</div>
+      <div class="card" onclick="abrirModal('Passagens', conteudos.passagens)">Passagens</div>
+      <div class="card" onclick="abrirModal('Meia guarda', conteudos.meiaguarda)">Meia guarda</div>
+      <div class="card" onclick="abrirModal('Finalizações', conteudos.finalizacoes)">Finalizações</div>
+      <div class="card" onclick="abrirModal('Quedas', conteudos.quedas)">Quedas</div>
+      <div class="card" onclick="abrirModal('Drills', conteudos.drills)">Drills</div>
+      <div class="card" onclick="abrirModal('Análise', conteudos.analise)">Análise</div>
     </div>
   </div>
 
@@ -161,6 +165,105 @@
   </div>
 
   <script>
+    // Conteúdos enriquecidos
+    const conteudos = {
+      comeco: `
+        Começar no Jiu-Jitsu pode parecer intimidador, mas é uma experiência transformadora.
+        <br><br>
+        <strong>1. Escolha a academia certa:</strong> procure professores experientes e ambiente amigável.<br>
+        <strong>2. Tenha o equipamento básico:</strong> um kimono simples ou roupa confortável para treinar no início.<br>
+        <strong>3. Frequência:</strong> 2 a 3 treinos por semana já trazem evolução.<br>
+        <strong>4. Seja paciente:</strong> você será finalizado muitas vezes — isso faz parte do aprendizado.<br>
+        <strong>5. Respeite o tatame:</strong> humildade é essencial.<br><br>
+        <em>Dica:</em> encare cada treino como uma vitória pessoal.
+      `,
+      regras: `
+        As regras variam de acordo com a federação (CBJJ, IBJJF), mas os princípios são comuns:<br><br>
+        ✅ Pontos: 2 (queda, raspagem), 3 (passagem de guarda), 4 (montada, costas).<br>
+        ✅ Finalizações: encerram a luta imediatamente.<br>
+        ❌ Golpes perigosos são proibidos (mãos nos olhos, puxar cabelo, etc.).<br><br>
+        <em>O objetivo é dominar o adversário com técnica, não com força bruta.</em>
+      `,
+      tatame: `
+        O tatame é um espaço sagrado no Jiu-Jitsu. Algumas regras de etiqueta:<br><br>
+        • Cumprimentar ao entrar e sair do tatame.<br>
+        • Manter unhas cortadas e higiene em dia.<br>
+        • Respeitar os colegas, independentemente da graduação.<br>
+        • Não discutir durante o treino.<br>
+        • Ouvir sempre as instruções do professor.<br><br>
+        <em>Respeito vem antes da vitória.</em>
+      `,
+      mentalidade: `
+        A mentalidade no Jiu-Jitsu é o que define sua evolução:<br><br>
+        • <strong>Paciência:</strong> cada técnica exige repetição.<br>
+        • <strong>Resiliência:</strong> você vai perder muitas vezes.<br>
+        • <strong>Humildade:</strong> até os mais graduados aprendem todo dia.<br>
+        • <strong>Controle emocional:</strong> manter a calma em situações de pressão.<br><br>
+        <em>O tatame é um espelho da vida.</em>
+      `,
+      guarda: `
+        A guarda é a posição em que você luta de costas no chão, controlando o adversário.<br><br>
+        • Guarda fechada.<br>
+        • Guarda aberta.<br>
+        • Guarda aranha.<br>
+        • Guarda de la Riva.<br>
+        • Guarda X.<br><br>
+        <em>Dominar a guarda é essencial para se defender e atacar.</em>
+      `,
+      passagens: `
+        Passar a guarda é um dos maiores desafios.<br><br>
+        • Passagem de joelho.<br>
+        • Torre (stack pass).<br>
+        • Passagem por pressão.<br>
+        • Passagem explosiva.<br><br>
+        <em>Quem passa bem a guarda, controla a luta.</em>
+      `,
+      meiaguarda: `
+        A meia guarda é uma posição de transição poderosa.<br><br>
+        • Meia guarda profunda.<br>
+        • Meia guarda invertida.<br>
+        • Ataques (sweeps, finalizações).<br>
+        • Defesas contra passagens.<br><br>
+        <em>É uma das posições mais usadas no Jiu-Jitsu moderno.</em>
+      `,
+      finalizacoes: `
+        As finalizações encerram a luta de forma imediata.<br><br>
+        • Armlock (chave de braço).<br>
+        • Triângulo.<br>
+        • Mata-leão.<br>
+        • Kimura.<br>
+        • Americana.<br>
+        • Estrangulamentos diversos.<br><br>
+        <em>A beleza do Jiu-Jitsu está em vencer pela técnica.</em>
+      `,
+      quedas: `
+        Toda luta começa em pé. As quedas são fundamentais:<br><br>
+        • O Soto Gari (projeção frontal).<br>
+        • Single leg.<br>
+        • Double leg.<br>
+        • Tomoe Nage (queda circular).<br>
+        • Sacrifício com rolamento.<br><br>
+        <em>Uma boa queda abre caminho para o domínio no chão.</em>
+      `,
+      drills: `
+        Drills são exercícios repetitivos que criam memória muscular:<br><br>
+        • Hip escape (saída de quadril).<br>
+        • Troca de base.<br>
+        • Passagem em movimento.<br>
+        • Raspe e volte.<br>
+        • Sequências de finalizações.<br><br>
+        <em>Quanto mais repetir, mais natural ficará o movimento.</em>
+      `,
+      analise: `
+        A análise é parte essencial da evolução:<br><br>
+        • Rever suas lutas em vídeo.<br>
+        • Identificar erros e acertos.<br>
+        • Estudar campeões e ídolos.<br>
+        • Conversar com o professor sobre ajustes.<br><br>
+        <em>No Jiu-Jitsu, pensar é tão importante quanto lutar.</em>
+      `
+    };
+
     // Mostra o conteúdo após o splash
     setTimeout(() => {
       document.getElementById('content').style.display = 'block';
@@ -169,7 +272,7 @@
     // Abre modal
     function abrirModal(titulo, texto) {
       document.getElementById("modal-title").innerText = titulo;
-      document.getElementById("modal-text").innerText = texto;
+      document.getElementById("modal-text").innerHTML = texto;
       document.getElementById("modal").classList.add("active");
     }
 
