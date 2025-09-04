@@ -19,6 +19,7 @@
       background: var(--bg-dark);
       color: var(--white);
     }
+
     /* Splash */
     #splash {
       position: fixed;
@@ -31,7 +32,6 @@
       z-index: 1000;
       animation: fadeout 2s ease forwards;
       animation-delay: 4s;
-      overflow: hidden;
     }
     #splash h1 {
       font-size: 48px;
@@ -58,218 +58,227 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    @keyframes brilho {
-      to { left: 150%; }
-    }
-    @keyframes fadeout {
-      from { opacity: 1; }
-      to { opacity: 0; visibility: hidden; }
-    }
-    /* Conteúdo principal */
-    #content {
-      padding: 20px;
-      display: none;
-      animation: fadein 1s ease forwards;
-    }
-    @keyframes fadein {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    h1 {
-      color: var(--gold);
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    @keyframes brilho { to { left: 150%; } }
+    @keyframes fadeout { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
+
+    /* Telas */
+    .screen { display: none; padding: 20px; }
+    .screen.active { display: block; animation: fadein 0.5s ease; }
+    @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+    h1 { color: var(--gold); text-align: center; margin-bottom: 20px; }
+
     /* Card principal */
-    .main-card {
+    .big-card {
+      background: var(--card-bg);
+      border: 2px solid var(--gold);
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--gold);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+      max-width: 400px;
+      margin: 120px auto;
+    }
+    .big-card:hover { transform: scale(1.05); }
+
+    /* Subcards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+    }
+    .card {
       background: var(--card-bg);
       border: 2px solid var(--gold);
       border-radius: 12px;
       padding: 20px;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      margin-bottom: 20px;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    .main-card.show {
-      animation: cardfade 0.6s ease forwards;
-    }
-    .main-card h2 {
-      color: var(--gold);
-      margin-bottom: 15px;
-    }
-    /* Subcards */
-    .subcards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 12px;
-    }
-    .subcards .card {
-      background: var(--card-bg);
-      border: 2px solid var(--gold);
-      border-radius: 10px;
-      padding: 15px;
-      font-size: 14px;
-      text-align: center;
       font-weight: bold;
-      color: var(--white);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-      transition: transform .2s;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    .subcards .card.show {
-      animation: cardfade 0.6s ease forwards;
-    }
-    .subcards .card:hover {
-      transform: scale(1.05);
       cursor: pointer;
+      transition: transform .2s;
     }
-    @keyframes cardfade {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-    .modal.active {
-      display: flex;
-    }
-    .modal-content {
+    .card:hover { transform: scale(1.05); }
+
+    /* Conteúdo */
+    .content-box {
       background: #1a1a1a;
       border: 2px solid var(--gold);
       border-radius: 12px;
       padding: 20px;
-      max-width: 90%;
-      max-height: 80%;
-      overflow-y: auto;
-      text-align: left;
-      animation: zoomin 0.3s ease;
+      max-width: 800px;
+      margin: auto;
     }
-    .modal-content h2 {
-      color: var(--gold);
-      margin-bottom: 10px;
-      text-align: center;
-    }
-    .close-btn {
-      background: var(--gold);
-      border: none;
-      color: var(--bg-dark);
-      padding: 10px 20px;
-      margin-top: 15px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
+    .content-box h2 { color: var(--gold); text-align: center; margin-bottom: 15px; }
+
+    /* Botão voltar */
+    .back-btn {
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 20px auto 0;
+      background: var(--gold);
+      color: var(--bg-dark);
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
   <!-- Splash -->
-  <div id="splash">
-    <h1>Jiu-Jitsu Puro</h1>
-  </div>
+  <div id="splash"><h1>Jiu-Jitsu Puro</h1></div>
 
-  <!-- Conteúdo -->
-  <div id="content">
-    <h1>Jiu-Jitsu Puro</h1>
-    <!-- Card principal -->
-    <div class="main-card" id="mainCard">
-      <h2>O que você quer aprender?</h2>
-      <div class="subcards">
-        <div class="card" onclick="abrirModal('O começo','comeco')">O começo</div>
-        <div class="card" onclick="abrirModal('Regras do jiu jitsu','regras')">Regras do jiu jitsu</div>
-        <div class="card" onclick="abrirModal('Regras do tatame','tatame')">Regras do tatame</div>
-        <div class="card" onclick="abrirModal('Mentalidade','mentalidade')">Mentalidade</div>
-        <div class="card" onclick="abrirModal('Guarda','guarda')">Guarda</div>
-        <div class="card" onclick="abrirModal('Passagens','passagens')">Passagens</div>
-        <div class="card" onclick="abrirModal('Meia guarda','meiaguarda')">Meia guarda</div>
-        <div class="card" onclick="abrirModal('Finalizações','finalizacoes')">Finalizações</div>
-        <div class="card" onclick="abrirModal('Quedas','quedas')">Quedas</div>
-        <div class="card" onclick="abrirModal('Drills','drills')">Drills</div>
-        <div class="card" onclick="abrirModal('Análise','analise')">Análise</div>
-      </div>
+  <!-- Tela inicial -->
+  <div id="home" class="screen">
+    <div class="big-card" onclick="showScreen('menu')">
+      O que você quer aprender hoje?
     </div>
   </div>
 
-  <!-- Modal -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <h2 id="modal-title"></h2>
-      <p id="modal-text"></p>
-      <button class="close-btn" onclick="fecharModal()">Fechar</button>
+  <!-- Tela de opções -->
+  <div id="menu" class="screen">
+    <h1>Escolha uma opção</h1>
+    <div class="cards">
+      <div class="card" onclick="abrirConteudo('O começo','comeco')">O começo</div>
+      <div class="card" onclick="abrirConteudo('Regras do Jiu Jitsu','regras')">Regras do Jiu Jitsu</div>
+      <div class="card" onclick="abrirConteudo('Regras do Tatame','tatame')">Regras do Tatame</div>
+      <div class="card" onclick="abrirConteudo('Mentalidade','mentalidade')">Mentalidade</div>
+      <div class="card" onclick="abrirConteudo('Guarda','guarda')">Guarda</div>
+      <div class="card" onclick="abrirConteudo('Passagens','passagens')">Passagens</div>
+      <div class="card" onclick="abrirConteudo('Meia Guarda','meiaguarda')">Meia Guarda</div>
+      <div class="card" onclick="abrirConteudo('Finalizações','finalizacoes')">Finalizações</div>
+      <div class="card" onclick="abrirConteudo('Quedas','quedas')">Quedas</div>
+      <div class="card" onclick="abrirConteudo('Drills','drills')">Drills</div>
+      <div class="card" onclick="abrirConteudo('Análise','analise')">Análise</div>
+    </div>
+    <button class="back-btn" onclick="showScreen('home')">Voltar</button>
+  </div>
+
+  <!-- Tela de conteúdo -->
+  <div id="conteudo" class="screen">
+    <div class="content-box">
+      <h2 id="conteudo-titulo"></h2>
+      <p id="conteudo-texto"></p>
+      <button class="back-btn" onclick="showScreen('menu')">Voltar</button>
     </div>
   </div>
 
   <script>
     const conteudos = {
-      comeco: `Começar no Jiu-Jitsu pode parecer intimidador, mas é uma experiência transformadora.
-      <br><br><strong>1. Escolha a academia certa:</strong> procure professores experientes e ambiente amigável.<br>
-      <strong>2. Tenha o equipamento básico:</strong> um kimono simples ou roupa confortável.<br>
-      <strong>3. Frequência:</strong> 2 a 3 treinos por semana já trazem evolução.<br>
-      <strong>4. Seja paciente:</strong> você será finalizado muitas vezes.<br>
-      <strong>5. Respeite o tatame:</strong> humildade é essencial.`,
-      regras: `As regras variam de acordo com a federação (CBJJ, IBJJF).<br><br>
-      ✅ Pontos: 2 (queda, raspagem), 3 (passagem de guarda), 4 (montada, costas).<br>
-      ✅ Finalizações: encerram a luta imediatamente.<br>
-      ❌ Golpes perigosos são proibidos.`,
-      tatame: `O tatame é um espaço sagrado.<br><br>
-      • Cumprimentar ao entrar e sair.<br>
-      • Manter unhas cortadas e higiene.<br>
-      • Respeitar todos os colegas.<br>
-      • Não discutir durante o treino.<br>
-      • Ouvir sempre o professor.`,
-      mentalidade: `A mentalidade no Jiu-Jitsu define sua evolução:<br><br>
-      • Paciência.<br> • Resiliência.<br> • Humildade.<br> • Controle emocional.`,
-      guarda: `A guarda é lutar de costas controlando o adversário.<br><br>
-      • Fechada<br> • Aberta<br> • Aranha<br> • De la Riva<br> • X`,
-      passagens: `Passar a guarda é um grande desafio:<br><br>
-      • De joelho<br> • Torre<br> • Por pressão<br> • Explosiva`,
-      meiaguarda: `Meia guarda é posição de transição poderosa:<br><br>
-      • Profunda<br> • Invertida<br> • Ataques<br> • Defesas`,
-      finalizacoes: `Finalizações encerram a luta:<br><br>
-      • Armlock<br> • Triângulo<br> • Mata-leão<br> • Kimura<br> • Americana`,
-      quedas: `Toda luta começa em pé:<br><br>
-      • O Soto Gari<br> • Single leg<br> • Double leg<br> • Tomoe Nage<br> • Sacrifício`,
-      drills: `Drills são exercícios repetitivos:<br><br>
-      • Hip escape<br> • Troca de base<br> • Passagens em movimento<br> • Raspe e volte`,
-      analise: `A análise é essencial:<br><br>
-      • Rever lutas<br> • Identificar erros<br> • Estudar campeões<br> • Conversar com professor`
+      comeco: `
+        <strong>O Começo:</strong><br><br>
+        Começar no Jiu-Jitsu pode parecer intimidador, mas é uma jornada transformadora.
+        <br><br>
+        • <strong>Escolha a academia certa:</strong> prefira professores experientes e ambiente acolhedor.<br>
+        • <strong>Equipamento:</strong> um kimono básico ou roupa confortável já basta para iniciar.<br>
+        • <strong>Frequência:</strong> treine 2 a 3 vezes por semana para sentir evolução.<br>
+        • <strong>Resiliência:</strong> você será finalizado muitas vezes, e isso é aprendizado.<br>
+        • <strong>Respeito:</strong> humildade sempre, dentro e fora do tatame.
+      `,
+      regras: `
+        <strong>Regras do Jiu-Jitsu:</strong><br><br>
+        • Pontos principais: 2 (queda/raspagem), 3 (passagem de guarda), 4 (montada/costas).<br>
+        • <strong>Finalizações:</strong> encerram a luta imediatamente.<br>
+        • Técnicas proibidas: golpes nos olhos, puxar cabelo, entre outros.<br>
+        <em>O foco é técnica, não força bruta.</em>
+      `,
+      tatame: `
+        <strong>Regras do Tatame:</strong><br><br>
+        • Cumprimente ao entrar e sair.<br>
+        • Higiene pessoal sempre em dia.<br>
+        • Respeite todos, independente da graduação.<br>
+        • Escute o professor e evite discussões.<br>
+        <em>O tatame é sagrado e reflete disciplina.</em>
+      `,
+      mentalidade: `
+        <strong>Mentalidade no Jiu-Jitsu:</strong><br><br>
+        • <strong>Paciência:</strong> cada técnica exige tempo.<br>
+        • <strong>Resiliência:</strong> derrotas moldam campeões.<br>
+        • <strong>Humildade:</strong> nunca se ache maior que o aprendizado.<br>
+        • <strong>Controle emocional:</strong> mantenha calma mesmo sob pressão.
+      `,
+      guarda: `
+        <strong>A Guarda:</strong><br><br>
+        É uma das posições mais estratégicas do Jiu-Jitsu.<br><br>
+        • Fechada.<br>
+        • Aberta.<br>
+        • Aranha.<br>
+        • De la Riva.<br>
+        • X-Guard.<br><br>
+        <em>Dominar a guarda é saber se defender e atacar.</em>
+      `,
+      passagens: `
+        <strong>Passagens de Guarda:</strong><br><br>
+        Passar a guarda é uma das maiores habilidades do esporte.<br><br>
+        • Passagem de joelho.<br>
+        • Torre (stack pass).<br>
+        • Passagem por pressão.<br>
+        • Passagem explosiva.<br>
+      `,
+      meiaguarda: `
+        <strong>Meia Guarda:</strong><br><br>
+        É uma posição de transição poderosa, usada tanto defensiva quanto ofensivamente.<br><br>
+        • Meia guarda profunda.<br>
+        • Meia guarda invertida.<br>
+        • Ataques e defesas estratégicas.<br>
+      `,
+      finalizacoes: `
+        <strong>Finalizações:</strong><br><br>
+        A beleza do Jiu-Jitsu está em vencer pela técnica.<br><br>
+        • Armlock.<br>
+        • Triângulo.<br>
+        • Mata-leão.<br>
+        • Kimura.<br>
+        • Americana.<br>
+        • Estrangulamentos diversos.<br>
+      `,
+      quedas: `
+        <strong>Quedas:</strong><br><br>
+        Toda luta começa em pé. As quedas são fundamentais.<br><br>
+        • O Soto Gari.<br>
+        • Single leg.<br>
+        • Double leg.<br>
+        • Tomoe Nage.<br>
+        • Sacrifício com rolamento.<br>
+      `,
+      drills: `
+        <strong>Drills:</strong><br><br>
+        Repetição gera memória muscular.<br><br>
+        • Hip escape.<br>
+        • Troca de base.<br>
+        • Passagens em movimento.<br>
+        • Raspe e volte.<br>
+        • Sequências de finalizações.<br>
+      `,
+      analise: `
+        <strong>Análise:</strong><br><br>
+        Refletir sobre sua prática acelera evolução.<br><br>
+        • Reveja vídeos das suas lutas.<br>
+        • Identifique erros e acertos.<br>
+        • Estude campeões e referências.<br>
+        • Converse com o professor para ajustes.<br>
+      `
     };
 
-    // Mostra conteúdo após splash
-    setTimeout(() => {
-      document.getElementById('content').style.display = 'block';
-      document.getElementById('mainCard').classList.add('show');
-      const subcards = document.querySelectorAll('.subcards .card');
-      subcards.forEach((card, i) => {
-        setTimeout(() => card.classList.add('show'), 500 + i * 150);
-      });
-    }, 4000);
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
 
-    function abrirModal(titulo, chave) {
-      document.getElementById("modal-title").innerText = titulo;
-      document.getElementById("modal-text").innerHTML = conteudos[chave];
-      document.getElementById("modal").classList.add("active");
+    function abrirConteudo(titulo, chave) {
+      document.getElementById("conteudo-titulo").innerText = titulo;
+      document.getElementById("conteudo-texto").innerHTML = conteudos[chave];
+      showScreen('conteudo');
     }
-    function fecharModal() {
-      document.getElementById("modal").classList.remove("active");
-    }
-    document.getElementById("modal").addEventListener("click", function(e) {
-      if (e.target === this) fecharModal();
-    });
+
+    // Início após splash
+    setTimeout(() => { showScreen('home'); }, 4000);
   </script>
 
 </body>
