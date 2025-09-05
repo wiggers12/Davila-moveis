@@ -464,8 +464,18 @@
     }
 
     /* =================== SPLASH -> HOME =================== */
-    setTimeout(() => { showScreen('home'); }, 4000);
+// Após 4 segundos, mostra a tela principal (ela aparecerá por baixo do splash que está sumindo)
+setTimeout(() => { 
+    showScreen('home'); 
+}, 4000);
 
+// Após 6 segundos (4s de delay + 2s de animação), remove completamente o splash
+setTimeout(() => {
+    const splash = document.getElementById('splash');
+    if (splash) {
+        splash.style.display = 'none';
+    }
+}, 6000);
     /* =================== UPLOAD DE VÍDEO =================== */
     const videoUpload = document.getElementById('videoUpload');
     const videoPreview = document.getElementById('videoPreview');
