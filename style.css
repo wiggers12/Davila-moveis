@@ -392,39 +392,44 @@ h1, h2, h3 {
   transform: translateY(-2px);
   
 }
-/* ==== BOTÃO DE LOGIN COM GOOGLE ==== */
+/* ==== BOTÃO DE LOGIN COM GOOGLE (versão premium) ==== */
 .login-container {
   display: flex;
   justify-content: center;
-  margin: 25px 0;
+  margin: 30px 0;
 }
 
 .google-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  background: #fff;
-  color: #444;
+  gap: 12px;
+  background: var(--gold);
+  color: var(--bg-dark);
   font-weight: bold;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 1em;
+  border: 2px solid var(--gold-light);
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 1.1em;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(212,175,55,0.4);
 }
 
 .google-btn img {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
 }
 
 .google-btn:hover {
-  background: #f7f7f7;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  background: var(--gold-light);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(212,175,55,0.6);
+}
+
+.google-btn:active {
+  transform: scale(0.95);
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.5);
 }
 /* ================= BOTÕES ================= */
 .back-btn, .main-menu-btn, .quiz-button {
