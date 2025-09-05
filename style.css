@@ -176,60 +176,55 @@ h1, h2, h3 {
 /* ================= BIBLIOTECA: CARROSSEL DE CATEGORIAS ================= */
 .carousel {
   position: relative;
-  width: 100%;
-  max-width: 800px;
+  width: 280px;   /* largura de 1 card */
+  height: 220px;  /* altura de 1 card */
+  margin: 40px auto;
   overflow: hidden;
-  margin: 30px auto;
 }
+
 .carousel-track {
   display: flex;
-  gap: 20px;
-  transition: transform .4s ease;
+  transition: transform 0.5s ease-in-out;
 }
+
+.cat-card {
+  flex: 0 0 100%;   /* cada card ocupa 100% da largura do carrossel */
+  height: 220px;
+  background: var(--card-bg);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .3s ease;
+}
+.cat-card i {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: var(--gold);
+}
+.cat-card:hover {
+  transform: scale(1.05);
+}
+
 .carousel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: var(--gold);
   border: none;
-  color: var(--bg-dark);
-  font-size: 1.5em;
-  padding: 8px 12px;
+  padding: 10px;
+  font-size: 1.4em;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: var(--shadow);
-  z-index: 10;
+  color: var(--bg-dark);
 }
-.carousel-btn.prev { left: -50px; }
-.carousel-btn.next { right: -50px; }
+.carousel-btn.prev { left: -45px; }
+.carousel-btn.next { right: -45px; }
 
-.cat-card {
-  min-width: 150px;
-  height: 150px;
-  background: var(--card-bg);
-  border: 2px solid transparent;
-  border-radius: 12px;
-  text-align: center;
-  padding: 20px 10px;
-  cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: all .3s ease;
-}
-.cat-card i {
-  font-size: 28px;
-  color: var(--gold);
-  margin-bottom: 8px;
-}
-.cat-card h3 {
-  color: var(--white);
-  font-size: 1em;
-  margin: 0;
-}
-.cat-card:hover {
-  transform: translateY(-5px) scale(1.05);
-  border-color: var(--gold);
-  box-shadow: 0 0 20px rgba(212,175,55,0.5);
-}
 
 /* ================= BIBLIOTECA DE POSIÇÕES ================= */
 #search-bar {
