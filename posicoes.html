@@ -6,85 +6,15 @@
   <title>Biblioteca de Posições</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* Botão flutuante */
-    #add-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--gold);
-      color: var(--bg-dark);
-      border: none;
-      border-radius: 50%;
-      width: 55px;
-      height: 55px;
-      font-size: 26px;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s ease;
-      z-index: 1100;
-    }
-    #add-btn:hover {
-      transform: scale(1.1);
-      background: var(--gold-light);
-    }
-
-    /* Modal */
-    #modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-      align-items: center;
-      justify-content: center;
-      z-index: 1200;
-    }
-    .modal-content {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-    .modal-content h2 {
-      margin-bottom: 15px;
-      color: var(--gold);
-    }
-    .modal-content input, .modal-content select, .modal-content textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: none;
-      background: rgba(255,255,255,0.08);
-      color: var(--white);
-      font-size: 1em;
-    }
-    .modal-content button {
-      margin-top: 10px;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .btn-save {
-      background: var(--gold);
-      color: var(--bg-dark);
-    }
-    .btn-cancel {
-      background: #444;
-      color: var(--white);
-      margin-left: 10px;
-    }
-  </style>
 </head>
 <body>
+  <!-- ===== Splash ===== -->
+  <div id="splash">
+    <h1>Jiu-Jitsu Puro</h1>
+  </div>
+
   <!-- ===== Tela Inicial ===== -->
-  <div id="home" class="screen">
+  <div id="home" class="screen" style="display:none;">
     <h1><i class="fa-solid fa-sitemap"></i> Biblioteca de Posições</h1>
     <div class="carousel">
       <div class="carousel-track" id="carousel-track"></div>
@@ -102,7 +32,7 @@
   <!-- ===== Botão flutuante ===== -->
   <button id="add-btn"><i class="fa-solid fa-plus"></i></button>
 
-  <!-- ===== Modal de Adição ===== -->
+  <!-- ===== Modal ===== -->
   <div id="modal">
     <div class="modal-content">
       <h2>Adicionar Nova Posição</h2>
@@ -123,73 +53,80 @@
   </div>
 
   <script>
-    // ===== Dados iniciais (20 cada) =====
+    // ===== Sons =====
+    function playSound(file) {
+      const audio = new Audio(file);
+      audio.volume = 0.5;
+      audio.play();
+    }
+
+    // ===== Dados iniciais =====
     const categorias = JSON.parse(localStorage.getItem("posicoesData")) || {
       Guarda: { icon: '<i class="fa-solid fa-shield-halved"></i>', posicoes: [
         { nome: 'Guarda Fechada', desc: 'Controle com pernas cruzadas.' },
         { nome: 'Guarda Aberta', desc: 'Controle de distância.' },
-        { nome: 'Guarda Borboleta', desc: 'Usa ganchos para raspar.' },
-        { nome: 'Guarda Aranha', desc: 'Pés nos bíceps do adversário.' },
-        { nome: 'De La Riva', desc: 'Gancho externo na perna.' },
-        { nome: 'RDLR', desc: 'Reverse De La Riva.' },
-        { nome: 'Guarda X', desc: 'Alavancas em X.' },
-        { nome: 'Single Leg X', desc: 'Controle de uma perna.' },
-        { nome: '50/50', desc: 'Posição neutra travada.' },
+        { nome: 'Guarda Aranha', desc: 'Usa pés nos bíceps.' },
+        { nome: 'Guarda Borboleta', desc: 'Ganchos para raspar.' },
+        { nome: 'Guarda De La Riva', desc: 'Gancho na perna.' },
+        { nome: 'Guarda X', desc: 'Estrutura em X.' },
+        { nome: 'Guarda 50/50', desc: 'Controle simétrico.' },
         { nome: 'Guarda Laço', desc: 'Perna enrolada no braço.' },
-        { nome: 'Guarda Lapela', desc: 'Uso da lapela como trava.' },
-        { nome: 'Worm Guard', desc: 'Controle moderno com lapela.' },
-        { nome: 'K-Guard', desc: 'Entrada para ataques de perna.' },
-        { nome: 'Guarda Octopus', desc: 'Controle lateral do tronco.' },
-        { nome: 'Guarda Tripé', desc: 'Base de 3 pontos.' },
-        { nome: 'Guarda Shin to Shin', desc: 'Contato de canelas.' },
-        { nome: 'Guarda Z', desc: 'Meia guarda alta.' },
-        { nome: 'Deep Half', desc: 'Meia guarda profunda.' },
-        { nome: 'Berimbolo', desc: 'Raspagem para costas.' },
-        { nome: 'Spider Lasso', desc: 'Aranha + laço.' }
+        { nome: 'Guarda Lapela', desc: 'Usa lapela como trava.' },
+        { nome: 'Guarda Worm', desc: 'Guarda moderna com lapela.' },
+        { nome: 'RDLR', desc: 'Reverse De La Riva.' },
+        { nome: 'Single Leg X', desc: 'Controle de uma perna.' },
+        { nome: 'X-Deep', desc: 'X profundo.' },
+        { nome: 'Shin to Shin', desc: 'Contato canela com canela.' },
+        { nome: 'Octopus', desc: 'Controle lateral.' },
+        { nome: 'Tripé', desc: 'Controle de pé e calcanhar.' },
+        { nome: 'Guarda Berimbolo', desc: 'Entrada para costas.' },
+        { nome: 'Spider Lasso', desc: 'Combina aranha e laço.' },
+        { nome: 'Guarda Invertida', desc: 'Ataque de baixo.' },
+        { nome: 'K-Guard', desc: 'Entrada para leg locks.' }
       ]},
       Passagem: { icon: '<i class="fa-solid fa-right-left"></i>', posicoes: [
-        { nome: 'Torreando', desc: 'Contorna as pernas.' },
-        { nome: 'Knee Cut', desc: 'Joelho cortando a guarda.' },
-        { nome: 'Over-Under', desc: 'Uma perna em cima e outra embaixo.' },
-        { nome: 'Leg Drag', desc: 'Arrasta a perna e passa.' },
-        { nome: 'Smash Pass', desc: 'Amassa com pressão.' },
+        { nome: 'Torreando', desc: 'Contorna pernas.' },
+        { nome: 'Knee Cut', desc: 'Joelho corta a guarda.' },
+        { nome: 'Smash Pass', desc: 'Pressão constante.' },
+        { nome: 'Leg Drag', desc: 'Arrasta a perna.' },
+        { nome: 'Over-Under', desc: 'Uma perna por cima e outra por baixo.' },
+        { nome: 'Double Under', desc: 'Abraço por baixo das pernas.' },
+        { nome: 'Standing Pass', desc: 'Passagem em pé.' },
+        { nome: 'Long Step', desc: 'Passo longo lateral.' },
+        { nome: 'Back Step', desc: 'Giro de quadril.' },
         { nome: 'Stack Pass', desc: 'Empilha o adversário.' },
-        { nome: 'X-Pass', desc: 'Explosiva com base.' },
-        { nome: 'Long Step', desc: 'Passo longo e giro.' },
-        { nome: 'Cartwheel Pass', desc: 'Passa girando estrela.' },
+        { nome: 'Duck Walk', desc: 'Abaixa e passa.' },
+        { nome: 'Cartwheel', desc: 'Estrela por cima.' },
         { nome: 'Body Lock', desc: 'Trava quadril e tronco.' },
-        { nome: 'Back Step', desc: 'Rotação de quadril.' },
-        { nome: 'Double Under', desc: 'Abraça pernas por baixo.' },
-        { nome: 'Shin Slice', desc: 'Variante de knee cut.' },
-        { nome: 'Duck Walk', desc: 'Passagem agachada.' },
-        { nome: 'Jump Over', desc: 'Salta por cima da guarda.' },
+        { nome: 'Shin Slice', desc: 'Variante do knee cut.' },
         { nome: 'Leg Weave', desc: 'Entrelaça pernas.' },
-        { nome: 'Standing Pass', desc: 'Passa em pé.' },
-        { nome: 'Lapela Smash', desc: 'Trava lapela.' },
-        { nome: 'Hip Switch', desc: 'Troca rápida de base.' },
-        { nome: 'Overhead Pass', desc: 'Passa levantando pernas.' }
+        { nome: 'X-Pass', desc: 'Explosiva troca de base.' },
+        { nome: 'Lapela Smash', desc: 'Travando com lapela.' },
+        { nome: 'Jump Over', desc: 'Salta sobre a guarda.' },
+        { nome: 'Passagem Blitz', desc: 'Rápida e agressiva.' },
+        { nome: 'Passagem Técnica', desc: 'Controle cadenciado.' }
       ]},
       Controle: { icon: '<i class="fa-solid fa-user-shield"></i>', posicoes: [
         { nome: 'Montada', desc: 'Sentado no torso.' },
-        { nome: '100kg', desc: 'Controle lateral básico.' },
-        { nome: 'Pegada de Costas', desc: 'Controle com ganchos.' },
-        { nome: 'North-South', desc: 'Cabeça para baixo.' },
+        { nome: '100kg', desc: 'Controle lateral.' },
+        { nome: 'Pegada de Costas', desc: 'Com seatbelt.' },
+        { nome: 'North-South', desc: 'Cabeça nos pés.' },
         { nome: 'Knee on Belly', desc: 'Joelho no abdômen.' },
-        { nome: 'S-Mount', desc: 'Montada em S.' },
-        { nome: 'Mount High', desc: 'Montada alta.' },
-        { nome: 'Mount Low', desc: 'Montada baixa.' },
-        { nome: 'Scarf Hold', desc: 'Controle estilo Kesa.' },
-        { nome: 'Reverse Side', desc: 'Controle invertido.' },
-        { nome: 'Crucifixo', desc: 'Braço e cabeça presos.' },
-        { nome: 'Body Triangle', desc: 'Costas com triângulo.' },
-        { nome: 'Head and Arm', desc: 'Cabeça e braço.' },
-        { nome: 'Twister Side', desc: 'Controle Twister.' },
-        { nome: 'Turtle Control', desc: 'Sobre quatro apoios.' },
-        { nome: 'Backpack', desc: 'Costas em pé.' },
-        { nome: 'Half Guard Top', desc: 'Superior na meia.' },
+        { nome: 'Turtle Control', desc: 'Controle da tartaruga.' },
+        { nome: 'Half Guard Top', desc: 'Por cima da meia guarda.' },
         { nome: 'Crossface', desc: 'Pressão no rosto.' },
-        { nome: 'Reverse Mount', desc: 'Montada invertida.' },
-        { nome: 'Side Control', desc: 'Controle lateral.' }
+        { nome: 'Reverse Side', desc: 'Lateral invertida.' },
+        { nome: 'S-Mount', desc: 'Montada em S.' },
+        { nome: 'Backpack', desc: 'Controle em pé.' },
+        { nome: 'Body Triangle', desc: 'Triângulo nas costas.' },
+        { nome: 'Head & Arm', desc: 'Cabeça e braço.' },
+        { nome: 'Crucifixo', desc: 'Braço e cabeça presos.' },
+        { nome: 'Twister Side', desc: 'Controle lateral twister.' },
+        { nome: 'High Mount', desc: 'Montada alta.' },
+        { nome: 'Low Mount', desc: 'Montada baixa.' },
+        { nome: 'Kesa Gatame', desc: 'Estilo judô.' },
+        { nome: 'Scarf Hold', desc: 'Braço e quadril.' },
+        { nome: 'Reverse Mount', desc: 'Montada invertida.' }
       ]},
       Finalização: { icon: '<i class="fa-solid fa-lock"></i>', posicoes: [
         { nome: 'Armlock', desc: 'Chave de braço.' },
@@ -197,54 +134,67 @@
         { nome: 'Triângulo', desc: 'Estrangulamento pernas.' },
         { nome: 'Omoplata', desc: 'Chave de ombro.' },
         { nome: 'Kimura', desc: 'Chave de ombro.' },
-        { nome: 'Americana', desc: 'Chave invertida.' },
-        { nome: 'Ezequiel', desc: 'Estrangulamento manga.' },
-        { nome: 'Botinha', desc: 'Chave tornozelo.' },
-        { nome: 'Heel Hook', desc: 'Chave calcanhar.' },
-        { nome: 'Kneebar', desc: 'Chave joelho.' },
+        { nome: 'Americana', desc: 'Chave de braço.' },
+        { nome: 'Ezequiel', desc: 'Estrangulamento gola.' },
+        { nome: 'Botinha', desc: 'Chave de tornozelo.' },
+        { nome: 'Chave de Calcanhar', desc: 'Heel hook.' },
+        { nome: 'Chave de Joelho', desc: 'Kneebar.' },
+        { nome: 'Arm Triangle', desc: 'Triângulo de braço.' },
         { nome: 'Guillotine', desc: 'Estrangulamento frontal.' },
-        { nome: 'Darce', desc: 'Estrangulamento braço.' },
-        { nome: 'Anaconda', desc: 'Estrangulamento invertido.' },
-        { nome: 'Baseball Choke', desc: 'Estrangulamento lapela.' },
-        { nome: 'Bow and Arrow', desc: 'Estrangulamento arco.' },
-        { nome: 'Cross Collar', desc: 'Estrangulamento gola.' },
-        { nome: 'North-South Choke', desc: 'Estrangulamento lateral.' },
-        { nome: 'Wrist Lock', desc: 'Chave punho.' },
-        { nome: 'Triangle Armbar', desc: 'Triângulo + braço.' },
-        { nome: 'Katagatame', desc: 'Estrangulamento ombro.' }
+        { nome: 'Baseball Choke', desc: 'Com gola.' },
+        { nome: 'Bow and Arrow', desc: 'Arco e flecha.' },
+        { nome: 'Cross Collar', desc: 'Gola cruzada.' },
+        { nome: 'North-South Choke', desc: 'Do north-south.' },
+        { nome: 'Darce', desc: 'Triângulo invertido.' },
+        { nome: 'Anaconda', desc: 'Semelhante ao Darce.' },
+        { nome: 'Wrist Lock', desc: 'Chave de punho.' },
+        { nome: 'Triangle Armbar', desc: 'Triângulo + armlock.' }
       ]},
       Queda: { icon: '<i class="fa-solid fa-arrow-down"></i>', posicoes: [
         { nome: 'Double Leg', desc: 'Ataque às duas pernas.' },
         { nome: 'Single Leg', desc: 'Ataque a uma perna.' },
         { nome: 'O Soto Gari', desc: 'Varrida externa.' },
         { nome: 'Seoi Nage', desc: 'Arremesso de ombro.' },
-        { nome: 'Tomoe Nage', desc: 'Queda sacrifício.' },
-        { nome: 'Harai Goshi', desc: 'Projeção quadril.' },
+        { nome: 'Tomoe Nage', desc: 'Sacrifício frontal.' },
+        { nome: 'Harai Goshi', desc: 'Projeção de quadril.' },
         { nome: 'Uchi Mata', desc: 'Projeção interna.' },
-        { nome: 'Kouchi Gari', desc: 'Pequena interna.' },
-        { nome: 'Ouchi Gari', desc: 'Grande interna.' },
-        { nome: 'Tai Otoshi', desc: 'Projeção corpo.' },
-        { nome: 'Kata Guruma', desc: 'Roda ombro.' },
-        { nome: 'Morote Seoi', desc: 'Seoi duas mãos.' },
-        { nome: 'Sumi Gaeshi', desc: 'Sacrifício gancho.' },
-        { nome: 'De Ashi Barai', desc: 'Varredura pé.' },
-        { nome: 'Hiza Guruma', desc: 'Queda joelho.' },
-        { nome: 'Yoko Tomoe', desc: 'Tomoe lateral.' },
-        { nome: 'Ura Nage', desc: 'Suplex.' },
+        { nome: 'Kouchi Gari', desc: 'Varrida curta interna.' },
+        { nome: 'Sumi Gaeshi', desc: 'Sacrifício com gancho.' },
+        { nome: 'Tai Otoshi', desc: 'Projeção de corpo.' },
+        { nome: 'Kosoto Gari', desc: 'Varrida curta externa.' },
+        { nome: 'Ouchi Gari', desc: 'Varrida longa interna.' },
+        { nome: 'Hiza Guruma', desc: 'Projeção no joelho.' },
+        { nome: 'De Ashi Barai', desc: 'Varredura de pé.' },
+        { nome: 'Yoko Tomoe', desc: 'Sacrifício lateral.' },
+        { nome: 'Kata Guruma', desc: 'Roda de ombro.' },
+        { nome: 'Morote Seoi', desc: 'Ombro com duas mãos.' },
         { nome: 'Osoto Otoshi', desc: 'Projeção direta.' },
-        { nome: 'Tani Otoshi', desc: 'Contra ataque.' },
-        { nome: 'Sukui Nage', desc: 'Erguendo pernas.' }
+        { nome: 'Ura Nage', desc: 'Suplex.' },
+        { nome: 'Makikomi', desc: 'Arremesso girando corpo.' }
       ]}
     };
 
-    const track = document.getElementById("carousel-track");
+    const splash = document.getElementById("splash");
     const home = document.getElementById("home");
     const detalhe = document.getElementById("detalhe");
     const detalheGrid = document.getElementById("detalhe-grid");
     const detalheTitulo = document.getElementById("detalhe-titulo");
+    const track = document.getElementById("carousel-track");
     const modal = document.getElementById("modal");
 
-    // Renderizar carrossel inicial
+    // ===== Splash =====
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        playSound('sounds/impact.mp3');
+        splash.classList.add("hiding");
+        setTimeout(() => {
+          splash.style.display = "none";
+          home.style.display = "block";
+        }, 1000);
+      }, 1200);
+    });
+
+    // ===== Renderizar tela inicial =====
     function renderHome() {
       track.innerHTML = "";
       Object.keys(categorias).forEach(cat => {
@@ -257,49 +207,57 @@
     }
     renderHome();
 
-    // Carrossel auto slide
+    // ===== Carrossel automático =====
     let index = 0;
     setInterval(() => {
       index = (index + 1) % Object.keys(categorias).length;
       track.style.transform = `translateX(-${index * 100}%)`;
     }, 3000);
 
-    // Abrir detalhe
+    // ===== Abrir detalhe =====
     function abrirDetalhe(cat) {
       home.style.display = "none";
-      detalhe.style.display = "block";
+      detalhe.style.display = "flex";
       detalheTitulo.innerText = cat;
       detalheGrid.innerHTML = "";
       categorias[cat].posicoes.forEach(p => {
         const card = document.createElement("div");
         card.className = "posicao-card";
+        card.onclick = () => alert(`Você clicou em ${p.nome}`);
         card.innerHTML = `<h4>${p.nome}</h4><p>${p.desc}</p>`;
         detalheGrid.appendChild(card);
       });
     }
 
-    // Voltar
+    // ===== Voltar =====
     function voltarHome() {
       detalhe.style.display = "none";
-      home.style.display = "flex";
+      home.style.display = "block";
     }
 
-    // Abrir/fechar modal
-    document.getElementById("add-btn").onclick = () => modal.style.display = "flex";
+    // ===== Modal =====
+    document.getElementById("add-btn").onclick = () => {
+      modal.style.display = "flex";
+      playSound('sounds/click.mp3');
+    };
     function fecharModal() { modal.style.display = "none"; }
 
-    // Salvar nova posição
+    // ===== Salvar nova posição =====
     function salvarPosicao() {
       const nome = document.getElementById("novaNome").value.trim();
       const tipo = document.getElementById("novaTipo").value;
       const desc = document.getElementById("novaDesc").value.trim();
 
-      if (!nome || !desc) { alert("Preencha todos os campos!"); return; }
+      if (!nome || !desc) { 
+        alert("Preencha todos os campos!"); 
+        return; 
+      }
 
       categorias[tipo].posicoes.push({ nome, desc });
       localStorage.setItem("posicoesData", JSON.stringify(categorias));
       fecharModal();
       renderHome();
+      playSound('sounds/success.mp3');
       alert("Nova posição adicionada!");
     }
   </script>
