@@ -6,10 +6,24 @@
   <title>Jiu-Jitsu Puro - Bem-vindo</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Botão de login fixo no rodapé */
+    .login-container {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: center;
+      z-index: 999;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- SPLASH -->
+  <!-- SPLASH (mostra apenas na primeira vez) -->
   <div id="splash" style="display: flex;">
     <h1>Jiu-Jitsu Puro</h1>
   </div>
@@ -50,19 +64,19 @@
         <div class="price-tag">R$ 69,90</div>
       </a>
     </div>
+  </div>
 
-    <!-- Área de Login / Usuário -->
-    <div class="login-container" id="loginBox">
-      <button id="btnLogin" class="google-btn">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
-        Entrar com Google
-      </button>
-    </div>
+  <!-- Área de Login / Usuário -->
+  <div class="login-container" id="loginBox">
+    <button id="btnLogin" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+      Entrar com Google
+    </button>
+  </div>
 
-    <div class="login-container" id="userBox" style="display:none;">
-      <p id="welcomeMsg"></p>
-      <button id="btnLogout" class="back-btn">Sair</button>
-    </div>
+  <div class="login-container" id="userBox" style="display:none;">
+    <p id="welcomeMsg"></p>
+    <button id="btnLogout" class="back-btn">Sair</button>
   </div>
 
   <!-- Firebase -->
@@ -80,9 +94,9 @@
       btnLogin.addEventListener("click", async () => {
         const user = await loginGoogle();
         if (user) {
+          welcomeMsg.textContent = `Bem-vindo, ${user.displayName} 👊`;
           loginBox.style.display = "none";
           userBox.style.display = "flex";
-          welcomeMsg.textContent = `Bem-vindo, ${user.displayName} 👊`;
         }
       });
     }
@@ -95,11 +109,12 @@
       });
     }
 
+    // Verifica estado de login automaticamente
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        welcomeMsg.textContent = `Bem-vindo, ${user.displayName} 👊`;
         loginBox.style.display = "none";
         userBox.style.display = "flex";
-        welcomeMsg.textContent = `Bem-vindo, ${user.displayName} 👊`;
       } else {
         loginBox.style.display = "flex";
         userBox.style.display = "none";
