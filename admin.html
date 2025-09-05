@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Jiu-Jitsu Puro</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { padding: 20px; }
+    h1 { color: var(--gold); text-align: center; }
+    table {
+      width: 100%; margin-top: 20px; border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #444; padding: 8px; text-align: center;
+    }
+    th { background: var(--gold); color: var(--bg-dark); }
+    button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      margin: 2px;
+      cursor: pointer;
+    }
+    .ativar { background: var(--correct); color: #fff; }
+    .desativar { background: var(--wrong); color: #fff; }
+    .plano-btn { background: var(--gold); color: var(--bg-dark); }
+  </style>
+</head>
+<body>
+  <h1>Painel de Administração</h1>
+
+  <div id="adminLogin">
+    <button id="btnLoginAdmin" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+      Entrar como Admin
+    </button>
+  </div>
+
+  <div id="painel" style="display:none;">
+    <p>Bem-vindo, <span id="adminName"></span> 👑</p>
+    <button id="btnLogout" class="back-btn">Sair</button>
+
+    <h2>Usuários</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Plano</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="usuariosTable"></tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    import { auth, db, loginGoogle } from "./firebase.js";
+    import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const btnLoginAdmin = document.getElementById("btnLoginAdmin");
+    const btnLogout = document.getElementById("btnLogout");
+    const adminLogin = document.getElementById("adminLogin");
+    const painel = document.getElementById("painel");
+    const usuariosTable = document.getElementById("usuariosTable");
+    const adminName = document.getElementById("adminName");
+
+    // Emails autorizados como admin
+    const ADMINS = ["dionegalato1212@gmail.com"]; // <<< coloque seu email aqui
+
+    if (btnLoginAdmin) {
+      btnLoginAdmin.addEventListener("click", async () => {
+        const user = await loginGoogle();
+        if (user && ADMINS.includes(user.email)) {
+          carregarUsuarios();
+        } else {
+          alert("⚠️ Acesso negado. Você não é admin.");
+          await signOut(auth);
+        }
+      });
+    }
+
+    if (btnLogout) {
+      btnLogout.addEventListener("click", async () => {
+        await signOut(auth);
+      });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user && ADMINS.includes(user.email)) {
+        adminLogin.style.display = "none";
+        painel.style.display = "block";
+        adminName.textContent = user.displayName;
+        carregarUsuarios();
+      } else {
+        adminLogin.style.display = "block";
+        painel.style.display = "none";
+      }
+    });
+
+    async function carregarUsuarios() {
+      usuariosTable.innerHTML = "";
+      const querySnapshot = await getDocs(collection(db, "usuarios"));
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${data.email}</td>
+          <td>${data.plano || "pendente"}</td>
+          <td>${data.ativo ? "✅ Ativo" : "❌ Inativo"}</td>
+          <td>
+            <button class="plano-btn" onclick="setPlano('${docSnap.id}','basica')">Básica</button>
+            <button class="plano-btn" onclick="setPlano('${docSnap.id}','premium')">Premium</button>
+            <button class="plano-btn" onclick="setPlano('${docSnap.id}','black')">Black</button>
+            <button class="ativar" onclick="setAtivo('${docSnap.id}', true)">Ativar</button>
+            <button class="desativar" onclick="setAtivo('${docSnap.id}', false)">Desativar</button>
+          </td>
+        `;
+
+        usuariosTable.appendChild(row);
+      });
+    }
+
+    // Precisa expor funções globais
+    window.setPlano = async (uid, plano) => {
+      await updateDoc(doc(db, "usuarios", uid), { plano: plano, ativo: true });
+      carregarUsuarios();
+    };
+
+    window.setAtivo = async (uid, ativo) => {
+      await updateDoc(doc(db, "usuarios", uid), { ativo });
+      carregarUsuarios();
+    };
+  </script>
+</body>
+</html>
