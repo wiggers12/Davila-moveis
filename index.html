@@ -6,20 +6,6 @@
   <title>Jiu-Jitsu Puro - Bem-vindo</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* Botão de login fixo no rodapé */
-    .login-container {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      justify-content: center;
-      z-index: 999;
-    }
-  </style>
 </head>
 <body>
 
@@ -74,7 +60,7 @@
     </button>
   </div>
 
-  <div class="login-container" id="userBox" style="display:none;">
+  <div class="login-container" id="userBox" style="display:none; flex-direction: column; align-items: center;">
     <p id="welcomeMsg"></p>
     <button id="btnLogout" class="back-btn">Sair</button>
   </div>
