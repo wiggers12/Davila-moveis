@@ -1,4 +1,4 @@
-/* ARQUIVO: style.css */
+/* ARQUIVO: style.css (ATUALIZADO PARA MONETIZAÇÃO) */
 :root {
   --bg-dark: #0f0f0f;
   --gold: #d4af37;
@@ -26,7 +26,7 @@ body, html {
   box-sizing: border-box;
 }
 
-/* ================= HUB PREMIUM ================= */
+/* ================= HUB PREMIUM (ATUALIZADO) ================= */
 .hub-container {
   display: flex;
   flex-direction: column;
@@ -39,14 +39,17 @@ body, html {
   background: var(--card-bg);
   border: 2px solid #333;
   border-radius: 15px;
-  padding: 30px;
+  padding: 25px;
   text-align: center;
   text-decoration: none;
   color: var(--white);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
 }
 
 .premium-card:hover {
@@ -55,31 +58,49 @@ body, html {
   box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
 }
 
-.premium-card i {
+.premium-card i.main-icon {
   font-size: 40px;
   color: var(--gold);
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .premium-card h2 {
-  margin: 0 0 10px 0;
-  font-size: 1.8em;
+  margin: 0 0 5px 0;
+  font-size: 1.5em;
   color: var(--white);
 }
 
-.premium-card p {
+.premium-card p.description {
   margin: 0;
   font-size: 1em;
   color: #aaa;
+  flex-grow: 1;
 }
 
-.premium-indicator {
+.price-tag {
+  background-color: var(--gold);
+  color: var(--bg-dark);
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 1.2em;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.tier-indicator {
   position: absolute;
   top: 15px;
   right: 15px;
-  font-size: 1em;
+  font-size: 0.9em;
+  font-weight: bold;
   color: var(--gold);
-  opacity: 0.7;
+  background-color: rgba(0,0,0,0.3);
+  padding: 4px 8px;
+  border-radius: 10px;
+}
+.tier-indicator i {
+    margin-right: 5px;
 }
 
 
