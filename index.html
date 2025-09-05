@@ -9,9 +9,12 @@
 </head>
 <body>
 
-  <div id="hub" class="screen center-content" style="display: flex;">
+  <div id="splash" style="display: flex;">
+    <h1>Jiu-Jitsu Puro</h1>
+  </div>
+
+  <div id="hub" class="screen center-content" style="display: none;">
     <div class="hub-container">
-        
         <a href="#" class="premium-card">
             <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
             <i class="fa-solid fa-graduation-cap main-icon"></i>
@@ -324,12 +327,11 @@
         document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
         const screenToShow = document.getElementById(id);
         
+        // As telas do hub, quizzes e do quiz em si usam flex para centralizar
         if (id === 'hub' || id === 'quizzes' || id === 'conteudo') {
             screenToShow.style.display = 'flex';
-            screenToShow.classList.add('center-content');
         } else {
             screenToShow.style.display = 'block';
-            screenToShow.classList.remove('center-content');
         }
 
         if (id === 'quizzes') {
@@ -337,6 +339,17 @@
         }
     }
 
+    /* ================= LÓGICA DO SPLASH SCREEN ================= */
+    window.addEventListener('load', () => {
+      const splash = document.getElementById('splash');
+      setTimeout(() => {
+        splash.classList.add('hiding');
+        splash.addEventListener('animationend', () => {
+          splash.style.display = 'none';
+          showScreen('hub');
+        }, { once: true });
+      }, 3000); // 3 segundos de delay
+    });
   </script>
 </body>
 </html>
