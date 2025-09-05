@@ -50,27 +50,63 @@
         <div class="price-tag">R$ 69,90</div>
       </a>
 
-      <!-- Botão de Login com Google -->
-      <div class="login-container">
+      <!-- Área de Login -->
+      <div class="login-container" id="loginBox">
         <button id="btnLogin" class="google-btn">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
           Entrar com Google
         </button>
+      </div>
+
+      <!-- Área do Usuário Logado -->
+      <div class="login-container" id="userBox" style="display:none;">
+        <p id="welcomeMsg"></p>
+        <button id="btnLogout" class="back-btn">Sair</button>
       </div>
     </div>
   </div>
 
   <!-- Firebase -->
   <script type="module">
-    import { loginGoogle } from "./firebase.js";
+    import { loginGoogle, auth } from "./firebase.js";
+    import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const btnLogin = document.getElementById("btnLogin");
+    const btnLogout = document.getElementById("btnLogout");
+    const loginBox = document.getElementById("loginBox");
+    const userBox = document.getElementById("userBox");
+    const welcomeMsg = document.getElementById("welcomeMsg");
+
     if (btnLogin) {
       btnLogin.addEventListener("click", async () => {
         const user = await loginGoogle();
-        if (user) alert("Bem-vindo, " + user.displayName);
+        if (user) {
+          loginBox.style.display = "none";
+          userBox.style.display = "flex";
+          welcomeMsg.textContent = `Bem-vindo, ${user.displayName} 👊`;
+        }
       });
     }
+
+    if (btnLogout) {
+      btnLogout.addEventListener("click", async () => {
+        await signOut(auth);
+        loginBox.style.display = "flex";
+        userBox.style.display = "none";
+      });
+    }
+
+    // Mantém estado de login entre páginas
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginBox.style.display = "none";
+        userBox.style.display = "flex";
+        welcomeMsg.textContent = `Bem-vindo, ${user.displayName} 👊`;
+      } else {
+        loginBox.style.display = "flex";
+        userBox.style.display = "none";
+      }
+    });
   </script>
 
   <!-- Splash logic -->
