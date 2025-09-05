@@ -1,79 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jiu-Jitsu Puro - Bem-vindo</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jiu-Jitsu Puro - Bem-vindo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="splash" style="display: flex;">
-        <h1>Jiu-Jitsu Puro</h1>
-    </div>
+  <!-- SPLASH (mostra apenas na primeira vez) -->
+  <div id="splash" style="display: flex;">
+    <h1>Jiu-Jitsu Puro</h1>
+  </div>
 
-    <div id="hub" class="screen center-content" style="display: none;">
-        <div class="hub-container">
-            
-            <a href="quizzes.html" class="premium-card">
-                <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
-                <i class="fa-solid fa-graduation-cap main-icon"></i>
-                <div>
-                    <h2>Aprenda e Teste</h2>
-                    <p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p>
-                </div>
-                <div class="price-tag">R$ 9,90</div>
-            </a>
-    
-            <a href="posicoes.html" class="premium-card">
-                <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
-                <i class="fa-solid fa-sitemap main-icon"></i>
-                <div>
-                    <h2>Biblioteca de Posições</h2>
-                    <p class="description">Explore um acervo completo de posições e técnicas.</p>
-                </div>
-                <div class="price-tag">R$ 39,90</div>
-            </a>
-    
-            <a href="analise.html" class="premium-card">
-                <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
-                <i class="fa-solid fa-chart-line main-icon"></i>
-                <div>
-                    <h2>Análise de Luta</h2>
-                    <p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p>
-                </div>
-                <div class="price-tag">R$ 69,90</div>
-            </a>
-    
+  <!-- HUB PRINCIPAL -->
+  <div id="hub" class="screen center-content" style="display: none;">
+    <div class="hub-container">
+      <!-- Card Básica -->
+      <a href="quizzes.html" class="premium-card">
+        <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
+        <i class="fa-solid fa-graduation-cap main-icon"></i>
+        <div>
+          <h2>Aprenda e Teste</h2>
+          <p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p>
         </div>
+        <div class="price-tag">R$ 9,90</div>
+      </a>
+
+      <!-- Card Premium -->
+      <a href="posicoes.html" class="premium-card">
+        <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
+        <i class="fa-solid fa-sitemap main-icon"></i>
+        <div>
+          <h2>Biblioteca de Posições</h2>
+          <p class="description">Explore um acervo completo de posições e técnicas.</p>
+        </div>
+        <div class="price-tag">R$ 39,90</div>
+      </a>
+
+      <!-- Card Black -->
+      <a href="analise.html" class="premium-card">
+        <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
+        <i class="fa-solid fa-chart-line main-icon"></i>
+        <div>
+          <h2>Análise de Luta</h2>
+          <p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p>
+        </div>
+        <div class="price-tag">R$ 69,90</div>
+      </a>
     </div>
+  </div>
 
-    <script>
-  /* LÓGICA DO SPLASH SCREEN */
-  window.addEventListener('load', () => {
-    const splash = document.getElementById('splash');
-    const hub = document.getElementById('hub');
-    const jaVisto = localStorage.getItem("splashVisto");
+  <!-- Botão de login -->
+  <div style="text-align:center; margin-top:20px;">
+    <button id="btnLogin">Entrar com Google</button>
+  </div>
 
-    if (!jaVisto) {
-      // Mostra splash apenas na primeira vez
-      setTimeout(() => {
-        splash.classList.add('hiding'); 
-        splash.addEventListener('animationend', () => {
-          splash.style.display = 'none'; 
-          hub.style.display = 'flex'; 
-          localStorage.setItem("splashVisto", "true"); // Marca como já visto
-        }, { once: true });
-      }, 2000); // 2 segundos
-    } else {
-      // Se já foi visto, pula direto
-      splash.style.display = 'none';
-      hub.style.display = 'flex';
+  <!-- Firebase -->
+  <script type="module">
+    import { loginGoogle } from "./firebase.js";
+
+    const btnLogin = document.getElementById("btnLogin");
+    if (btnLogin) {
+      btnLogin.addEventListener("click", async () => {
+        const user = await loginGoogle();
+        if (user) alert("Bem-vindo, " + user.displayName);
+      });
     }
-  });
-</script>
+  </script>
 
-    
+  <!-- Splash logic -->
+  <script>
+    window.addEventListener('load', () => {
+      const splash = document.getElementById('splash');
+      const hub = document.getElementById('hub');
+      const jaVisto = localStorage.getItem("splashVisto");
+
+      if (!jaVisto) {
+        setTimeout(() => {
+          splash.classList.add('hiding');
+          splash.addEventListener('animationend', () => {
+            splash.style.display = 'none';
+            hub.style.display = 'flex';
+            localStorage.setItem("splashVisto", "true");
+          }, { once: true });
+        }, 2000);
+      } else {
+        splash.style.display = 'none';
+        hub.style.display = 'flex';
+      }
+    });
+  </script>
+
 </body>
 </html>
