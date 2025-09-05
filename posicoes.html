@@ -6,180 +6,24 @@
   <title>Biblioteca de Posições</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <style>
-    #posicoes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
-      padding: 25px;
-    }
-    .posicao-card {
-      background: var(--card-bg);
-      border-radius: 14px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: var(--shadow);
-      border: 1px solid transparent;
-      backdrop-filter: blur(12px);
-      overflow: hidden;
-      position: relative;
-    }
-    .posicao-card:hover {
-      transform: translateY(-6px) scale(1.03);
-      border-color: var(--gold);
-      box-shadow: 0 0 25px rgba(212,175,55,0.4);
-    }
-    .posicao-card .icon {
-      font-size: 44px;
-      margin-bottom: 12px;
-      color: var(--gold);
-    }
-    .posicao-card h3 {
-      margin: 0 0 15px;
-      font-size: 1.6em;
-      color: var(--white);
-    }
-    /* ===== CARROSSEL ===== */
-    .carousel {
-      display: flex;
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-    }
-    .carousel-track {
-      display: flex;
-      transition: transform 0.7s ease;
-      width: 100%;
-    }
-    .carousel-item {
-      flex: 0 0 100%;
-      box-sizing: border-box;
-      padding: 10px;
-    }
-    .carousel-item h4 {
-      margin: 0 0 8px;
-      font-size: 1.2em;
-      color: var(--gold);
-    }
-    .carousel-item p {
-      margin: 0;
-      font-size: 0.95em;
-      color: var(--gray);
-    }
-
-    /* ===== BOTÃO FLUTUANTE ===== */
-    .fab {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--gold);
-      color: var(--bg-dark);
-      font-size: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      transition: transform .25s;
-      z-index: 1100;
-    }
-    .fab:hover {
-      transform: scale(1.1);
-      background: var(--gold-light);
-    }
-
-    /* ===== MODAL ===== */
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1200;
-    }
-    .modal-content {
-      background: var(--card-bg);
-      padding: 25px;
-      border-radius: 12px;
-      max-width: 500px;
-      width: 90%;
-      box-shadow: var(--shadow);
-      animation: fadeIn .3s ease;
-      text-align: center;
-    }
-    .modal-content h2 {
-      color: var(--gold);
-      margin-bottom: 15px;
-    }
-    .modal-content input, 
-    .modal-content select, 
-    .modal-content textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border-radius: 8px;
-      border: none;
-      background: rgba(255,255,255,0.08);
-      color: var(--white);
-      font-size: 1em;
-    }
-    .modal-content textarea { resize: vertical; }
-    .modal-content button {
-      background: var(--gold);
-      color: var(--bg-dark);
-      font-weight: bold;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all .25s;
-      margin: 5px;
-    }
-    .modal-content button:hover { background: var(--gold-light); }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
 </head>
 <body>
-  <div class="screen">
+  <!-- ===== Tela Inicial ===== -->
+  <div id="home" class="screen">
     <h1><i class="fa-solid fa-sitemap"></i> Biblioteca de Posições</h1>
     <div id="posicoes-grid"></div>
-    <a href="index.html" class="main-menu-btn">Voltar ao Menu Principal</a>
   </div>
 
-  <!-- Botão flutuante -->
-  <div class="fab" onclick="abrirModal()"><i class="fa-solid fa-plus"></i></div>
-
-  <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <h2>Adicionar Nova Posição</h2>
-      <input type="text" id="novaNome" placeholder="Nome da posição" required>
-      <select id="novaCategoria">
-        <option value="Guarda">Guarda</option>
-        <option value="Passagem">Passagem</option>
-        <option value="Controle">Controle</option>
-        <option value="Finalização">Finalização</option>
-        <option value="Queda">Queda</option>
-      </select>
-      <textarea id="novaDesc" rows="3" placeholder="Descrição da posição"></textarea>
-      <br>
-      <button onclick="adicionarPosicao()">Salvar</button>
-      <button onclick="fecharModal()">Cancelar</button>
-    </div>
+  <!-- ===== Tela Detalhe ===== -->
+  <div id="detalhe" class="screen" style="display:none;">
+    <h1 id="detalhe-titulo"></h1>
+    <div id="detalhe-grid"></div>
+    <button class="back-btn" onclick="voltarHome()">Voltar</button>
   </div>
 
   <script>
-    // 100 posições pré-carregadas
-    let categorias = JSON.parse(localStorage.getItem("categorias")) || {
+    // ===== Dados das categorias (20 posições cada = 100 total) =====
+    const categorias = {
       Guarda: {
         icon: '<i class="fa-solid fa-shield-halved"></i>',
         posicoes: [
@@ -308,12 +152,18 @@
     };
 
     const grid = document.getElementById('posicoes-grid');
+    const detalhe = document.getElementById('detalhe');
+    const home = document.getElementById('home');
+    const detalheGrid = document.getElementById('detalhe-grid');
+    const detalheTitulo = document.getElementById('detalhe-titulo');
 
-    function renderGrid() {
+    // Renderiza os cards iniciais
+    function renderHome() {
       grid.innerHTML = '';
       Object.keys(categorias).forEach(cat => {
         const card = document.createElement('div');
         card.className = 'posicao-card';
+        card.onclick = () => abrirDetalhe(cat);
         card.innerHTML = `
           <div class="icon">${categorias[cat].icon}</div>
           <h3>${cat}</h3>
@@ -339,35 +189,31 @@
       });
     }
 
-    function adicionarPosicao() {
-      const nome = document.getElementById('novaNome').value.trim();
-      const categoria = document.getElementById('novaCategoria').value;
-      const desc = document.getElementById('novaDesc').value.trim();
-
-      if (!nome || !desc) {
-        alert("Preencha todos os campos!");
-        return;
-      }
-
-      categorias[categoria].posicoes.push({ nome, desc });
-      localStorage.setItem("categorias", JSON.stringify(categorias));
-
-      fecharModal();
-      renderGrid();
-      alert("Posição adicionada com sucesso!");
+    // Abre a tela detalhada
+    function abrirDetalhe(cat) {
+      home.style.display = 'none';
+      detalhe.style.display = 'block';
+      detalheTitulo.innerText = cat;
+      detalheGrid.innerHTML = '';
+      categorias[cat].posicoes.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'posicao-card';
+        card.innerHTML = `
+          <h4>${p.nome}</h4>
+          <p>${p.desc}</p>
+        `;
+        detalheGrid.appendChild(card);
+      });
     }
 
-    function abrirModal() {
-      document.getElementById('modal').style.display = 'flex';
-    }
-    function fecharModal() {
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('novaNome').value = '';
-      document.getElementById('novaDesc').value = '';
+    // Volta para a tela inicial
+    function voltarHome() {
+      detalhe.style.display = 'none';
+      home.style.display = 'block';
     }
 
     // Render inicial
-    renderGrid();
+    renderHome();
   </script>
 </body>
 </html>
