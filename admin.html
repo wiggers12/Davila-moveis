@@ -6,7 +6,7 @@
   <title>Admin - Jiu-Jitsu Puro</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body { padding: 20px; }
+    body { padding: 20px; font-family: 'Poppins', sans-serif; }
     h1 { color: var(--gold); text-align: center; }
     table {
       width: 100%; margin-top: 20px; border-collapse: collapse;
@@ -48,6 +48,8 @@
           <th>Email</th>
           <th>Plano</th>
           <th>Status</th>
+          <th>Data de Cadastro</th>
+          <th>Último Login</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -68,7 +70,7 @@
     const adminName = document.getElementById("adminName");
 
     // Emails autorizados como admin
-    const ADMINS = ["dionegalato1212@gmail.com"]; // <<< coloque seu email aqui
+    const ADMINS = ["seuemail@gmail.com"]; // <<< coloque seu email aqui
 
     if (btnLoginAdmin) {
       btnLoginAdmin.addEventListener("click", async () => {
@@ -105,12 +107,21 @@
       const querySnapshot = await getDocs(collection(db, "usuarios"));
       querySnapshot.forEach((docSnap) => {
         const data = docSnap.data();
-        const row = document.createElement("tr");
 
+        const dataCadastro = data.dataCadastro 
+          ? new Date(data.dataCadastro.seconds * 1000).toLocaleString("pt-BR") 
+          : "—";
+        const ultimoLogin = data.ultimoLogin 
+          ? new Date(data.ultimoLogin.seconds * 1000).toLocaleString("pt-BR") 
+          : "—";
+
+        const row = document.createElement("tr");
         row.innerHTML = `
           <td>${data.email}</td>
           <td>${data.plano || "pendente"}</td>
           <td>${data.ativo ? "✅ Ativo" : "❌ Inativo"}</td>
+          <td>${dataCadastro}</td>
+          <td>${ultimoLogin}</td>
           <td>
             <button class="plano-btn" onclick="setPlano('${docSnap.id}','basica')">Básica</button>
             <button class="plano-btn" onclick="setPlano('${docSnap.id}','premium')">Premium</button>
@@ -119,7 +130,6 @@
             <button class="desativar" onclick="setAtivo('${docSnap.id}', false)">Desativar</button>
           </td>
         `;
-
         usuariosTable.appendChild(row);
       });
     }
