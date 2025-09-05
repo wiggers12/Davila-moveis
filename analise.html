@@ -34,5 +34,19 @@
             });
         }
     </script>
+      <!-- ==================== FIREBASE CHECK ==================== -->
+  <script type="module">
+    import { verificarAcesso } from "./firebase.js";
+
+    verificarAcesso((permitido, user) => {
+      if (!permitido) {
+        alert("⚠️ Você precisa assinar para acessar esta página.");
+        window.location.href = "index.html";
+      } else {
+        console.log("✅ Usuário logado:", user.email);
+      }
+    });
+  </script>
 </body>
 </html>
+
