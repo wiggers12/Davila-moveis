@@ -4,13 +4,14 @@ import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB-rnG4cIZzEb1w_h_qmif3XPSx28ZIdaM",
-  authDomain: "ecomercie-vendas.firebaseapp.com",
-  projectId: "ecomercie-vendas",
-  storageBucket: "ecomercie-vendas.firebasestorage.app",
-  messagingSenderId: "1054540261609",
-  appId: "1:1054540261609:web:90042b823220b4c73f6878",
-  measurementId: "G-TNC5M9G89H"
+  const firebaseConfig = {
+  apiKey: "AIzaSyDS2Nd7av1K4sgWIa5Wjl177dsL8rbdNVA",
+  authDomain: "jiu-jitsu-puro.firebaseapp.com",
+  projectId: "jiu-jitsu-puro",
+  storageBucket: "jiu-jitsu-puro.firebasestorage.app",
+  messagingSenderId: "548698593197",
+  appId: "1:548698593197:web:9ab3957b03da0d3c57b324",
+  measurementId: "G-3S051XEGY7"
 };
 
 // Inicializa
