@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Luta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="screen">
+        <h1><i class="fa-solid fa-chart-line"></i> Análise de Luta</h1>
+        <div class="upload-box">
+            <p>Faça o upload de um vídeo da sua luta ou treino para analisar seus movimentos.</p>
+            <input type="file" id="videoUpload" accept="video/*">
+            <video id="videoPreview" controls style="display:none;"></video>
+            <textarea id="videoDesc" rows="5" placeholder="Escreva suas observações sobre o vídeo..."></textarea>
+        </div>
+        <a href="index.html" class="main-menu-btn">Voltar ao Menu Principal</a>
+    </div>
+
+    <script>
+        const videoUpload = document.getElementById('videoUpload');
+        const videoPreview = document.getElementById('videoPreview');
+
+        if (videoUpload) {
+            videoUpload.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    videoPreview.src = url;
+                    videoPreview.style.display = 'block';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
