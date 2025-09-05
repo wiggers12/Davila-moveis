@@ -172,6 +172,45 @@ h1, h2, h3 {
   margin-top: 20px;
   text-align: center;
 }
+/* ===== MENU DE QUIZZES (cards iniciais) ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+}
+
+.card i {
+  font-size: 24px;
+  color: var(--gold);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.05);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(212,175,55,0.5);
+}
+
+.card a {
+  color: var(--white);
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  margin-top: 5px;
+}
 
 /* ================= BIBLIOTECA: CARROSSEL DE CATEGORIAS ================= */
 .carousel {
