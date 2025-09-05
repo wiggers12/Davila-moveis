@@ -191,13 +191,10 @@ h1, h2, h3 {
   box-shadow: var(--shadow);
 }
 
-.card i {
-  font-size: 24px;
+.card a i {
+  font-size: 28px;
   color: var(--gold);
-  margin-bottom: 10px;
-  display: block;
 }
-
 .card:hover {
   transform: translateY(-5px) scale(1.05);
   border-color: var(--gold);
@@ -205,13 +202,16 @@ h1, h2, h3 {
 }
 
 .card a {
+  display: flex;                 /* Ícone em cima, texto embaixo */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;                       /* espaço entre ícone e texto */
   color: var(--white);
   font-weight: bold;
   text-decoration: none;
-  display: block;
-  margin-top: 5px;
+  font-size: 1em;
 }
-
 /* ================= BIBLIOTECA: CARROSSEL DE CATEGORIAS ================= */
 .carousel {
   position: relative;
