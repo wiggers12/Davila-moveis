@@ -1,197 +1,229 @@
-/* ================= VARIÁVEIS ================= */
+/* ================== BIBLIOTECA DE POSIÇÕES ================== */
+
 :root {
   --bg-dark: #0f0f0f;
-  --bg-gradient: linear-gradient(135deg, #0f0f0f, #1a1a1a, #2a2a2a);
+  --bg-gradient: linear-gradient(135deg, #0f0f0f, #1c1c1c, #2a2a2a);
   --gold: #d4af37;
   --gold-light: #f1d86d;
   --white: #fff;
   --gray: #aaa;
-  --red: #b30000;
-  --card-bg: rgba(28, 28, 28, 0.95);
-  --shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --card-bg: rgba(28, 28, 28, 0.9);
+  --shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
 
-/* ================= BASE ================= */
-body, html {
+body {
   margin: 0;
   padding: 0;
-  height: 100%;
   font-family: 'Poppins', Arial, sans-serif;
   background: var(--bg-gradient);
   color: var(--white);
+  min-height: 100vh;
 }
 
-/* ================= SPLASH ================= */
-#splash {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at center, var(--bg-dark) 40%, var(--red) 80%, black 100%);
-  z-index: 1000;
-}
-
-#splash h1 {
-  font-size: 48px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 3px;
+/* ===== TÍTULO ===== */
+h1 {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 2.5em;
+  font-weight: bold;
   color: var(--gold);
-  text-shadow: 2px 2px var(--red), 0 0 15px rgba(212,175,55,0.6);
-  animation: splashImpact 2s ease forwards;
+  text-shadow: 0 0 12px rgba(212,175,55,0.6);
 }
 
-#splash.hiding { animation: fadeout 1s ease forwards; }
-
-@keyframes splashImpact {
-  0% { transform: scale(0.7) translateY(-40px); opacity: 0; }
-  60% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); }
-}
-
-@keyframes fadeout {
-  from { opacity: 1; }
-  to { opacity: 0; visibility: hidden; pointer-events: none; }
-}
-
-/* ================= MENU PRINCIPAL ================= */
-.hub-container {
+/* ===== FILTROS ===== */
+.filters {
   display: flex;
-  flex-direction: column;
-  gap: 25px;
-  width: 90%;
-  max-width: 500px;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto;
+  flex-wrap: wrap;
+}
+.filters button {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+.filters button:hover,
+.filters button.active {
+  background: var(--gold);
+  color: var(--bg-dark);
+  transform: scale(1.05);
 }
 
-.menu-card {
+/* ===== BARRA DE BUSCA ===== */
+#search-bar {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  max-width: 600px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid var(--gold);
+  background: rgba(255,255,255,0.05);
+  color: var(--white);
+  font-size: 1em;
+  box-shadow: var(--shadow);
+  transition: all .3s ease;
+}
+#search-bar:focus {
+  outline: none;
+  border-color: var(--gold-light);
+  background: rgba(255,255,255,0.1);
+}
+
+/* ===== GRID ===== */
+#posicoes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
+  padding: 25px;
+  margin-top: 20px;
+}
+
+/* ===== CARD ===== */
+.posicao-card {
   background: var(--card-bg);
   border-radius: 14px;
-  padding: 25px;
+  padding: 20px;
   text-align: center;
   box-shadow: var(--shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid transparent;
+  backdrop-filter: blur(10px);
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  scroll-snap-align: start;
+  min-width: 220px; /* importante para carrossel */
 }
-
-.menu-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 20px rgba(212,175,55,0.5);
+.posicao-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  border-color: var(--gold);
+  box-shadow: 0 0 30px rgba(212,175,55,0.5);
 }
-
-.menu-card i {
-  font-size: 40px;
-  color: var(--gold);
+.posicao-card .icon {
+  font-size: 44px;
   margin-bottom: 12px;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(212,175,55,0.5);
 }
-
-.menu-card h2 {
-  margin: 0;
+.posicao-card h3 {
+  margin: 0 0 10px;
   font-size: 1.4em;
   color: var(--white);
+  font-weight: 600;
 }
-
-.menu-card p {
-  margin: 10px 0 15px;
-  color: var(--gray);
+.posicao-card p {
   font-size: 0.95em;
+  color: var(--gray);
+  margin: 0 0 12px;
+  flex-grow: 1;
+}
+.posicao-card .tipo {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 0.85em;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  color: var(--gold);
+  font-weight: bold;
+  letter-spacing: 0.5px;
 }
 
-.btn-card {
-  display: inline-block;
+/* ===== FORMULÁRIO DE ADIÇÃO ===== */
+.add-form {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 14px;
+  margin: 40px auto;
+  max-width: 650px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  border: 1px solid rgba(212,175,55,0.3);
+}
+.add-form h2 {
+  margin-bottom: 18px;
+  color: var(--gold);
+  font-size: 1.6em;
+  text-shadow: 0 0 8px rgba(212,175,55,0.5);
+}
+.add-form input,
+.add-form select,
+.add-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: var(--white);
+  font-size: 1em;
+  transition: background .3s ease, border .3s ease;
+}
+.add-form input:focus,
+.add-form select:focus,
+.add-form textarea:focus {
+  outline: none;
+  background: rgba(255,255,255,0.15);
+}
+.add-form button {
   background: var(--gold);
   color: var(--bg-dark);
   font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.25s;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.05em;
+  transition: all .3s ease;
 }
-
-.btn-card:hover {
+.add-form button:hover {
   background: var(--gold-light);
+  transform: scale(1.05);
 }
 
-/* ================= CARROSSEL (POSIÇÕES) ================= */
-.carousel {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 20px;
-  padding: 20px;
-  justify-content: center;
-}
-
-.categoria-card {
-  flex: 0 0 85%;
-  scroll-snap-align: center;
-  background: var(--card-bg);
-  border-radius: 14px;
-  padding: 20px;
-  text-align: left;
-  box-shadow: var(--shadow);
-}
-
-.categoria-card h3 {
-  text-align: center;
-  margin-bottom: 12px;
-  font-size: 1.3em;
-  color: var(--gold);
-}
-
-.posicao-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.posicao-item h4 {
-  margin: 0;
-  font-size: 0.95em;
-  color: var(--gold);
-}
-
-.posicao-item p {
-  margin: 0;
-  font-size: 0.9em;
-  color: var(--gray);
-  text-align: right;
-}
-
-/* ================= BOTÃO FLUTUANTE ================= */
-#add-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+/* ===== BOTÃO MENU ===== */
+.main-menu-btn {
+  display: block;
+  margin: 30px auto 40px;
   background: var(--gold);
   color: var(--bg-dark);
+  font-weight: bold;
   border: none;
-  border-radius: 50%;
-  width: 55px;
-  height: 55px;
-  font-size: 26px;
+  padding: 12px 28px;
+  border-radius: 10px;
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(212,175,55,0.8);
-  transition: transform 0.2s ease, background 0.2s ease;
-  z-index: 1100;
-  animation: pulse 2s infinite;
+  text-decoration: none;
+  font-size: 1em;
+  transition: all .3s ease;
+  box-shadow: var(--shadow);
 }
-
-#add-btn:hover {
-  transform: scale(1.1);
+.main-menu-btn:hover {
   background: var(--gold-light);
+  transform: translateY(-3px);
 }
 
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 15px rgba(212,175,55,0.8); }
-  50% { box-shadow: 0 0 25px rgba(212,175,55,1), 0 0 40px rgba(212,175,55,0.6); }
-}
-
-/* ================= RESPONSIVIDADE ================= */
-@media (max-width: 600px) {
-  .hub-container { width: 95%; }
-  .menu-card { padding: 18px; }
-  .carousel { gap: 15px; }
-  .categoria-card { flex: 0 0 90%; }
-  #splash h1 { font-size: 34px; }
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  #posicoes-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding: 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .posicao-card {
+    flex: 0 0 auto;
+    min-width: 80%;
+    max-width: 80%;
+  }
 }
