@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Posições</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="screen">
+        <h1><i class="fa-solid fa-sitemap"></i> Biblioteca de Posições</h1>
+        <div class="posicoes-container">
+            <div class="filters">
+                <button class="active" onclick="filterPositions('all')">Todas</button>
+                <button onclick="filterPositions('Guarda')">Guarda</button>
+                <button onclick="filterPositions('Passagem')">Passagem</button>
+                <button onclick="filterPositions('Controle')">Controle</button>
+                <button onclick="filterPositions('Finalização')">Finalização</button>
+                <button onclick="filterPositions('Queda')">Queda</button>
+            </div>
+            <input type="text" id="search-bar" onkeyup="filterPositions()" placeholder="Buscar posição...">
+
+            <div id="posicoes-grid"></div>
+        </div>
+        <a href="index.html" class="main-menu-btn">Voltar ao Menu Principal</a>
+    </div>
+
+    <script>
+        const posicoes = [
+            { nome: 'Guarda Fechada', tipo: 'Guarda', desc: 'Controle fundamental onde as pernas se fecham nas costas do oponente.' },
+            { nome: 'Armlock', tipo: 'Finalização', desc: 'Chave de braço que hiperextende o cotovelo, partindo de várias posições.' },
+            { nome: 'Montada', tipo: 'Controle', desc: 'Posição dominante sentado sobre o torso do oponente, com alto potencial de finalização.' },
+            { nome: 'Double Leg', tipo: 'Queda', desc: 'Queda que visa controlar as duas pernas do oponente para derrubá-lo.' },
+            { nome: 'Passagem Torreando', tipo: 'Passagem', desc: 'Passagem de guarda rápida, circulando as pernas do oponente.' },
+            { nome: 'Pegada de Costas', tipo: 'Controle', desc: 'Controle dominante pelas costas, com ganchos e cinto de segurança (seatbelt).' },
+            { nome: 'Mata-Leão', tipo: 'Finalização', desc: 'Estrangulamento sanguíneo aplicado a partir das costas.' },
+            { nome: 'Guarda Aranha', tipo: 'Guarda', desc: 'Guarda aberta que usa os pés nos bíceps do oponente para controlar a distância.' },
+            { nome: 'Raspagem de Gancho', tipo: 'Guarda', desc: 'Partindo da guarda borboleta, usa os ganchos para desequilibrar e inverter.' },
+            { nome: 'Cem Kilos (100kg)', tipo: 'Controle', desc: 'Controle lateral no chão, distribuindo o peso sobre o oponente.' },
+            { nome: 'Triângulo', tipo: 'Finalização', desc: 'Estrangulamento com as pernas que prende o pescoço e um braço do oponente.' },
+            { nome: 'Passagem de Pressão', tipo: 'Passagem', desc: 'Passagem que utiliza o peso e a pressão para amassar e passar a guarda.' },
+        ];
+
+        let currentFilter = 'all';
+
+        const grid = document.getElementById('posicoes-grid');
+        const searchBar = document.getElementById('search-bar');
+        const filterButtons = document.querySelectorAll('.filters button');
+
+        function renderPositions() {
+            grid.innerHTML = '';
+            const searchTerm = searchBar.value.toLowerCase();
+
+            const filteredPositions = posicoes.filter(p => {
+                const matchesFilter = currentFilter === 'all' || p.tipo === currentFilter;
+                const matchesSearch = p.nome.toLowerCase().includes(searchTerm) || p.desc.toLowerCase().includes(searchTerm);
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filteredPositions.length === 0) {
+                grid.innerHTML = '<p>Nenhuma posição encontrada.</p>';
+                return;
+            }
+
+            filteredPositions.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'posicao-card';
+                card.innerHTML = `
+                    <h3>${p.nome}</h3>
+                    <p>${p.desc}</p>
+                    <span class="tipo">${p.tipo}</span>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterPositions(tipo) {
+            if (typeof tipo === 'string') {
+                currentFilter = tipo;
+                filterButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.innerText.toLowerCase() === tipo || (tipo === 'all' && btn.innerText === 'Todas'));
+                });
+            }
+            renderPositions();
+        }
+
+        // Initial render
+        renderPositions();
+    </script>
+</body>
+</html>
