@@ -50,22 +50,30 @@
     </div>
 
     <script>
-        /* LÓGICA DO SPLASH SCREEN */
-        window.addEventListener('load', () => {
-          const splash = document.getElementById('splash');
-          const hub = document.getElementById('hub');
+  /* LÓGICA DO SPLASH SCREEN */
+  window.addEventListener('load', () => {
+    const splash = document.getElementById('splash');
+    const hub = document.getElementById('hub');
+    const jaVisto = localStorage.getItem("splashVisto");
 
-          setTimeout(() => {
-            splash.classList.add('hiding'); 
+    if (!jaVisto) {
+      // Mostra splash apenas na primeira vez
+      setTimeout(() => {
+        splash.classList.add('hiding'); 
+        splash.addEventListener('animationend', () => {
+          splash.style.display = 'none'; 
+          hub.style.display = 'flex'; 
+          localStorage.setItem("splashVisto", "true"); // Marca como já visto
+        }, { once: true });
+      }, 3000); // 3 segundos
+    } else {
+      // Se já foi visto, pula direto
+      splash.style.display = 'none';
+      hub.style.display = 'flex';
+    }
+  });
+</script>
 
-            splash.addEventListener('animationend', () => {
-              splash.style.display = 'none'; 
-              hub.style.display = 'flex'; // Mostra o hub
-            }, { once: true });
-
-          }, 3000); // 3 segundos de delay
-        });
-    </script>
     
 </body>
 </html>
