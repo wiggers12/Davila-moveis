@@ -1,10 +1,10 @@
-// firebase.js
+// Importa os módulos Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+// 🔑 Configuração certa do projeto JIU-JITSU-PURO (copie do Console > Configurações do Projeto > Suas apps > Web)
 const firebaseConfig = {
-  const firebaseConfig = {
   apiKey: "AIzaSyDS2Nd7av1K4sgWIa5Wjl177dsL8rbdNVA",
   authDomain: "jiu-jitsu-puro.firebaseapp.com",
   projectId: "jiu-jitsu-puro",
@@ -14,12 +14,12 @@ const firebaseConfig = {
   measurementId: "G-3S051XEGY7"
 };
 
-// Inicializa
+// Inicializa Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// Função de login
+// Função de login Google
 export async function loginGoogle() {
   const provider = new GoogleAuthProvider();
   try {
@@ -29,7 +29,7 @@ export async function loginGoogle() {
     // Cria registro no Firestore (se ainda não existir)
     await setDoc(doc(db, "usuarios", user.uid), {
       email: user.email,
-      ativo: false, // só libera após pagamento Pix
+      ativo: false, // só libera após pagamento
       plano: "pendente"
     }, { merge: true });
 
@@ -40,7 +40,7 @@ export async function loginGoogle() {
   }
 }
 
-// Verifica se usuário está ativo
+// Verificação de acesso
 export async function verificarAcesso(callback) {
   onAuthStateChanged(auth, async (user) => {
     if (user) {
