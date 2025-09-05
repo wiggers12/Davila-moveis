@@ -1,0 +1,297 @@
+/* ARQUIVO: style.css */
+:root {
+  --bg-dark: #0f0f0f;
+  --gold: #d4af37;
+  --white: #fff;
+  --card-bg: #1c1c1c;
+  --correct: #2ecc71;
+  --wrong: #e74c3c;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background: var(--bg-dark);
+  color: var(--white);
+}
+
+/* ================= SPLASH ================= */
+#splash {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#splash.hiding {
+  animation: fadeout 1s ease forwards;
+}
+
+#splash h1 {
+  font-size: 48px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  background: linear-gradient(90deg, white, #007bff, #6f42c1, #8b4513, black);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 300%;
+  animation: faixaAnim 3s linear infinite;
+  position: relative;
+}
+
+#splash h1::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.7), transparent);
+  animation: brilho 2s infinite;
+}
+
+@keyframes faixaAnim {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes brilho { to { left: 150%; } }
+@keyframes fadeout { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
+
+/* ================= TELAS E LAYOUT GERAL ================= */
+.screen { padding: 20px; animation: fadein 0.5s ease; }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+h1 { color: var(--gold); text-align: center; margin-bottom: 20px; }
+
+/* ================= CARD PRINCIPAL ================= */
+.big-card {
+  background: var(--card-bg);
+  border: 2px solid var(--gold);
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--gold);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.3s;
+  max-width: 400px;
+  margin: 120px auto;
+}
+.big-card:hover { transform: scale(1.05); }
+
+/* ================= SUBCARDS (OPÇÕES) ================= */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+  transition: transform .2s;
+}
+
+/* Adicionando estilo para links dentro dos cards */
+.card a {
+  text-decoration: none;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.card a:hover { color: var(--gold); }
+.card:hover { transform: scale(1.08); }
+
+
+.card.show { animation: cardfade 0.6s ease forwards; }
+
+.card i {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: var(--gold);
+}
+
+@keyframes cardfade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= CONTEÚDO DETALHADO ================= */
+.content-box {
+  background: #1a1a1a;
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.content-box h2 { color: var(--gold); text-align: center; margin-bottom: 15px; }
+
+/* ================= ESTILO DO QUIZ ================= */
+.quiz-container { text-align: center; }
+.quiz-question { color: var(--gold); font-size: 1.2em; margin-bottom: 20px; }
+.quiz-options .option {
+  background: #2c2c2c;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px auto;
+  cursor: pointer;
+  max-width: 400px;
+  transition: background 0.3s;
+}
+.quiz-options .option:hover { background: #3a3a3a; }
+.quiz-options .option.correct { background: var(--correct); color: #fff; border-color: var(--correct); }
+.quiz-options .option.wrong { background: var(--wrong); color: #fff; border-color: var(--wrong); }
+.quiz-options .option.disabled { pointer-events: none; opacity: 0.7; }
+
+.quiz-feedback { margin-top: 15px; font-weight: bold; min-height: 24px; }
+.quiz-progress { margin: 10px; font-style: italic; opacity: 0.8; }
+
+.quiz-button {
+  margin-top: 15px;
+  background: var(--gold);
+  border: none;
+  color: var(--bg-dark);
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.quiz-final-score { font-size: 1.5em; color: var(--gold); margin: 20px; }
+
+/* ================= PLACAR ================= */
+#placar {
+  text-align: center;
+  margin: 15px 0;
+  font-weight: bold;
+  color: var(--gold);
+}
+
+/* ================= BOTÕES ================= */
+.back-btn, .main-menu-btn {
+  display: block;
+  margin: 20px auto 0;
+  background: var(--gold);
+  color: var(--bg-dark);
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s;
+  text-decoration: none;
+  text-align: center;
+  width: fit-content;
+}
+.back-btn:hover, .main-menu-btn:hover { background: #f1d86d; }
+
+/* ================= UPLOAD DE VÍDEO (Página de Análise) ================= */
+.upload-box {
+  background: #1a1a1a;
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+}
+.upload-box input, .upload-box textarea {
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid var(--gold);
+  background: #2c2c2c;
+  color: var(--white);
+}
+.upload-box video {
+  margin-top: 15px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* ================= BIBLIOTECA DE POSIÇÕES ================= */
+.posicoes-container {
+  max-width: 900px;
+  margin: auto;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.filters button {
+  background: var(--card-bg);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.filters button.active {
+  background: var(--gold);
+  color: var(--bg-dark);
+}
+#search-bar {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--gold);
+  background: #2c2c2c;
+  color: var(--white);
+  font-size: 1em;
+}
+
+#posicoes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+.posicao-card {
+  background: var(--card-bg);
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 15px;
+}
+.posicao-card h3 {
+  color: var(--gold);
+  margin-top: 0;
+}
+.posicao-card .tipo {
+  background: var(--gold);
+  color: var(--bg-dark);
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 10px;
+}
