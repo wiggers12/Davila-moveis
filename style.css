@@ -392,13 +392,16 @@ h1, h2, h3 {
   transform: translateY(-2px);
   
 }
-/* ==== BOTÃO DE LOGIN COM GOOGLE (versão premium) ==== */
+/* ==== CONTAINER FIXO DO LOGIN ==== */
 .login-container {
-  display: flex;
-  justify-content: center;
-  margin: 30px 0;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000; /* acima do resto */
 }
 
+/* ==== BOTÃO GOOGLE PREMIUM ==== */
 .google-btn {
   display: flex;
   align-items: center;
@@ -430,6 +433,7 @@ h1, h2, h3 {
 .google-btn:active {
   transform: scale(0.95);
   box-shadow: inset 0 3px 8px rgba(0,0,0,0.5);
+}
 }
 /* ================= BOTÕES ================= */
 .back-btn, .main-menu-btn, .quiz-button {
