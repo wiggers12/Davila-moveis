@@ -7,6 +7,64 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
+    /* ==== CARDS DE CATEGORIAS ==== */
+    .carousel {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      overflow: hidden;
+      margin: 30px auto;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 20px;
+      transition: transform .4s ease;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--gold);
+      border: none;
+      color: var(--bg-dark);
+      font-size: 1.5em;
+      padding: 8px 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+    .carousel-btn.prev { left: -50px; }
+    .carousel-btn.next { right: -50px; }
+
+    .cat-card {
+      min-width: 150px;
+      height: 150px;
+      background: var(--card-bg);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      text-align: center;
+      padding: 20px 10px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: all .3s ease;
+    }
+    .cat-card i {
+      font-size: 28px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .cat-card h3 {
+      color: var(--white);
+      font-size: 1em;
+      margin: 0;
+    }
+    .cat-card:hover {
+      transform: translateY(-5px) scale(1.05);
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(212,175,55,0.5);
+    }
+
+    /* Formulário */
     .add-form {
       background: var(--card-bg);
       padding: 20px;
@@ -45,40 +103,60 @@
   </style>
 </head>
 <body>
-  <div class="screen">
-    <h1><i class="fa-solid fa-sitemap"></i> Biblioteca de Posições</h1>
-    <div class="posicoes-container">
-      <div class="filters">
-        <button class="active" onclick="filterPositions('all')">Todas</button>
-        <button onclick="filterPositions('Guarda')">Guarda</button>
-        <button onclick="filterPositions('Passagem')">Passagem</button>
-        <button onclick="filterPositions('Controle')">Controle</button>
-        <button onclick="filterPositions('Finalização')">Finalização</button>
-        <button onclick="filterPositions('Queda')">Queda</button>
+  <!-- TELA INICIAL: CARDS DAS CATEGORIAS -->
+  <div id="biblioteca-categorias" class="screen center-content">
+    <div>
+      <h1><i class="fa-solid fa-sitemap"></i> Biblioteca de Posições</h1>
+      <div class="carousel">
+        <div class="carousel-track">
+          <div class="cat-card" onclick="abrirCategoria('Guarda')">
+            <i class="fa-solid fa-shield-halved"></i><h3>Guarda</h3>
+          </div>
+          <div class="cat-card" onclick="abrirCategoria('Passagem')">
+            <i class="fa-solid fa-right-left"></i><h3>Passagem</h3>
+          </div>
+          <div class="cat-card" onclick="abrirCategoria('Controle')">
+            <i class="fa-solid fa-hand"></i><h3>Controle</h3>
+          </div>
+          <div class="cat-card" onclick="abrirCategoria('Finalização')">
+            <i class="fa-solid fa-lock"></i><h3>Finalização</h3>
+          </div>
+          <div class="cat-card" onclick="abrirCategoria('Queda')">
+            <i class="fa-solid fa-arrow-down"></i><h3>Queda</h3>
+          </div>
+        </div>
+        <button class="carousel-btn prev" onclick="moverCarousel(-1)">‹</button>
+        <button class="carousel-btn next" onclick="moverCarousel(1)">›</button>
       </div>
-      <input type="text" id="search-bar" onkeyup="filterPositions()" placeholder="Buscar posição...">
-      <div id="posicoes-grid"></div>
     </div>
-
-    <!-- Formulário para adicionar nova posição -->
-    <div class="add-form">
-      <h2>Adicionar Nova Posição</h2>
-      <input type="text" id="novaNome" placeholder="Nome da posição" required>
-      <select id="novaTipo">
-        <option value="Guarda">Guarda</option>
-        <option value="Passagem">Passagem</option>
-        <option value="Controle">Controle</option>
-        <option value="Finalização">Finalização</option>
-        <option value="Queda">Queda</option>
-      </select>
-      <textarea id="novaDesc" rows="3" placeholder="Descrição da posição"></textarea>
-      <button onclick="adicionarPosicao()">Adicionar</button>
-    </div>
-
-    <a href="index.html" class="main-menu-btn">Voltar ao Menu Principal</a>
   </div>
 
+  <!-- TELA SECUNDÁRIA: GRID DE POSIÇÕES -->
+  <div id="biblioteca-posicoes" class="screen" style="display:none;">
+    <h1 id="titulo-categoria"></h1>
+    <div id="posicoes-grid"></div>
+    <button class="back-btn" onclick="voltarBiblioteca()">Voltar</button>
+  </div>
+
+  <!-- FORMULÁRIO DE ADIÇÃO -->
+  <div class="add-form">
+    <h2>Adicionar Nova Posição</h2>
+    <input type="text" id="novaNome" placeholder="Nome da posição" required>
+    <select id="novaTipo">
+      <option value="Guarda">Guarda</option>
+      <option value="Passagem">Passagem</option>
+      <option value="Controle">Controle</option>
+      <option value="Finalização">Finalização</option>
+      <option value="Queda">Queda</option>
+    </select>
+    <textarea id="novaDesc" rows="3" placeholder="Descrição da posição"></textarea>
+    <button onclick="adicionarPosicao()">Adicionar</button>
+  </div>
+
+  <a href="index.html" class="main-menu-btn">Voltar ao Menu Principal</a>
+
   <script>
+    /* === TODAS AS POSIÇÕES (igual você já tinha) === */
     const posicoes = [
       /* ===== GUARDAS ===== */
       { nome: 'Guarda Fechada', tipo: 'Guarda', desc: 'Controle com as pernas cruzadas nas costas do oponente.' },
@@ -191,67 +269,51 @@
       { nome: 'Ura Nage', tipo: 'Queda', desc: 'Arremesso para trás, estilo suplex.' }
     ];
 
-    let currentFilter = 'all';
-    const grid = document.getElementById('posicoes-grid');
-    const searchBar = document.getElementById('search-bar');
-    const filterButtons = document.querySelectorAll('.filters button');
+    /* --- Funções de navegação --- */
+    function abrirCategoria(tipo) {
+      document.getElementById("biblioteca-categorias").style.display = "none";
+      document.getElementById("biblioteca-posicoes").style.display = "block";
+      document.getElementById("titulo-categoria").innerText = tipo;
+      renderCategoria(tipo);
+    }
 
-    function renderPositions() {
-      grid.innerHTML = '';
-      const searchTerm = searchBar.value.toLowerCase();
+    function voltarBiblioteca() {
+      document.getElementById("biblioteca-posicoes").style.display = "none";
+      document.getElementById("biblioteca-categorias").style.display = "flex";
+    }
 
-      const filteredPositions = posicoes.filter(p => {
-        const matchesFilter = currentFilter === 'all' || p.tipo === currentFilter;
-        const matchesSearch = p.nome.toLowerCase().includes(searchTerm) || p.desc.toLowerCase().includes(searchTerm);
-        return matchesFilter && matchesSearch;
-      });
-
-      if (filteredPositions.length === 0) {
-        grid.innerHTML = '<p>Nenhuma posição encontrada.</p>';
-        return;
-      }
-
-      filteredPositions.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'posicao-card';
-        card.innerHTML = `
-          <h3>${p.nome}</h3>
-          <p>${p.desc}</p>
-          <span class="tipo">${p.tipo}</span>
-        `;
+    /* --- Renderizar posições filtradas --- */
+    function renderCategoria(tipo) {
+      const grid = document.getElementById("posicoes-grid");
+      grid.innerHTML = "";
+      const filtradas = posicoes.filter(p => p.tipo === tipo);
+      filtradas.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "posicao-card";
+        card.innerHTML = `<h3>${p.nome}</h3><p>${p.desc}</p><span class="tipo">${p.tipo}</span>`;
         grid.appendChild(card);
       });
     }
 
-    function filterPositions(tipo) {
-      if (typeof tipo === 'string') {
-        currentFilter = tipo;
-        filterButtons.forEach(btn => {
-          btn.classList.toggle('active', btn.innerText.toLowerCase() === tipo || (tipo === 'all' && btn.innerText === 'Todas'));
-        });
-      }
-      renderPositions();
-    }
-
+    /* --- Adicionar nova posição --- */
     function adicionarPosicao() {
       const nome = document.getElementById('novaNome').value.trim();
       const tipo = document.getElementById('novaTipo').value;
       const desc = document.getElementById('novaDesc').value.trim();
-
-      if (!nome || !desc) {
-        alert("Preencha todos os campos antes de adicionar!");
-        return;
-      }
-
+      if (!nome || !desc) { alert("Preencha todos os campos!"); return; }
       posicoes.push({ nome, tipo, desc });
-      document.getElementById('novaNome').value = '';
-      document.getElementById('novaDesc').value = '';
-      renderPositions();
       alert("Posição adicionada com sucesso!");
     }
 
-    // Render inicial
-    renderPositions();
+    /* --- Carousel --- */
+    let currentSlide = 0;
+    function moverCarousel(direcao) {
+      const track = document.querySelector('.carousel-track');
+      const cards = document.querySelectorAll('.cat-card');
+      const total = cards.length;
+      currentSlide = (currentSlide + direcao + total) % total;
+      track.style.transform = `translateX(${-currentSlide * 170}px)`;
+    }
   </script>
 </body>
 </html>
