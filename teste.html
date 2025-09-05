@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jiu-Jitsu Puro</title>
 
-  <!-- Importando Font Awesome para ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -35,9 +34,11 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      #splash.hiding {
-  animation: fadeout 1s ease forwards; /* Duração pode ser ajustada */
-}
+    }
+
+    /* CLASSE PARA ATIVAR A ANIMAÇÃO (AGORA NO LUGAR CORRETO) */
+    #splash.hiding {
+      animation: fadeout 1s ease forwards;
     }
 
     #splash h1 {
@@ -240,17 +241,14 @@
 </head>
 <body>
 
-  <!-- ================ SPLASH ================ -->
   <div id="splash"><h1>Jiu-Jitsu Puro</h1></div>
 
-  <!-- ================ TELA INICIAL ================ -->
   <div id="home" class="screen">
     <div class="big-card" onclick="showScreen('menu')">
       O que você quer aprender hoje?
     </div>
   </div>
 
-  <!-- ================ TELA DE OPÇÕES ================ -->
   <div id="menu" class="screen">
     <h1>Escolha uma opção</h1>
     <div id="placar">Placar: 0 acertos</div>
@@ -270,7 +268,6 @@
     <button class="back-btn" onclick="showScreen('home')">Voltar</button>
   </div>
 
-  <!-- ================ TELA DE CONTEÚDO ================= -->
   <div id="conteudo" class="screen">
     <div class="content-box">
       <h2 id="conteudo-titulo"></h2>
@@ -280,7 +277,6 @@
     </div>
   </div>
 
-  <!-- ================ TELA DE ANÁLISE DE LUTA ================= -->
   <div id="analise" class="screen">
     <h1>Análise de Luta</h1>
     <div class="upload-box">
@@ -296,8 +292,7 @@
     const conteudos = {
       comeco: `<strong>O Começo:</strong> Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é evolução.`,
       regras: `<strong>Regras:</strong> Pontuação, finalizações e foco na técnica.`,
-      tatame: `<strong>Tatame:</strong> Cumpriment
-            tatame: `<strong>Tatame:</strong> Cumprimente sempre, mantenha higiene, respeite colegas e professor.`,
+      tatame: `<strong>Tatame:</strong> Cumprimente sempre, mantenha higiene, respeite colegas e professor.`,
       mentalidade: `<strong>Mentalidade:</strong> Paciência, resiliência, humildade e controle emocional.`,
       guarda: `<strong>Guarda:</strong> Fechada, aberta, aranha, de la Riva, X-Guard.`,
       passagens: `<strong>Passagens:</strong> De joelho, torre, pressão, explosiva.`,
@@ -465,23 +460,24 @@
     }
 
    /* =================== SPLASH -> HOME (VERSÃO CORRIGIDA) =================== */
-window.addEventListener('load', () => {
-    const splash = document.getElementById('splash');
+    window.addEventListener('load', () => {
+        const splash = document.getElementById('splash');
 
-    // 1. Espera 3 segundos (ou o tempo que preferir)
-    setTimeout(() => {
-        // 2. Adiciona a classe que inicia a animação de fade-out
-        splash.classList.add('hiding');
+        // 1. Espera 3 segundos (ou o tempo que preferir)
+        setTimeout(() => {
+            // 2. Adiciona a classe que inicia a animação de fade-out
+            splash.classList.add('hiding');
 
-        // 3. Adiciona um "ouvinte" que espera a animação CSS terminar
-        splash.addEventListener('animationend', () => {
-            // 4. SÓ QUANDO a animação terminar, esconde o splash e mostra a tela home
-            splash.style.display = 'none';
-            showScreen('home');
-        }, { once: true }); // O { once: true } faz o "ouvinte" ser removido após ser usado 1 vez
+            // 3. Adiciona um "ouvinte" que espera a animação CSS terminar
+            splash.addEventListener('animationend', () => {
+                // 4. SÓ QUANDO a animação terminar, esconde o splash e mostra a tela home
+                splash.style.display = 'none';
+                showScreen('home');
+            }, { once: true }); // O { once: true } faz o "ouvinte" ser removido após ser usado 1 vez
 
-    }, 3000); // Delay inicial de 3 segundos
-});
+        }, 3000); // Delay inicial de 3 segundos
+    });
+    
     /* =================== UPLOAD DE VÍDEO =================== */
     const videoUpload = document.getElementById('videoUpload');
     const videoPreview = document.getElementById('videoPreview');
