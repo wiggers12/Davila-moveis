@@ -35,8 +35,9 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      animation: fadeout 2s ease forwards;
-      animation-delay: 4s;
+      #splash.hiding {
+  animation: fadeout 1s ease forwards; /* Duração pode ser ajustada */
+}
     }
 
     #splash h1 {
@@ -463,19 +464,24 @@
       }
     }
 
-    /* =================== SPLASH -> HOME =================== */
-// Após 4 segundos, mostra a tela principal (ela aparecerá por baixo do splash que está sumindo)
-setTimeout(() => { 
-    showScreen('home'); 
-}, 4000);
-
-// Após 6 segundos (4s de delay + 2s de animação), remove completamente o splash
-setTimeout(() => {
+   /* =================== SPLASH -> HOME (VERSÃO CORRIGIDA) =================== */
+window.addEventListener('load', () => {
     const splash = document.getElementById('splash');
-    if (splash) {
-        splash.style.display = 'none';
-    }
-}, 6000);
+
+    // 1. Espera 3 segundos (ou o tempo que preferir)
+    setTimeout(() => {
+        // 2. Adiciona a classe que inicia a animação de fade-out
+        splash.classList.add('hiding');
+
+        // 3. Adiciona um "ouvinte" que espera a animação CSS terminar
+        splash.addEventListener('animationend', () => {
+            // 4. SÓ QUANDO a animação terminar, esconde o splash e mostra a tela home
+            splash.style.display = 'none';
+            showScreen('home');
+        }, { once: true }); // O { once: true } faz o "ouvinte" ser removido após ser usado 1 vez
+
+    }, 3000); // Delay inicial de 3 segundos
+});
     /* =================== UPLOAD DE VÍDEO =================== */
     const videoUpload = document.getElementById('videoUpload');
     const videoPreview = document.getElementById('videoPreview');
