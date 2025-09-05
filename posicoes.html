@@ -108,27 +108,33 @@
     <div>
       <h1><i class="fa-solid fa-sitemap"></i> Biblioteca de Posições</h1>
       <div class="carousel">
-        <div class="carousel-track">
-          <div class="cat-card" onclick="abrirCategoria('Guarda')">
-            <i class="fa-solid fa-shield-halved"></i><h3>Guarda</h3>
-          </div>
-          <div class="cat-card" onclick="abrirCategoria('Passagem')">
-            <i class="fa-solid fa-right-left"></i><h3>Passagem</h3>
-          </div>
-          <div class="cat-card" onclick="abrirCategoria('Controle')">
-            <i class="fa-solid fa-hand"></i><h3>Controle</h3>
-          </div>
-          <div class="cat-card" onclick="abrirCategoria('Finalização')">
-            <i class="fa-solid fa-lock"></i><h3>Finalização</h3>
-          </div>
-          <div class="cat-card" onclick="abrirCategoria('Queda')">
-            <i class="fa-solid fa-arrow-down"></i><h3>Queda</h3>
-          </div>
-        </div>
-        <button class="carousel-btn prev" onclick="moverCarousel(-1)">‹</button>
-        <button class="carousel-btn next" onclick="moverCarousel(1)">›</button>
-      </div>
+  <div class="carousel-track">
+    <div class="cat-card" onclick="abrirCategoria('Guarda')">
+      <i class="fa-solid fa-shield"></i>
+      <h3>Guarda</h3>
     </div>
+    <div class="cat-card" onclick="abrirCategoria('Passagem')">
+      <i class="fa-solid fa-right-left"></i>
+      <h3>Passagem</h3>
+    </div>
+    <div class="cat-card" onclick="abrirCategoria('Controle')">
+      <i class="fa-solid fa-hand"></i>
+      <h3>Controle</h3>
+    </div>
+    <div class="cat-card" onclick="abrirCategoria('Finalização')">
+      <i class="fa-solid fa-lock"></i>
+      <h3>Finalização</h3>
+    </div>
+    <div class="cat-card" onclick="abrirCategoria('Queda')">
+      <i class="fa-solid fa-arrow-down"></i>
+      <h3>Queda</h3>
+    </div>
+  </div>
+
+  <button class="carousel-btn prev" onclick="moverCarousel(-1)">&#10094;</button>
+  <button class="carousel-btn next" onclick="moverCarousel(1)">&#10095;</button>
+</div>
+
   </div>
 
   <!-- TELA SECUNDÁRIA: GRID DE POSIÇÕES -->
@@ -305,15 +311,19 @@
       alert("Posição adicionada com sucesso!");
     }
 
-    /* --- Carousel --- */
-    let currentSlide = 0;
-    function moverCarousel(direcao) {
-      const track = document.querySelector('.carousel-track');
-      const cards = document.querySelectorAll('.cat-card');
-      const total = cards.length;
-      currentSlide = (currentSlide + direcao + total) % total;
-      track.style.transform = `translateX(${-currentSlide * 170}px)`;
-    }
+   let currentSlide = 0;
+function moverCarousel(direcao) {
+  const track = document.querySelector('.carousel-track');
+  const cards = document.querySelectorAll('.cat-card');
+  const total = cards.length;
+
+  currentSlide = (currentSlide + direcao + total) % total;
+  track.style.transform = `translateX(${-currentSlide * 100}%)`;
+}
+
+// autoplay a cada 4s
+setInterval(() => moverCarousel(1), 4000);
+
   </script>
 </body>
 </html>
