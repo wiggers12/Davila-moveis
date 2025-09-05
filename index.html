@@ -9,7 +9,7 @@
 </head>
 <body>
 
-  <!-- SPLASH (mostra apenas na primeira vez) -->
+  <!-- SPLASH -->
   <div id="splash" style="display: flex;">
     <h1>Jiu-Jitsu Puro</h1>
   </div>
@@ -49,20 +49,19 @@
         </div>
         <div class="price-tag">R$ 69,90</div>
       </a>
+    </div>
 
-      <!-- Área de Login -->
-      <div class="login-container" id="loginBox">
-        <button id="btnLogin" class="google-btn">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
-          Entrar com Google
-        </button>
-      </div>
+    <!-- Área de Login / Usuário -->
+    <div class="login-container" id="loginBox">
+      <button id="btnLogin" class="google-btn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+        Entrar com Google
+      </button>
+    </div>
 
-      <!-- Área do Usuário Logado -->
-      <div class="login-container" id="userBox" style="display:none;">
-        <p id="welcomeMsg"></p>
-        <button id="btnLogout" class="back-btn">Sair</button>
-      </div>
+    <div class="login-container" id="userBox" style="display:none;">
+      <p id="welcomeMsg"></p>
+      <button id="btnLogout" class="back-btn">Sair</button>
     </div>
   </div>
 
@@ -96,7 +95,6 @@
       });
     }
 
-    // Mantém estado de login entre páginas
     onAuthStateChanged(auth, (user) => {
       if (user) {
         loginBox.style.display = "none";
