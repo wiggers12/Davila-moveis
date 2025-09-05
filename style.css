@@ -1,174 +1,260 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Biblioteca de Posições</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <!-- ===== Splash ===== -->
-  <div id="splash">
-    <h1>Jiu-Jitsu Puro</h1>
-  </div>
+/* ================= VARIÁVEIS ================= */
+:root {
+  --bg-dark: #0f0f0f;
+  --bg-gradient: linear-gradient(135deg, #0f0f0f, #1a1a1a, #2a2a2a);
+  --gold: #d4af37;
+  --gold-light: #f1d86d;
+  --white: #fff;
+  --gray: #aaa;
+  --red: #b30000;
+  --card-bg: rgba(28, 28, 28, 0.92);
+  --correct: #2ecc71;
+  --wrong: #e74c3c;
+  --shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
 
-  <!-- ===== Tela Inicial ===== -->
-  <div id="home" class="screen" style="display:none;">
-    <h1><i class="fa-solid fa-sitemap"></i> Biblioteca de Posições</h1>
-    <div class="carousel">
-      <div class="carousel-track" id="carousel-track"></div>
-    </div>
-    <a href="index.html" class="main-menu-btn">Voltar ao Menu Principal</a>
-  </div>
+/* ================= BASE ================= */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', Arial, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--white);
+  overflow-x: hidden;
+}
 
-  <!-- ===== Tela Detalhe ===== -->
-  <div id="detalhe" class="screen" style="display:none;">
-    <h1 id="detalhe-titulo"></h1>
-    <div id="detalhe-grid"></div>
-    <button class="back-btn" onclick="voltarHome()">Voltar</button>
-  </div>
+/* Helper */
+.center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
 
-  <!-- ===== Botão flutuante ===== -->
-  <button id="add-btn"><i class="fa-solid fa-plus"></i></button>
+/* ================= SPLASH ================= */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--bg-dark) 40%, var(--red) 80%, black 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 1000;
+}
 
-  <!-- ===== Modal ===== -->
-  <div id="modal">
-    <div class="modal-content">
-      <h2>Adicionar Nova Posição</h2>
-      <input type="text" id="novaNome" placeholder="Nome da posição" required>
-      <select id="novaTipo">
-        <option value="Guarda">Guarda</option>
-        <option value="Passagem">Passagem</option>
-        <option value="Controle">Controle</option>
-        <option value="Finalização">Finalização</option>
-        <option value="Queda">Queda</option>
-      </select>
-      <textarea id="novaDesc" rows="3" placeholder="Descrição da posição"></textarea>
-      <div>
-        <button class="btn-save" onclick="salvarPosicao()">Salvar</button>
-        <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
-      </div>
-    </div>
-  </div>
+#splash h1 {
+  font-size: 56px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-shadow: 3px 3px var(--red), -2px -2px #333, 0 0 20px rgba(212,175,55,0.7);
+  animation: splashImpact 1.5s ease forwards;
+}
 
-  <script>
-    // ===== Sons =====
-    function playSound(file) {
-      const audio = new Audio(file);
-      audio.volume = 0.5;
-      audio.play();
-    }
+#splash.hiding {
+  animation: fadeout 1s ease forwards;
+}
 
-    // ===== Dados iniciais (resumidos p/ exemplo, ajuste conforme quiser 20 em cada) =====
-    const categorias = JSON.parse(localStorage.getItem("posicoesData")) || {
-      Guarda: { icon: '<i class="fa-solid fa-shield-halved"></i>', posicoes: [
-        { nome: 'Guarda Fechada', desc: 'Controle com pernas cruzadas.' },
-        { nome: 'Guarda Aberta', desc: 'Controle de distância.' }
-      ]},
-      Passagem: { icon: '<i class="fa-solid fa-right-left"></i>', posicoes: [
-        { nome: 'Torreando', desc: 'Contorna as pernas.' },
-        { nome: 'Knee Cut', desc: 'Joelho cortando a guarda.' }
-      ]},
-      Controle: { icon: '<i class="fa-solid fa-user-shield"></i>', posicoes: [
-        { nome: 'Montada', desc: 'Sentado no torso.' },
-        { nome: '100kg', desc: 'Controle lateral básico.' }
-      ]},
-      Finalização: { icon: '<i class="fa-solid fa-lock"></i>', posicoes: [
-        { nome: 'Armlock', desc: 'Chave de braço.' },
-        { nome: 'Mata-Leão', desc: 'Estrangulamento costas.' }
-      ]},
-      Queda: { icon: '<i class="fa-solid fa-arrow-down"></i>', posicoes: [
-        { nome: 'Double Leg', desc: 'Ataque às duas pernas.' },
-        { nome: 'Single Leg', desc: 'Ataque a uma perna.' }
-      ]}
-    };
+@keyframes splashImpact {
+  0% { transform: scale(0.5) translateY(-80px); opacity: 0; }
+  50% { transform: scale(1.3); opacity: 1; }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
 
-    const splash = document.getElementById("splash");
-    const home = document.getElementById("home");
-    const detalhe = document.getElementById("detalhe");
-    const detalheGrid = document.getElementById("detalhe-grid");
-    const detalheTitulo = document.getElementById("detalhe-titulo");
-    const track = document.getElementById("carousel-track");
-    const modal = document.getElementById("modal");
+@keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
 
-    // ===== Splash =====
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        playSound('sounds/impact.mp3');
-        splash.classList.add("hiding");
-        splash.addEventListener("animationend", () => {
-          splash.style.display = "none";
-          home.style.display = "block";
-        }, { once: true });
-      }, 1200);
-    });
+/* ================= CARDS GERAIS ================= */
+.categoria-card, .posicao-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+  text-align: center;
+  border: 1px solid transparent;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
 
-    // ===== Renderizar tela inicial =====
-    function renderHome() {
-      track.innerHTML = "";
-      Object.keys(categorias).forEach(cat => {
-        const card = document.createElement("div");
-        card.className = "categoria-card";
-        card.onclick = () => abrirDetalhe(cat);
-        card.innerHTML = `<div class="icon">${categorias[cat].icon}</div><h3>${cat}</h3>`;
-        track.appendChild(card);
-      });
-    }
-    renderHome();
+.categoria-card:hover, .posicao-card:hover {
+  border-color: var(--gold);
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(212,175,55,0.6);
+}
 
-    // ===== Carrossel automático =====
-    let index = 0;
-    setInterval(() => {
-      index = (index + 1) % Object.keys(categorias).length;
-      track.style.transform = `translateX(-${index * 100}%)`;
-    }, 3000);
+.categoria-card .icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+  color: var(--gold);
+}
 
-    // ===== Abrir detalhe =====
-    function abrirDetalhe(cat) {
-      home.style.display = "none";
-      detalhe.style.display = "block";
-      detalheTitulo.innerText = cat;
-      detalheGrid.innerHTML = "";
-      categorias[cat].posicoes.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "posicao-card";
-        card.innerHTML = `<h4>${p.nome}</h4><p>${p.desc}</p>`;
-        detalheGrid.appendChild(card);
-      });
-    }
+.categoria-card h3 {
+  margin: 0;
+  font-size: 1.1em;
+  color: var(--white);
+}
 
-    // ===== Voltar =====
-    function voltarHome() {
-      detalhe.style.display = "none";
-      home.style.display = "block";
-    }
+.posicao-card h4 {
+  margin: 0 0 6px;
+  font-size: 1em;
+  color: var(--gold);
+}
 
-    // ===== Modal =====
-    document.getElementById("add-btn").onclick = () => {
-      modal.style.display = "flex";
-      playSound('sounds/click.mp3');
-    };
-    function fecharModal() { modal.style.display = "none"; }
+.posicao-card p {
+  font-size: 0.85em;
+  color: var(--gray);
+}
 
-    // ===== Salvar nova posição =====
-    function salvarPosicao() {
-      const nome = document.getElementById("novaNome").value.trim();
-      const tipo = document.getElementById("novaTipo").value;
-      const desc = document.getElementById("novaDesc").value.trim();
+/* ================= BOTÕES ================= */
+.back-btn, .main-menu-btn {
+  display: inline-block;
+  margin: 20px auto;
+  background: var(--gold);
+  color: var(--bg-dark);
+  font-weight: bold;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .25s;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
 
-      if (!nome || !desc) { 
-        alert("Preencha todos os campos!"); 
-        return; 
-      }
+.back-btn:hover, .main-menu-btn:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+}
 
-      categorias[tipo].posicoes.push({ nome, desc });
-      localStorage.setItem("posicoesData", JSON.stringify(categorias));
-      fecharModal();
-      renderHome();
-      playSound('sounds/success.mp3');
-      alert("Nova posição adicionada!");
-    }
-  </script>
-</body>
-</html>
+/* ================= BOTÃO FLUTUANTE ================= */
+#add-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--gold);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(212,175,55,0.8), 0 0 30px rgba(212,175,55,0.4);
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 1100;
+  animation: pulse 2s infinite;
+}
+#add-btn:hover {
+  transform: scale(1.1) rotate(5deg);
+  background: var(--gold-light);
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(212,175,55,0.8); }
+  50% { box-shadow: 0 0 25px rgba(212,175,55,1), 0 0 50px rgba(212,175,55,0.7); }
+}
+
+/* ================= MODAL ================= */
+#modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 0 25px rgba(212,175,55,0.6);
+  text-align: center;
+  border: 1px solid var(--gold);
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(212,175,55,0.6);
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid rgba(212,175,55,0.4);
+  background: rgba(255,255,255,0.06);
+  color: var(--white);
+  font-size: 1em;
+}
+
+.modal-content button {
+  margin-top: 12px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-save {
+  background: var(--gold);
+  color: var(--bg-dark);
+}
+.btn-cancel {
+  background: #444;
+  color: var(--white);
+  margin-left: 10px;
+}
+
+/* ================= CARROSSEL ================= */
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 280px;
+  height: 220px;
+  position: relative;
+  margin: 40px auto;
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.6s ease;
+  width: 100%;
+}
+.categoria-card {
+  flex: 0 0 100%;
+}
+
+/* ================= GRID DETALHE ================= */
+#detalhe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+  justify-items: center;
+}
+
+/* ================= RESPONSIVIDADE ================= */
+@media (max-width: 600px) {
+  #splash h1 { font-size: 36px; }
+  .carousel { width: 220px; height: 180px; }
+  .categoria-card { padding: 12px; }
+  #detalhe-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
