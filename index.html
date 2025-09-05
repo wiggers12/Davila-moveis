@@ -9,81 +9,60 @@
 </head>
 <body>
 
-  <div id="splash" style="display: flex;"><h1>Jiu-Jitsu Puro</h1></div>
+  <div id="hub" class="screen center-content" style="display: flex;">
+    <div class="hub-container">
+        <div class="premium-card" onclick="showScreen('quizzes')">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <h2>Aprenda e Teste</h2>
+            <p>Acesse nossos quizzes e aprimore seu conhecimento teórico.</p>
+        </div>
 
-  <div id="home" class="screen" style="display: none;">
-    <div class="big-card" onclick="showScreen('menu')">
-      O que você quer aprender hoje?
+        <a href="posicoes.html" class="premium-card">
+            <span class="premium-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
+            <i class="fa-solid fa-sitemap"></i>
+            <h2>Biblioteca de Posições</h2>
+            <p>Explore um acervo completo de posições e técnicas.</p>
+        </a>
+
+        <a href="analise.html" class="premium-card">
+            <span class="premium-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
+            <i class="fa-solid fa-chart-line"></i>
+            <h2>Análise de Luta</h2>
+            <p>Faça o upload e analise suas lutas com nossa ferramenta.</p>
+        </a>
     </div>
   </div>
 
-  <div id="menu" class="screen" style="display: none;">
-    <h1>Menu Principal</h1>
-    <div id="placar">Placar: 0 acertos</div>
-    <div class="cards">
-        <div class="card" onclick="abrirConteudo('O começo','comeco')" style="cursor: pointer;"><a><i class="fa-solid fa-flag-checkered"></i>O começo</a></div>
-        <div class="card" onclick="abrirConteudo('Regras do Jiu Jitsu','regras')" style="cursor: pointer;"><a><i class="fa-solid fa-scroll"></i>Regras</a></div>
-        <div class="card" onclick="abrirConteudo('Regras do Tatame','tatame')" style="cursor: pointer;"><a><i class="fa-solid fa-user-shield"></i>Regras do Tatame</a></div>
-        <div class="card" onclick="abrirConteudo('Mentalidade','mentalidade')" style="cursor: pointer;"><a><i class="fa-solid fa-brain"></i>Mentalidade</a></div>
-        <div class="card" onclick="abrirConteudo('Guarda','guarda')" style="cursor: pointer;"><a><i class="fa-solid fa-shield-halved"></i>Guarda</a></div>
-        <div class="card" onclick="abrirConteudo('Passagens','passagens')" style="cursor: pointer;"><a><i class="fa-solid fa-right-left"></i>Passagens</a></div>
-        <div class="card" onclick="abrirConteudo('Meia Guarda','meiaguarda')" style="cursor: pointer;"><a><i class="fa-solid fa-circle-notch"></i>Meia Guarda</a></div>
-        <div class="card" onclick="abrirConteudo('Finalizações','finalizacoes')" style="cursor: pointer;"><a><i class="fa-solid fa-lock"></i>Finalizações</a></div>
-        <div class="card" onclick="abrirConteudo('Quedas','quedas')" style="cursor: pointer;"><a><i class="fa-solid fa-arrow-down"></i>Quedas</a></div>
-        <div class="card" onclick="abrirConteudo('Drills','drills')" style="cursor: pointer;"><a><i class="fa-solid fa-sync-alt"></i>Drills</a></div>
-
-        <div class="card" onclick="showScreen('posicoes')" style="cursor: pointer;">
-            <a><i class="fa-solid fa-sitemap"></i>Biblioteca de Posições</a>
+  <div id="quizzes" class="screen center-content" style="display: none;">
+    <div>
+        <h1>Menu de Quizzes</h1>
+        <div id="placar">Placar: 0 acertos</div>
+        <div class="cards">
+            <div class="card" onclick="abrirConteudo('O começo','comeco')"><a><i class="fa-solid fa-flag-checkered"></i>O começo</a></div>
+            <div class="card" onclick="abrirConteudo('Regras do Jiu Jitsu','regras')"><a><i class="fa-solid fa-scroll"></i>Regras</a></div>
+            <div class="card" onclick="abrirConteudo('Regras do Tatame','tatame')"><a><i class="fa-solid fa-user-shield"></i>Regras do Tatame</a></div>
+            <div class="card" onclick="abrirConteudo('Mentalidade','mentalidade')"><a><i class="fa-solid fa-brain"></i>Mentalidade</a></div>
+            <div class="card" onclick="abrirConteudo('Guarda','guarda')"><a><i class="fa-solid fa-shield-halved"></i>Guarda</a></div>
+            <div class="card" onclick="abrirConteudo('Passagens','passagens')"><a><i class="fa-solid fa-right-left"></i>Passagens</a></div>
+            <div class="card" onclick="abrirConteudo('Meia Guarda','meiaguarda')"><a><i class="fa-solid fa-circle-notch"></i>Meia Guarda</a></div>
+            <div class="card" onclick="abrirConteudo('Finalizações','finalizacoes')"><a><i class="fa-solid fa-lock"></i>Finalizações</a></div>
+            <div class="card" onclick="abrirConteudo('Quedas','quedas')"><a><i class="fa-solid fa-arrow-down"></i>Quedas</a></div>
+            <div class="card" onclick="abrirConteudo('Drills','drills')"><a><i class="fa-solid fa-sync-alt"></i>Drills</a></div>
         </div>
-        <div class="card" onclick="showScreen('analise')" style="cursor: pointer;">
-            <a><i class="fa-solid fa-chart-line"></i>Análise de Luta</a>
-        </div>
+        <button class="main-menu-btn" onclick="showScreen('hub')">Voltar ao Menu Principal</button>
     </div>
   </div>
 
-  <div id="conteudo" class="screen" style="display: none;">
+  <div id="conteudo" class="screen center-content" style="display: none;">
     <div class="content-box">
       <h2 id="conteudo-titulo"></h2>
       <p id="conteudo-texto"></p>
       <div id="quiz-area" class="quiz-container"></div>
-      <button class="back-btn" onclick="showScreen('menu')">Voltar ao Menu</button>
+      <button class="back-btn" onclick="showScreen('quizzes')">Voltar ao Menu de Quizzes</button>
     </div>
-  </div>
-
-  <div id="posicoes" class="screen" style="display: none;">
-      <h1><i class="fa-solid fa-sitemap"></i> Biblioteca de Posições</h1>
-      <div class="posicoes-container">
-          <div class="filters">
-              <button class="active" onclick="filterPositions('all', this)">Todas</button>
-              <button onclick="filterPositions('Guarda', this)">Guarda</button>
-              <button onclick="filterPositions('Passagem', this)">Passagem</button>
-              <button onclick="filterPositions('Controle', this)">Controle</button>
-              <button onclick="filterPositions('Finalização', this)">Finalização</button>
-              <button onclick="filterPositions('Queda', this)">Queda</button>
-          </div>
-          <input type="text" id="search-bar" onkeyup="filterPositions()" placeholder="Buscar posição...">
-
-          <div id="posicoes-grid"></div>
-      </div>
-      <button class="main-menu-btn" onclick="showScreen('menu')">Voltar ao Menu Principal</button>
-  </div>
-
-  <div id="analise" class="screen" style="display: none;">
-    <h1><i class="fa-solid fa-chart-line"></i> Análise de Luta</h1>
-    <div class="upload-box">
-        <p>Faça o upload de um vídeo da sua luta ou treino para analisar seus movimentos.</p>
-        <input type="file" id="videoUpload" accept="video/*">
-        <video id="videoPreview" controls style="display:none;"></video>
-        <textarea id="videoDesc" rows="5" placeholder="Escreva suas observações sobre o vídeo..."></textarea>
-    </div>
-    <button class="main-menu-btn" onclick="showScreen('menu')">Voltar ao Menu Principal</button>
   </div>
 
   <script>
-    /* ===================================================================================
-       INÍCIO DO CÓDIGO JAVASCRIPT COMPLETO
-    =================================================================================== */
-
     /* ================= CONTEÚDOS DOS QUIZZES ================= */
     const conteudos = {
       comeco: `<strong>O Começo:</strong> Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é evolução. Teste seus conhecimentos básicos.`,
@@ -329,89 +308,25 @@
       document.getElementById("placar").innerText = `Placar: ${pontos} acertos`;
     }
 
-    /* ================= DADOS E LÓGICA DA BIBLIOTECA DE POSIÇÕES ================= */
-    const posicoes = [
-        { nome: 'Guarda Fechada', tipo: 'Guarda', desc: 'Controle fundamental onde as pernas se fecham nas costas do oponente.' },
-        { nome: 'Armlock', tipo: 'Finalização', desc: 'Chave de braço que hiperextende o cotovelo, partindo de várias posições.' },
-        { nome: 'Montada', tipo: 'Controle', desc: 'Posição dominante sentado sobre o torso do oponente.' },
-        { nome: 'Double Leg', tipo: 'Queda', desc: 'Queda que visa controlar as duas pernas do oponente para derrubá-lo.' },
-        { nome: 'Passagem Torreando', tipo: 'Passagem', desc: 'Passagem de guarda rápida, circulando as pernas do oponente.' },
-        { nome: 'Pegada de Costas', tipo: 'Controle', desc: 'Controle dominante pelas costas, com ganchos e cinto de segurança (seatbelt).' },
-        { nome: 'Mata-Leão', tipo: 'Finalização', desc: 'Estrangulamento sanguíneo aplicado a partir das costas.' },
-        { nome: 'Guarda Aranha', tipo: 'Guarda', desc: 'Guarda aberta que usa os pés nos bíceps do oponente para controlar a distância.' },
-        { nome: 'Raspagem de Gancho', tipo: 'Guarda', desc: 'Partindo da guarda borboleta, usa os ganchos para desequilibrar e inverter.' },
-        { nome: 'Cem Kilos (100kg)', tipo: 'Controle', desc: 'Controle lateral no chão, distribuindo o peso sobre o oponente.' },
-        { nome: 'Triângulo', tipo: 'Finalização', desc: 'Estrangulamento com as pernas que prende o pescoço e um braço do oponente.' },
-        { nome: 'Passagem de Pressão', tipo: 'Passagem', desc: 'Passagem que utiliza o peso e a pressão para amassar e passar a guarda.' },
-    ];
-    let currentFilter = 'all';
-
-    function renderPositions() {
-        const grid = document.getElementById('posicoes-grid');
-        const searchBar = document.getElementById('search-bar');
-        if (!grid || !searchBar) return; // Só executa se estiver na tela certa
-        grid.innerHTML = '';
-        const searchTerm = searchBar.value.toLowerCase();
-
-        const filteredPositions = posicoes.filter(p => (currentFilter === 'all' || p.tipo === currentFilter) && (p.nome.toLowerCase().includes(searchTerm) || p.desc.toLowerCase().includes(searchTerm)));
-
-        if (filteredPositions.length === 0) { grid.innerHTML = '<p style="text-align: center;">Nenhuma posição encontrada.</p>'; return; }
-
-        filteredPositions.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'posicao-card';
-            card.innerHTML = `<h3>${p.nome}</h3><p>${p.desc}</p><span class="tipo">${p.tipo}</span>`;
-            grid.appendChild(card);
-        });
-    }
-
-    function filterPositions(tipo, element) {
-        if (typeof tipo === 'string') {
-            currentFilter = tipo;
-            document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
-            if (element) element.classList.add('active');
-        }
-        renderPositions();
-    }
-
-    /* ================= LÓGICA DA ANÁLISE DE LUTA ================= */
-    const videoUpload = document.getElementById('videoUpload');
-    const videoPreview = document.getElementById('videoPreview');
-    if (videoUpload) {
-        videoUpload.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const url = URL.createObjectURL(file);
-                videoPreview.src = url;
-                videoPreview.style.display = 'block';
-            }
-        });
-    }
-    
-    /* ================= CONTROLE DE NAVEGAÇÃO E INICIALIZAÇÃO ================= */
+    /* ================= CONTROLE DE NAVEGAÇÃO ================= */
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
         const screenToShow = document.getElementById(id);
-        screenToShow.style.display = 'block';
+        
+        // A tela do hub e a tela de quizzes usam flex para centralizar
+        if (id === 'hub' || id === 'quizzes') {
+            screenToShow.style.display = 'flex';
+            screenToShow.classList.add('center-content');
+        } else {
+            screenToShow.style.display = 'block'; // As outras telas podem ser block
+            screenToShow.classList.remove('center-content');
+        }
 
-        if (id === 'menu') { atualizarPlacar(); }
-        if (id === 'posicoes') { 
-            // Garante que o filtro "Todas" esteja ativo ao abrir a tela
-            filterPositions('all', document.querySelector('.filters button'));
+        if (id === 'quizzes') {
+            atualizarPlacar();
         }
     }
 
-    window.addEventListener('load', () => {
-      const splash = document.getElementById('splash');
-      setTimeout(() => {
-        splash.classList.add('hiding');
-        splash.addEventListener('animationend', () => {
-          splash.style.display = 'none';
-          showScreen('home');
-        }, { once: true });
-      }, 3000);
-    });
   </script>
-
 </body>
 </html>
