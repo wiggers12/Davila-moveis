@@ -7,6 +7,52 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
+    #posicoes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 25px;
+    }
+    .posicao-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+      border: 1px solid transparent;
+      backdrop-filter: blur(12px);
+    }
+    .posicao-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      border-color: var(--gold);
+      box-shadow: 0 0 25px rgba(212,175,55,0.4);
+    }
+    .posicao-card .icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      color: var(--gold);
+    }
+    .posicao-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.3em;
+      color: var(--white);
+    }
+    .posicao-card p {
+      font-size: 0.95em;
+      color: var(--gray);
+      margin: 0 0 12px;
+      min-height: 50px;
+    }
+    .posicao-card .tipo {
+      display: inline-block;
+      padding: 5px 12px;
+      font-size: 0.85em;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      color: var(--gold);
+      font-weight: bold;
+    }
     .add-form {
       background: var(--card-bg);
       padding: 20px;
@@ -179,7 +225,8 @@
       { nome: 'Kouchi Gari', tipo: 'Queda', desc: 'Pequena varrida interna.' },
       { nome: 'Sumi Gaeshi', tipo: 'Queda', desc: 'Queda de sacrifício com gancho.' },
       { nome: 'Ippon Seoi Nage', tipo: 'Queda', desc: 'Variação de ombro com um braço.' },
-      { nome: 'Tai Otoshi', tipo: 'Queda', desc: 'Projeção de corpo inteiro.' },
+      { nome: 'Tai Otoshi', tipo: 'Queda
+            { nome: 'Tai Otoshi', tipo: 'Queda', desc: 'Projeção de corpo inteiro.' },
       { nome: 'Kosoto Gari', tipo: 'Queda', desc: 'Pequena varrida externa.' },
       { nome: 'Ouchi Gari', tipo: 'Queda', desc: 'Grande varrida interna.' },
       { nome: 'Hiza Guruma', tipo: 'Queda', desc: 'Projeção usando o joelho como pivô.' },
@@ -212,9 +259,17 @@
       }
 
       filteredPositions.forEach(p => {
+        let icon = '';
+        if (p.tipo === 'Guarda') icon = '<i class="fa-solid fa-shield-halved"></i>';
+        if (p.tipo === 'Passagem') icon = '<i class="fa-solid fa-right-left"></i>';
+        if (p.tipo === 'Controle') icon = '<i class="fa-solid fa-user-shield"></i>';
+        if (p.tipo === 'Finalização') icon = '<i class="fa-solid fa-lock"></i>';
+        if (p.tipo === 'Queda') icon = '<i class="fa-solid fa-arrow-down"></i>';
+
         const card = document.createElement('div');
         card.className = 'posicao-card';
         card.innerHTML = `
+          <div class="icon">${icon}</div>
           <h3>${p.nome}</h3>
           <p>${p.desc}</p>
           <span class="tipo">${p.tipo}</span>
@@ -227,7 +282,7 @@
       if (typeof tipo === 'string') {
         currentFilter = tipo;
         filterButtons.forEach(btn => {
-          btn.classList.toggle('active', btn.innerText.toLowerCase() === tipo || (tipo === 'all' && btn.innerText === 'Todas'));
+          btn.classList.toggle('active', btn.innerText.toLowerCase() === tipo.toLowerCase() || (tipo === 'all' && btn.innerText === 'Todas'));
         });
       }
       renderPositions();
