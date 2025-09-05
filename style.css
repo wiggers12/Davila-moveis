@@ -174,6 +174,60 @@ h1, h2, h3 {
   text-align: center;
 }
 
+/* ===== MENU DE QUIZZES (CARDS PREMIUM) ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+}
+.card {
+  background: var(--card-bg);
+  border: 1px solid transparent;
+  border-image: var(--card-border) 1;
+  border-radius: 14px;
+  padding: 20px 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .3s ease;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(15px);
+  animation: cardFade .6s ease forwards;
+}
+.card i {
+  font-size: 26px;
+  color: var(--gold);
+  margin-bottom: 10px;
+  display: block;
+}
+.card a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  display: block;
+}
+.card:hover {
+  transform: translateY(-6px) scale(1.05);
+  border-color: var(--gold);
+  box-shadow: 0 0 25px rgba(212,175,55,0.6);
+}
+/* Animação em cascata para os cards */
+.card:nth-child(1) { animation-delay: .1s; }
+.card:nth-child(2) { animation-delay: .2s; }
+.card:nth-child(3) { animation-delay: .3s; }
+.card:nth-child(4) { animation-delay: .4s; }
+.card:nth-child(5) { animation-delay: .5s; }
+.card:nth-child(6) { animation-delay: .6s; }
+.card:nth-child(7) { animation-delay: .7s; }
+.card:nth-child(8) { animation-delay: .8s; }
+.card:nth-child(9) { animation-delay: .9s; }
+.card:nth-child(10){ animation-delay: 1s; }
+
+@keyframes cardFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ================= BIBLIOTECA DE POSIÇÕES ================= */
 #search-bar {
   width: 100%;
