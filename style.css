@@ -74,6 +74,7 @@ h1, h2, h3 {
   gap: 25px;
   width: 100%;
   max-width: 600px;
+  margin-bottom: 100px; /* espaço para o botão de login não sobrepor */
 }
 
 .premium-card {
@@ -202,32 +203,31 @@ h1, h2, h3 {
 }
 
 .card a {
-  display: flex;                 /* Ícone em cima, texto embaixo */
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;                       /* espaço entre ícone e texto */
+  gap: 8px;
   color: var(--white);
   font-weight: bold;
   text-decoration: none;
   font-size: 1em;
 }
-/* ================= BIBLIOTECA: CARROSSEL DE CATEGORIAS ================= */
+
+/* ================= BIBLIOTECA: CARROSSEL ================= */
 .carousel {
   position: relative;
-  width: 280px;   /* largura de 1 card */
-  height: 220px;  /* altura de 1 card */
+  width: 280px;
+  height: 220px;
   margin: 40px auto;
   overflow: hidden;
 }
-
 .carousel-track {
   display: flex;
   transition: transform 0.5s ease-in-out;
 }
-
 .cat-card {
-  flex: 0 0 100%;   /* cada card ocupa 100% da largura do carrossel */
+  flex: 0 0 100%;
   height: 220px;
   background: var(--card-bg);
   border-radius: 15px;
@@ -245,10 +245,7 @@ h1, h2, h3 {
   margin-bottom: 10px;
   color: var(--gold);
 }
-.cat-card:hover {
-  transform: scale(1.05);
-}
-
+.cat-card:hover { transform: scale(1.05); }
 .carousel-btn {
   position: absolute;
   top: 50%;
@@ -264,144 +261,19 @@ h1, h2, h3 {
 .carousel-btn.prev { left: -45px; }
 .carousel-btn.next { right: -45px; }
 
-
-/* ================= BIBLIOTECA DE POSIÇÕES ================= */
-#search-bar {
-  width: 100%;
-  max-width: 450px;
-  padding: 12px 40px 12px 14px;
-  border-radius: 12px;
-  border: none;
-  margin: 25px auto;
-  font-size: 1em;
-  box-shadow: var(--shadow);
-  background: rgba(255,255,255,0.08);
-  color: var(--white);
-  display: block;
-}
-#search-bar:focus { outline: 2px solid var(--gold); }
-#search-bar::placeholder { color: var(--gray); }
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 20px 0;
-  justify-content: center;
-}
-.filters button {
-  background: var(--card-bg);
-  border: 2px solid transparent;
-  padding: 8px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  color: var(--white);
-  transition: all .25s;
-}
-.filters button.active,
-.filters button:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-#posicoes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 20px;
-  width: 100%;
-  margin-top: 20px;
-}
-
-.posicao-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 18px;
-  box-shadow: var(--shadow);
-  transition: all .3s;
-}
-.posicao-card h3 {
-  color: var(--gold);
-  margin-bottom: 8px;
-}
-.posicao-card p {
-  font-size: 0.95em;
-  color: var(--gray);
-}
-.posicao-card .tipo {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 4px 10px;
-  background: var(--gold);
-  color: var(--bg-dark);
-  border-radius: 6px;
-  font-size: 0.85em;
-  font-weight: bold;
-}
-.posicao-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
-}
-
-/* ================= ANÁLISE DE LUTA ================= */
-.upload-box {
-  border: 2px dashed var(--gold);
-  padding: 20px;
-  text-align: center;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all .3s;
-  max-width: 700px;
-  margin: 0 auto;
-}
-.upload-box.dragging {
-  background: rgba(212, 175, 55, 0.1);
-}
-.upload-box video {
-  max-width: 100%;
-  margin-top: 15px;
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-.upload-box textarea {
-  width: 100%;
-  margin-top: 15px;
-  border-radius: 10px;
-  padding: 12px;
-  background: rgba(255,255,255,0.08);
-  border: none;
-  color: var(--white);
-  resize: vertical;
-}
-.upload-box textarea::placeholder {
-  color: var(--gray);
-}
-.save-btn {
-  margin-top: 15px;
-  background: var(--gold);
-  color: var(--bg-dark);
-  font-weight: bold;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all .25s;
-}
-.save-btn:hover {
-  background: var(--gold-light);
-  transform: translateY(-2px);
-  
-}
-/* ==== CONTAINER FIXO DO LOGIN ==== */
+/* ================= LOGIN FIXO ================= */
 .login-container {
   position: fixed;
-  top: 20px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2000; /* acima do resto */
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  z-index: 2000;
 }
 
-/* ==== BOTÃO GOOGLE PREMIUM ==== */
 .google-btn {
   display: flex;
   align-items: center;
@@ -418,22 +290,20 @@ h1, h2, h3 {
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(212,175,55,0.4);
 }
-
 .google-btn img {
   width: 26px;
   height: 26px;
 }
-
 .google-btn:hover {
   background: var(--gold-light);
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 6px 20px rgba(212,175,55,0.6);
 }
-
 .google-btn:active {
   transform: scale(0.95);
   box-shadow: inset 0 3px 8px rgba(0,0,0,0.5);
 }
+
 /* ================= BOTÕES ================= */
 .back-btn, .main-menu-btn, .quiz-button {
   background: var(--gold);
@@ -460,24 +330,16 @@ h1, h2, h3 {
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 900px) {
-  /* grid mais compacto em tablets */
   .cards {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 14px;
   }
-  .card {
-    padding: 15px;
-  }
-  .card i {
-    font-size: 22px;
-  }
-  .card a {
-    font-size: 0.9em;
-  }
+  .card { padding: 15px; }
+  .card i { font-size: 22px; }
+  .card a { font-size: 0.9em; }
 }
 
 @media (max-width: 600px) {
-  /* no celular 1 card por linha (ou 2 se couber bem) */
   .cards {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -486,25 +348,16 @@ h1, h2, h3 {
     padding: 14px;
     min-height: 120px;
   }
-  .card i {
-    font-size: 20px;
-    margin-bottom: 6px;
-  }
-  .card a {
-    font-size: 0.9em;
-  }
-  h1 {
-    font-size: 1.5em;
-  }
-  #placar {
-    font-size: 0.9em;
-  }
-  .main-menu-btn, .back-btn {
-    width: 100%;
-    text-align: center;
-  }
-}
+  .card i { font-size: 20px; margin-bottom: 6px; }
+  .card a { font-size: 0.9em; }
+  h1 { font-size: 1.5em; }
+  #placar { font-size: 0.9em; }
+  .main-menu-btn, .back-btn { width: 100%; text-align: center; }
 
+  /* botão de login ocupa quase toda a tela */
+  .login-container { max-width: 95%; }
+  .google-btn { width: 100%; padding: 16px; font-size: 1em; }
+}
 
 /* ================= ANIMAÇÕES ================= */
 @keyframes gradientMove {
