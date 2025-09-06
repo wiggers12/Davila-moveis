@@ -5,10 +5,8 @@ const mercadopago = require("mercadopago");
 
 const app = express();
 
-// Configuração de CORS para aceitar do seu domínio
+// Configuração de CORS
 app.use(cors({ origin: true }));
-app.options("*", cors()); // ✅ responde às preflight requests
-
 app.use(express.json());
 
 // Configure Mercado Pago com sua credencial de TESTE
@@ -37,7 +35,7 @@ app.post("/create_preference", async (req, res) => {
     };
 
     const response = await mercadopago.preferences.create(preference);
-    res.set("Access-Control-Allow-Origin", "*"); // ✅ garante CORS
+    res.set("Access-Control-Allow-Origin", "*"); // garante CORS
     res.json({ id: response.body.id });
   } catch (error) {
     console.error(error);
