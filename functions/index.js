@@ -9,8 +9,8 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 
 // Configure Mercado Pago com sua credencial de TESTE
-mercadopago.configure({
-  access_token: "APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151"
+mercadopago.configurations.setAccessToken("APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151
+");
 });
 
 // Rota para criar uma preferência de pagamento
