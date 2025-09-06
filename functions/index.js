@@ -4,15 +4,13 @@ const cors = require("cors");
 const mercadopago = require("mercadopago");
 
 const app = express();
-
-// Configuração de CORS
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-// Configure Mercado Pago com sua credencial de TESTE
-mercadopago.configurations.setAccessToken(
-  "APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151"
-);
+// Criar cliente Mercado Pago com o accessToken
+const client = new mercadopago.MercadoPagoConfig({
+  accessToken: "APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151",
+});
 
 // Rota para criar uma preferência de pagamento
 app.post("/create_preference", async (req, res) => {
@@ -34,11 +32,13 @@ app.post("/create_preference", async (req, res) => {
       auto_return: "approved",
     };
 
-    const response = await mercadopago.preferences.create(preference);
-    res.set("Access-Control-Allow-Origin", "*"); // garante CORS
-    res.json({ id: response.body.id });
+    // Criar preferência via nova API
+    const response = await new mercadopago.Preference(client).create({ body: preference });
+
+    res.set("Access-Control-Allow-Origin", "*");
+    res.json({ id: response.id });
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao criar preferência:", error);
     res.status(500).json({ error: "Erro ao criar preferência" });
   }
 });
