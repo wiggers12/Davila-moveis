@@ -12,7 +12,7 @@ app.use(express.json());
 
 // ✅ 2. Cliente é configurado na inicialização (substitui o .configure)
 const client = new MercadoPagoConfig({
-  accessToken: "APP_USR-a0b3c8cf-f893-4882-91f4-24767363695c"
+  accessToken: "APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151"
 });
 
 // Rota para criar preferência de pagamento
