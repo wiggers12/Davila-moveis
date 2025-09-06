@@ -110,33 +110,34 @@
 
   <!-- SDK Mercado Pago -->
   <script src="https://sdk.mercadopago.com/js/v2"></script>
-  <script>
-    // 🔑 SUA PUBLIC KEY (não use o accessToken aqui!)
-    const mp = new MercadoPago("APP_USR-a0b3c8cf-f893-4882-91f4-24767363695c", { locale: "pt-BR" });
+<script>
+  // Use a chave "Public Key" do seu painel do Mercado Pago
+  const mp = new MercadoPago("APP_USR-a0b3c8cf-f893-4882-91f4-24767363695c", { locale: "pt-BR" }); // Ex: "APP_USR-a0b3c8cf..."
 
-    async function criarPreferencia(nomePlano, valor) {
-      try {
-        const res = await fetch("https://api-amhpksgvbq-uc.a.run.app/create_preference", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: nomePlano, price: valor })
+  async function criarPreferencia(nomePlano, valor) {
+    try {
+      // URL NOVA E CORRETA DA API
+      const res = await fetch("https://api-amhpksgvbq-uc.a.run.app/create_preference", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: nomePlano, price: valor })
+      });
+
+      const data = await res.json();
+      if (data.id) {
+        mp.checkout({
+          preference: { id: data.id },
+          autoOpen: true
         });
-
-        const data = await res.json();
-        if (data.id) {
-          mp.checkout({
-            preference: { id: data.id },
-            autoOpen: true
-          });
-        } else {
-          alert("Erro ao criar preferência de pagamento");
-        }
-      } catch (e) {
-        console.error("Erro:", e);
-        alert("Falha na comunicação com servidor de pagamentos");
+      } else {
+        alert("Erro ao criar preferência de pagamento");
       }
+    } catch (e) {
+      console.error("Erro:", e);
+      alert("Falha na comunicação com servidor de pagamentos");
     }
-  </script>
+  }
+</script>
 
   <!-- Splash -->
   <script>
