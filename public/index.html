@@ -9,7 +9,7 @@
 </head>
 <body>
 
-  <!-- SPLASH (mostra apenas na primeira vez) -->
+  <!-- SPLASH -->
   <div id="splash" style="display: flex;">
     <h1>Jiu-Jitsu Puro</h1>
   </div>
@@ -52,7 +52,7 @@
     </div>
   </div>
 
-  <!-- Área de Login / Usuário -->
+  <!-- Área de Login -->
   <div class="login-container" id="loginBox">
     <button id="btnLogin" class="google-btn">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
@@ -60,12 +60,13 @@
     </button>
   </div>
 
+  <!-- Área do Usuário -->
   <div class="login-container" id="userBox" style="display:none; flex-direction: column; align-items: center;">
     <p id="welcomeMsg"></p>
     <button id="btnLogout" class="back-btn">Sair</button>
   </div>
 
-  <!-- Firebase -->
+  <!-- Firebase + Login -->
   <script type="module">
     import { loginGoogle, auth } from "./firebase.js";
     import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -95,7 +96,7 @@
       });
     }
 
-    // Verifica estado de login automaticamente
+    // Verifica login automático
     onAuthStateChanged(auth, (user) => {
       if (user) {
         welcomeMsg.textContent = `Bem-vindo, ${user.displayName} 👊`;
@@ -108,7 +109,7 @@
     });
   </script>
 
-  <!-- Splash logic -->
+  <!-- Splash -->
   <script>
     window.addEventListener('load', () => {
       const splash = document.getElementById('splash');
