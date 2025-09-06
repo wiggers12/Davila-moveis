@@ -1,32 +1,45 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+// functions/index.js
+const functions = require("firebase-functions");
+const express = require("express");
+const cors = require("cors");
+const mercadopago = require("mercadopago");
 
-const {setGlobalOptions} = require("firebase-functions");
-const {onRequest} = require("firebase-functions/https");
-const logger = require("firebase-functions/logger");
+const app = express();
+app.use(cors({ origin: true }));
+app.use(express.json());
 
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
-setGlobalOptions({ maxInstances: 10 });
+// Configure Mercado Pago com sua credencial de TESTE
+mercadopago.configure({
+  access_token: "APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151"
+});
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+// Rota para criar uma preferência de pagamento
+app.post("/create_preference", async (req, res) => {
+  try {
+    const preference = {
+      items: [
+        {
+          title: "Plano Básico - Jiu-Jitsu Puro",
+          quantity: 1,
+          currency_id: "BRL",
+          unit_price: 9.90
+        }
+      ],
+      back_urls: {
+        success: "https://jiu-jitsu-puro.web.app/success.html",
+        failure: "https://jiu-jitsu-puro.web.app/failure.html",
+        pending: "https://jiu-jitsu-puro.web.app/pending.html"
+      },
+      auto_return: "approved"
+    };
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+    const response = await mercadopago.preferences.create(preference);
+    res.json({ id: response.body.id }); // devolve o ID da preferência
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao criar preferência" });
+  }
+});
+
+// Exporta como função Firebase
+exports.api = functions.https.onRequest(app);
