@@ -16,5 +16,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DASHCONTROL_VENDAS }}
-          projectId: dashcontrol-vendas
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JIU_JITSU_PURO }}
+          projectId: jiu-jitsu-puro
