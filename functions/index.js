@@ -4,67 +4,54 @@ const express = require("express");
 const cors = require("cors");
 const mercadopago = require("mercadopago");
 
-// Configuração do app
 const app = express();
+
+// Configura CORS global
+app.use(cors());
 app.use(express.json());
 
-// CORS bem definido (frontend autorizado)
-const allowedOrigins = [
-  "https://jiu-jitsu-puro.web.app",
-  "https://jiu-jitsu-puro.firebaseapp.com",
-  "http://localhost:5000"
-];
-
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
-
-// Middleware para garantir resposta ao preflight
-app.options("*", (req, res) => {
-  res.set("Access-Control-Allow-Origin", req.headers.origin || "*");
-  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.set("Access-Control-Allow-Headers", "Content-Type");
-  res.sendStatus(200);
+// 🔑 Configuração Mercado Pago
+mercadopago.configure({
+  access_token: "APP_USR-a0b3c8cf-f893-4882-91f4-24767363695c" // sua Access Token
 });
 
-// Cliente Mercado Pago (SDK nova)
-const client = new mercadopago.MercadoPagoConfig({
-  accessToken: "APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151", // 🔑 teste
+// ✅ Tratamento manual para preflight (Express 5 não aceita '*')
+app.options(/.*/, (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.sendStatus(204);
 });
 
-// Rota para criar preferência
+// Rota para criar preferência de pagamento
 app.post("/create_preference", async (req, res) => {
   try {
     const preference = {
       items: [
         {
-          title: req.body.title || "Plano Jiu-Jitsu Puro",
+          title: req.body.title,
           quantity: 1,
           currency_id: "BRL",
-          unit_price: req.body.price || 9.9,
-        },
+          unit_price: Number(req.body.price)
+        }
       ],
       back_urls: {
         success: "https://jiu-jitsu-puro.web.app/success.html",
         failure: "https://jiu-jitsu-puro.web.app/failure.html",
-        pending: "https://jiu-jitsu-puro.web.app/pending.html",
+        pending: "https://jiu-jitsu-puro.web.app/pending.html"
       },
-      auto_return: "approved",
+      auto_return: "approved"
     };
 
-    const response = await new mercadopago.Preference(client).create({ body: preference });
+    const response = await mercadopago.preferences.create(preference);
 
-    res.set("Access-Control-Allow-Origin", req.headers.origin || "*");
-    res.json({ id: response.id });
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.json({ id: response.body.id });
   } catch (error) {
     console.error("Erro ao criar preferência:", error);
     res.status(500).json({ error: "Erro ao criar preferência" });
   }
 });
 
-// Exporta a função
+// Exporta função para Firebase
 exports.api = functions.https.onRequest(app);
