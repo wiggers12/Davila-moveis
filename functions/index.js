@@ -2,28 +2,24 @@
 const functions = require("firebase-functions");
 const express = require("express");
 const cors = require("cors");
-const mercadopago = require("mercadopago");
+// ✅ 1. Importação atualizada para a nova versão
+const { MercadoPagoConfig, Preference } = require("mercadopago");
 
 const app = express();
 
-// ✅ Configuração de CORS (Forma Correta e Segura)
-// Substitua o app.use(cors()) por esta configuração.
-// Isso permite requisições SOMENTE do seu site.
 app.use(cors({ origin: "https://jiu-jitsu-puro.web.app" }));
-
-// Middleware para interpretar o corpo da requisição como JSON
 app.use(express.json());
 
-// 🔑 Configuração Mercado Pago
-mercadopago.configure({
-  // IMPORTANTE: Mova este token para uma variável de ambiente para segurança!
-  access_token: "APP_USR-a0b3c8cf-f893-4882-91f4-24767363695c"
+// ✅ 2. Cliente é configurado na inicialização (substitui o .configure)
+const client = new MercadoPagoConfig({
+  accessToken: "APP_USR-a0b3c8cf-f893-4882-91f4-24767363695c"
 });
 
 // Rota para criar preferência de pagamento
 app.post("/create_preference", async (req, res) => {
   try {
-    const preference = {
+    // O corpo da preferência agora vai dentro de uma propriedade "body"
+    const preferenceData = {
       items: [
         {
           title: req.body.title,
@@ -40,10 +36,11 @@ app.post("/create_preference", async (req, res) => {
       auto_return: "approved"
     };
 
-    const response = await mercadopago.preferences.create(preference);
-    
-    // O cabeçalho de CORS já foi adicionado pelo middleware, não precisa mais aqui.
-    res.json({ id: response.body.id });
+    // ✅ 3. Cria-se uma nova instância de Preference e chama o método create
+    const preference = new Preference(client);
+    const result = await preference.create({ body: preferenceData });
+
+    res.json({ id: result.id });
 
   } catch (error) {
     console.error("Erro ao criar preferência:", error);
@@ -51,5 +48,4 @@ app.post("/create_preference", async (req, res) => {
   }
 });
 
-// Exporta a API como uma Cloud Function
 exports.api = functions.https.onRequest(app);
