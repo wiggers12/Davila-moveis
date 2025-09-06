@@ -108,27 +108,31 @@
     });
   </script>
 
-  <!-- Função Mercado Pago -->
+  <!-- SDK Mercado Pago -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script>
+    // 🔑 SUA PUBLIC KEY (não use o accessToken aqui!)
+    const mp = new MercadoPago("APP_USR-a0b3c8cf-f893-4882-91f4-24767363695c", { locale: "pt-BR" });
+
     async function criarPreferencia(nomePlano, valor) {
       try {
-        const res = await fetch("https://api-anmphgkgybq-uc.a.run.app/create_preference", {
+        const res = await fetch("https://api-amhpksgvbq-uc.a.run.app/create_preference", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: nomePlano,
-            price: valor
-          })
+          body: JSON.stringify({ title: nomePlano, price: valor })
         });
-        const data = await res.json();
 
+        const data = await res.json();
         if (data.id) {
-          window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${data.id}`;
+          mp.checkout({
+            preference: { id: data.id },
+            autoOpen: true
+          });
         } else {
           alert("Erro ao criar preferência de pagamento");
         }
       } catch (e) {
-        console.error(e);
+        console.error("Erro:", e);
         alert("Falha na comunicação com servidor de pagamentos");
       }
     }
