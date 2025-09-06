@@ -7,7 +7,7 @@ const { MercadoPagoConfig, Preference } = require("mercadopago");
 
 const app = express();
 
-app.use(cors({ origin: "https://jiu-jitsu-puro.web.app" }));
+app.use(cors({ origin: true }));
 app.use(express.json());
 
 // ✅ 2. Cliente é configurado na inicialização (substitui o .configure)
