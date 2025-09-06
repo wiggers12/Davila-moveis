@@ -8,15 +8,19 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-// Configure Mercado Pago com sua credencial de TESTE
-mercadopago.configurations.setAccessToken("APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151
-");
+// ✅ Configuração correta do Mercado Pago (use seu token de TESTE aqui)
+const mp = new mercadopago.MercadoPagoConfig({
+  accessToken: "APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151", 
+  options: { timeout: 5000 }
 });
 
-// Rota para criar uma preferência de pagamento
+// Criar preferências
+const preference = new mercadopago.Preference(mp);
+
+// 🔹 Rota para criar uma preferência de pagamento
 app.post("/create_preference", async (req, res) => {
   try {
-    const preference = {
+    const body = {
       items: [
         {
           title: "Plano Básico - Jiu-Jitsu Puro",
@@ -33,13 +37,13 @@ app.post("/create_preference", async (req, res) => {
       auto_return: "approved"
     };
 
-    const response = await mercadopago.preferences.create(preference);
-    res.json({ id: response.body.id }); // devolve o ID da preferência
+    const result = await preference.create({ body });
+    res.json({ id: result.id }); // devolve o ID da preferência
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao criar preferência:", error);
     res.status(500).json({ error: "Erro ao criar preferência" });
   }
 });
 
-// Exporta como função Firebase
+// ✅ Exporta como função Firebase
 exports.api = functions.https.onRequest(app);
