@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Use a chave "Access Token" do seu painel do Mercado Pago
 const client = new MercadoPagoConfig({
-  accessToken: "APP_USR-1084694532738590-090520-3ea72ac2bbf4b4e462a1bd1670b7874b-2669325151" // Ex: "APP_USR-108469..."
+  accessToken: "APP_USR-4207416003425678-090517-e5f2c87311b1ecf64828f28fc093fc23-2668676373" // Ex: "APP_USR-108469..."
 });
 
 app.post("/create_preference", async (req, res) => {
