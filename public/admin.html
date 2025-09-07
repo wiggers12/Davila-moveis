@@ -1,10 +1,93 @@
-<script type="module">
-    // ... (imports e referências aos elementos continuam os mesmos)
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Jiu-Jitsu Puro</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { padding: 20px; font-family: sans-serif; background-color: #f4f4f4; color: #333; }
+    h1, h2 { text-align: center; color: #1a1a1a; }
+    table { width: 100%; max-width: 1200px; margin: 20px auto; border-collapse: collapse; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    th, td { border: 1px solid #ddd; padding: 12px 15px; text-align: center; vertical-align: middle; }
+    th { background-color: #333; color: #fff; text-transform: uppercase; letter-spacing: 1px;}
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    button { padding: 8px 12px; border: none; border-radius: 5px; margin: 2px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
+    button:hover { transform: scale(1.05); }
+    .ativar { background: #28a745; color: #fff; }
+    .desativar { background: #dc3545; color: #fff; }
+    .plano-btn { background: #ffc107; color: #333; }
+    #painel, #adminLogin { max-width: 1200px; margin: auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    .google-btn, .back-btn { display: block; margin: 20px auto; }
+  </style>
+</head>
+<body>
+  <h1>Painel de Administração</h1>
+
+  <div id="adminLogin">
+    <button id="btnLoginAdmin" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+      Entrar como Admin
+    </button>
+  </div>
+
+  <div id="painel" style="display:none;">
+    <p>Bem-vindo, <span id="adminName"></span> 👑</p>
+    <button id="btnLogout" class="back-btn">Sair</button>
+
+    <h2>Usuários</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Plano</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="usuariosTable"></tbody>
+    </table>
+  </div>
+
+  <script type="module">
     import { auth, db, loginGoogle } from "./firebase.js";
     import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import { collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // ... (código de login do admin continua o mesmo)
+    const btnLoginAdmin = document.getElementById("btnLoginAdmin");
+    const btnLogout = document.getElementById("btnLogout");
+    const adminLogin = document.getElementById("adminLogin");
+    const painel = document.getElementById("painel");
+    const usuariosTable = document.getElementById("usuariosTable");
+    const adminName = document.getElementById("adminName");
+
+    const ADMINS = ["dionegalato1212@gmail.com"];
+
+    if (btnLoginAdmin) {
+      btnLoginAdmin.addEventListener("click", async () => {
+        const user = await loginGoogle();
+        if (!user || !ADMINS.includes(user.email)) {
+          alert("⚠️ Acesso negado. Você não é admin.");
+          if (auth.currentUser) await signOut(auth);
+        }
+      });
+    }
+
+    if (btnLogout) {
+      btnLogout.addEventListener("click", () => signOut(auth));
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && ADMINS.includes(user.email)) {
+        adminLogin.style.display = "none";
+        painel.style.display = "block";
+        adminName.textContent = user.displayName;
+        carregarUsuarios();
+      } else {
+        adminLogin.style.display = "block";
+        painel.style.display = "none";
+      }
+    });
 
     async function carregarUsuarios() {
       usuariosTable.innerHTML = "<tr><td colspan='4'>Carregando...</td></tr>";
@@ -12,15 +95,14 @@
         const querySnapshot = await getDocs(collection(db, "usuarios"));
         usuariosTable.innerHTML = "";
         if (querySnapshot.empty) {
-            usuariosTable.innerHTML = "<tr><td colspan='4'>Nenhum usuário encontrado.</td></tr>";
-            return;
+          usuariosTable.innerHTML = "<tr><td colspan='4'>Nenhum usuário encontrado.</td></tr>";
+          return;
         }
         querySnapshot.forEach((docSnap) => {
           const data = docSnap.data();
           const row = document.createElement("tr");
           const statusText = data.status === 'ativo' ? "✅ Ativo" : "❌ Inativo";
           
-          // ATUALIZADO: Adicionamos os botões de plano novamente
           row.innerHTML = `
             <td>${data.email || "Não disponível"}</td>
             <td>${data.plano || "Pendente"}</td>
@@ -40,20 +122,16 @@
       }
     }
 
-    // Função para ativar/desativar
     window.setStatus = async (uid, novoStatus) => {
       try {
-        // Se desativar, também limpa o plano
         const dataToUpdate = novoStatus === 'inativo' ? { status: novoStatus, plano: null } : { status: novoStatus };
         await updateDoc(doc(db, "usuarios", uid), dataToUpdate);
         carregarUsuarios();
       } catch (error) { console.error("Erro ao atualizar status:", error); }
     };
 
-    // NOVA FUNÇÃO: Para definir o plano
     window.setPlano = async (uid, nomeDoPlano) => {
       try {
-        // Ao definir um plano, também ativamos o usuário
         await updateDoc(doc(db, "usuarios", uid), {
           plano: nomeDoPlano,
           status: 'ativo'
@@ -62,3 +140,5 @@
       } catch (error) { console.error("Erro ao definir plano:", error); }
     };
   </script>
+</body>
+</html>

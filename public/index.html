@@ -14,6 +14,7 @@
   </div>
 
   <div id="hub" class="screen center-content" style="display: none;">
+    
     <div id="planos-venda" class="hub-container">
         <div class="premium-card" onclick="criarPreferencia('Plano Básico - Jiu-Jitsu Puro', 9.90)">
             <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
@@ -45,34 +46,25 @@
     </div>
 
     <div id="conteudo-liberado" class="hub-container" style="display: none;">
-      <a href="quizzes.html" class="card-link">
+      <a href="quizzes.html" class="card-link" id="link-quizzes" style="display: none;">
         <div class="premium-card">
             <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
             <i class="fa-solid fa-graduation-cap main-icon"></i>
-            <div>
-              <h2>Aprenda e Teste</h2>
-              <p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p>
-            </div>
+            <div><h2>Aprenda e Teste</h2><p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p></div>
         </div>
       </a>
-      <a href="posicoes.html" class="card-link">
+      <a href="posicoes.html" class="card-link" id="link-biblioteca" style="display: none;">
         <div class="premium-card">
             <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
             <i class="fa-solid fa-sitemap main-icon"></i>
-            <div>
-              <h2>Biblioteca de Posições</h2>
-              <p class="description">Explore um acervo completo de posições e técnicas.</p>
-            </div>
+            <div><h2>Biblioteca de Posições</h2><p class="description">Explore um acervo completo de posições e técnicas.</p></div>
         </div>
       </a>
-      <a href="analise.html" class="card-link">
+      <a href="analise.html" class="card-link" id="link-analise" style="display: none;">
         <div class="premium-card">
             <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
             <i class="fa-solid fa-chart-line main-icon"></i>
-            <div>
-              <h2>Análise de Luta</h2>
-              <p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p>
-            </div>
+            <div><h2>Análise de Luta</h2><p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p></div>
         </div>
       </a>
     </div>
@@ -88,10 +80,7 @@
       </div>
     </div>
     <p class="divisor">ou</p>
-    <button id="btnLoginGoogle" class="google-btn">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
-      Entrar com Google
-    </button>
+    <button id="btnLoginGoogle" class="google-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"> Entrar com Google</button>
     <button id="btnAnonymous" class="anonymous-btn">Continuar sem cadastro</button>
     <p id="loginErrorMsg" class="error-msg"></p>
   </div>
@@ -126,6 +115,11 @@
     const loginErrorMsg = document.getElementById('loginErrorMsg');
     const planosVenda = document.getElementById('planos-venda');
     const conteudoLiberado = document.getElementById('conteudo-liberado');
+    const linkQuizzes = document.getElementById('link-quizzes');
+    const linkBiblioteca = document.getElementById('link-biblioteca');
+    const linkAnalise = document.getElementById('link-analise');
+
+    const ADMINS = ["dionegalato1212@gmail.com"]; // Seus e-mails de admin
 
     btnLoginGoogle.addEventListener("click", loginGoogle);
     btnEmailSignup.addEventListener("click", async () => {
@@ -152,17 +146,38 @@
         hub.style.display = 'flex';
         loginBox.style.display = "none";
         userBox.style.display = "flex";
-        if (user.isAnonymous) {
-          welcomeMsg.textContent = `Bem-vindo, Visitante 👊`;
+
+        const isAdmin = user.email && ADMINS.includes(user.email);
+        
+        if (user.isAnonymous || isAdmin) {
+          welcomeMsg.textContent = isAdmin ? `Bem-vindo, Admin ${user.displayName} 👑` : `Bem-vindo, Visitante 👊`;
           planosVenda.style.display = 'flex';
           conteudoLiberado.style.display = 'none';
         } else {
           welcomeMsg.textContent = `Bem-vindo, ${user.displayName || user.email} 👊`;
           const userDocRef = doc(db, "usuarios", user.uid);
           const userDocSnap = await getDoc(userDocRef);
+
           if (userDocSnap.exists() && userDocSnap.data().status === 'ativo') {
             planosVenda.style.display = 'none';
             conteudoLiberado.style.display = 'flex';
+            
+            const planoDoUsuario = userDocSnap.data().plano || '';
+
+            // --- LÓGICA DE ACESSO HIERÁRQUICO ---
+            linkQuizzes.style.display = 'none';
+            linkBiblioteca.style.display = 'none';
+            linkAnalise.style.display = 'none';
+
+            if (planoDoUsuario.includes('Básico') || planoDoUsuario.includes('Premium') || planoDoUsuario.includes('Black')) {
+                linkQuizzes.style.display = 'block';
+            }
+            if (planoDoUsuario.includes('Premium') || planoDoUsuario.includes('Black')) {
+                linkBiblioteca.style.display = 'block';
+            }
+            if (planoDoUsuario.includes('Black')) {
+                linkAnalise.style.display = 'block';
+            }
           } else {
             planosVenda.style.display = 'flex';
             conteudoLiberado.style.display = 'none';
@@ -174,7 +189,6 @@
       }
     });
 
-    // Anexamos a função ao objeto window para que o onclick do HTML a encontre
     window.criarPreferencia = async (nomePlano, valor) => {
       const user = auth.currentUser;
       if (!user || user.isAnonymous) {
@@ -193,10 +207,7 @@
         } else {
           alert("Erro ao criar preferência de pagamento");
         }
-      } catch (e) {
-        console.error("Erro:", e);
-        alert("Falha na comunicação com servidor");
-      }
+      } catch (e) { console.error("Erro:", e); alert("Falha na comunicação com servidor"); }
     };
   </script>
 
@@ -205,6 +216,7 @@
       const splash = document.getElementById('splash');
       setTimeout(() => {
         splash.style.display = 'none';
+        // A lógica do onAuthStateChanged vai decidir o que mostrar em seguida.
       }, 2000);
     });
   </script>
