@@ -9,7 +9,7 @@
 </head>
 <body>
 
-  <div id="splash" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background-color: #121212;">
+  <div id="splash" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background-color: #121212; justify-content: center; align-items: center;">
     <h1>Jiu-Jitsu Puro</h1>
   </div>
 
@@ -19,28 +19,19 @@
         <div class="premium-card" onclick="criarPreferencia('Plano Básico - Jiu-Jitsu Puro', 9.90)">
             <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
             <i class="fa-solid fa-graduation-cap main-icon"></i>
-            <div>
-              <h2>Aprenda e Teste</h2>
-              <p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p>
-            </div>
+            <div><h2>Aprenda e Teste</h2><p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p></div>
             <div class="price-tag">R$ 9,90</div>
         </div>
         <div class="premium-card" onclick="criarPreferencia('Plano Premium - Jiu-Jitsu Puro', 39.90)">
             <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
             <i class="fa-solid fa-sitemap main-icon"></i>
-            <div>
-              <h2>Biblioteca de Posições</h2>
-              <p class="description">Explore um acervo completo de posições e técnicas.</p>
-            </div>
+            <div><h2>Biblioteca de Posições</h2><p class="description">Explore um acervo completo de posições e técnicas.</p></div>
             <div class="price-tag">R$ 39,90</div>
         </div>
         <div class="premium-card" onclick="criarPreferencia('Plano Black - Jiu-Jitsu Puro', 69.90)">
             <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
             <i class="fa-solid fa-chart-line main-icon"></i>
-            <div>
-              <h2>Análise de Luta</h2>
-              <p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p>
-            </div>
+            <div><h2>Análise de Luta</h2><p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p></div>
             <div class="price-tag">R$ 69,90</div>
         </div>
     </div>
@@ -93,14 +84,15 @@
   <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script>
     // IMPORTANTE: USE SUA PUBLIC KEY DE PRODUÇÃO AQUI
-    const mp = new MercadoPago("APP_USR-a984cf15-517f-4d10-a57f-f47617a3a10d", { locale: "pt-BR" });
+    const mp = new MercadoPago("SUA_PUBLIC_KEY_DE_PRODUÇÃO_AQUI", { locale: "pt-BR" });
   </script>
 
   <script type="module">
-    import { loginGoogle, auth, app, db } from "./firebase.js"; 
+    import { loginGoogle, auth, db } from "./firebase.js"; 
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+    const splash = document.getElementById('splash');
     const hub = document.getElementById('hub');
     const loginBox = document.getElementById("loginBox");
     const userBox = document.getElementById("userBox");
@@ -118,8 +110,6 @@
     const linkQuizzes = document.getElementById('link-quizzes');
     const linkBiblioteca = document.getElementById('link-biblioteca');
     const linkAnalise = document.getElementById('link-analise');
-
-    const ADMINS = ["dionegalato1212@gmail.com"]; // Seus e-mails de admin
 
     btnLoginGoogle.addEventListener("click", loginGoogle);
     btnEmailSignup.addEventListener("click", async () => {
@@ -142,15 +132,15 @@
 
     onAuthStateChanged(auth, async (user) => {
       hub.style.display = 'none';
+      loginBox.style.display = 'none';
+      userBox.style.display = 'none';
+
       if (user) {
         hub.style.display = 'flex';
-        loginBox.style.display = "none";
         userBox.style.display = "flex";
-
-        const isAdmin = user.email && ADMINS.includes(user.email);
         
-        if (user.isAnonymous || isAdmin) {
-          welcomeMsg.textContent = isAdmin ? `Bem-vindo, Admin ${user.displayName} 👑` : `Bem-vindo, Visitante 👊`;
+        if (user.isAnonymous) {
+          welcomeMsg.textContent = `Bem-vindo, Visitante 👊`;
           planosVenda.style.display = 'flex';
           conteudoLiberado.style.display = 'none';
         } else {
@@ -163,8 +153,7 @@
             conteudoLiberado.style.display = 'flex';
             
             const planoDoUsuario = userDocSnap.data().plano || '';
-
-            // --- LÓGICA DE ACESSO HIERÁRQUICO ---
+            
             linkQuizzes.style.display = 'none';
             linkBiblioteca.style.display = 'none';
             linkAnalise.style.display = 'none';
@@ -185,8 +174,9 @@
         }
       } else {
         loginBox.style.display = "flex";
-        userBox.style.display = "none";
       }
+      
+      splash.style.display = 'none';
     });
 
     window.criarPreferencia = async (nomePlano, valor) => {
@@ -211,14 +201,5 @@
     };
   </script>
 
-  <script>
-    window.addEventListener('load', () => {
-      const splash = document.getElementById('splash');
-      setTimeout(() => {
-        splash.style.display = 'none';
-        // A lógica do onAuthStateChanged vai decidir o que mostrar em seguida.
-      }, 2000);
-    });
-  </script>
-</body>
+  </body>
 </html>
