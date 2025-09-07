@@ -6,25 +6,19 @@
   <title>Admin - Jiu-Jitsu Puro</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body { padding: 20px; font-family: 'Poppins', sans-serif; }
-    h1 { color: var(--gold); text-align: center; }
-    table {
-      width: 100%; margin-top: 20px; border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #444; padding: 8px; text-align: center;
-    }
-    th { background: var(--gold); color: var(--bg-dark); }
-    button {
-      padding: 5px 10px;
-      border: none;
-      border-radius: 6px;
-      margin: 2px;
-      cursor: pointer;
-    }
-    .ativar { background: var(--correct); color: #fff; }
-    .desativar { background: var(--wrong); color: #fff; }
-    .plano-btn { background: var(--gold); color: var(--bg-dark); }
+    body { padding: 20px; font-family: sans-serif; background-color: #f4f4f4; color: #333; }
+    h1, h2 { text-align: center; color: #1a1a1a; }
+    table { width: 100%; max-width: 1200px; margin: 20px auto; border-collapse: collapse; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    th, td { border: 1px solid #ddd; padding: 12px 15px; text-align: center; }
+    th { background-color: #333; color: #fff; text-transform: uppercase; letter-spacing: 1px;}
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    button { padding: 8px 12px; border: none; border-radius: 5px; margin: 2px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
+    button:hover { transform: scale(1.05); }
+    .ativar { background: #28a745; color: #fff; }
+    .desativar { background: #dc3545; color: #fff; }
+    .plano-btn { background: #ffc107; color: #333; }
+    #painel, #adminLogin { max-width: 1200px; margin: auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    .google-btn, .back-btn { display: block; margin: 20px auto; }
   </style>
 </head>
 <body>
@@ -48,8 +42,6 @@
           <th>Email</th>
           <th>Plano</th>
           <th>Status</th>
-          <th>Data de Cadastro</th>
-          <th>Último Login</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -69,28 +61,24 @@
     const usuariosTable = document.getElementById("usuariosTable");
     const adminName = document.getElementById("adminName");
 
-    // Emails autorizados como admin
-    const ADMINS = ["dionegalato1212@gmail.com"]; // <<< coloque seu email aqui
+    // Adicione aqui os e-mails que terão permissão de administrador
+    const ADMINS = ["dionegalato1212@gmail.com"];
 
     if (btnLoginAdmin) {
       btnLoginAdmin.addEventListener("click", async () => {
         const user = await loginGoogle();
-        if (user && ADMINS.includes(user.email)) {
-          carregarUsuarios();
-        } else {
+        if (!user || !ADMINS.includes(user.email)) {
           alert("⚠️ Acesso negado. Você não é admin.");
-          await signOut(auth);
+          if(auth.currentUser) await signOut(auth);
         }
       });
     }
 
     if (btnLogout) {
-      btnLogout.addEventListener("click", async () => {
-        await signOut(auth);
-      });
+      btnLogout.addEventListener("click", () => signOut(auth));
     }
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user && ADMINS.includes(user.email)) {
         adminLogin.style.display = "none";
         painel.style.display = "block";
@@ -103,46 +91,46 @@
     });
 
     async function carregarUsuarios() {
-      usuariosTable.innerHTML = "";
-      const querySnapshot = await getDocs(collection(db, "usuarios"));
-      querySnapshot.forEach((docSnap) => {
-        const data = docSnap.data();
+      usuariosTable.innerHTML = "<tr><td colspan='4'>Carregando...</td></tr>";
+      try {
+        const querySnapshot = await getDocs(collection(db, "usuarios"));
+        usuariosTable.innerHTML = ""; // Limpa a tabela
+        if (querySnapshot.empty) {
+            usuariosTable.innerHTML = "<tr><td colspan='4'>Nenhum usuário encontrado.</td></tr>";
+            return;
+        }
+        querySnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const row = document.createElement("tr");
 
-        const dataCadastro = data.dataCadastro 
-          ? new Date(data.dataCadastro.seconds * 1000).toLocaleString("pt-BR") 
-          : "—";
-        const ultimoLogin = data.ultimoLogin 
-          ? new Date(data.ultimoLogin.seconds * 1000).toLocaleString("pt-BR") 
-          : "—";
-
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${data.email}</td>
-          <td>${data.plano || "pendente"}</td>
-          <td>${data.ativo ? "✅ Ativo" : "❌ Inativo"}</td>
-          <td>${dataCadastro}</td>
-          <td>${ultimoLogin}</td>
-          <td>
-            <button class="plano-btn" onclick="setPlano('${docSnap.id}','basica')">Básica</button>
-            <button class="plano-btn" onclick="setPlano('${docSnap.id}','premium')">Premium</button>
-            <button class="plano-btn" onclick="setPlano('${docSnap.id}','black')">Black</button>
-            <button class="ativar" onclick="setAtivo('${docSnap.id}', true)">Ativar</button>
-            <button class="desativar" onclick="setAtivo('${docSnap.id}', false)">Desativar</button>
-          </td>
-        `;
-        usuariosTable.appendChild(row);
-      });
+          const statusText = data.status === 'ativo' ? "✅ Ativo" : "❌ Inativo";
+          
+          row.innerHTML = `
+            <td>${data.email || "Não disponível"}</td>
+            <td>${data.plano || "Pendente"}</td>
+            <td>${statusText}</td>
+            <td>
+              <button class="ativar" onclick="setStatus('${docSnap.id}', 'ativo')">Ativar</button>
+              <button class="desativar" onclick="setStatus('${docSnap.id}', 'inativo')">Desativar</button>
+            </td>
+          `;
+          usuariosTable.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Erro ao carregar usuários:", error);
+        usuariosTable.innerHTML = "<tr><td colspan='4'>Erro ao carregar usuários.</td></tr>";
+      }
     }
 
-    // Precisa expor funções globais
-    window.setPlano = async (uid, plano) => {
-      await updateDoc(doc(db, "usuarios", uid), { plano: plano, ativo: true });
-      carregarUsuarios();
-    };
-
-    window.setAtivo = async (uid, ativo) => {
-      await updateDoc(doc(db, "usuarios", uid), { ativo });
-      carregarUsuarios();
+    // Expõe a função para o HTML poder chamá-la via onclick
+    window.setStatus = async (uid, novoStatus) => {
+      try {
+        await updateDoc(doc(db, "usuarios", uid), { status: novoStatus });
+        carregarUsuarios(); // Recarrega a lista para mostrar a mudança
+      } catch (error) {
+        console.error("Erro ao atualizar status:", error);
+        alert("Não foi possível atualizar o status.");
+      }
     };
   </script>
 </body>
