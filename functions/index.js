@@ -80,7 +80,7 @@ app.post("/webhook-mercadopago", async (req, res) => {
           
           // ATUALIZA O DOCUMENTO DO USUÁRIO NA COLEÇÃO "usuarios"
           const userDocRef = db.collection('usuarios').doc(userId);
-          await userDocRef.update({
+        await userDocRef.set({ ... }, { merge: true });
             plano: planName,
             status: 'ativo', // Define o status como ATIVO
             paymentId: paymentId,
