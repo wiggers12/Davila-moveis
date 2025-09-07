@@ -13,15 +13,14 @@ const db = admin.firestore();
 const app = express();
 
 // ----------------- MIDDLEWARE -----------------
-// Habilita o CORS para permitir que seu site acesse a API
 app.use(cors({ origin: true }));
-// Habilita o Express para interpretar o corpo das requisições como JSON
 app.use(express.json());
 
 // ----------------- CONFIGURAÇÃO DO CLIENTE MERCADO PAGO -----------------
 const client = new MercadoPagoConfig({
-  accessToken: functions.config().mercadopago.token
+  accessToken: process.env.MERCADOPAGO_TOKEN
 });
+
 
 // ----------------- ROTA PARA CRIAR PREFERÊNCIA DE PAGAMENTO -----------------
 app.post("/create_preference", async (req, res) => {
@@ -29,7 +28,7 @@ app.post("/create_preference", async (req, res) => {
     const preferenceData = {
       items: [
         {
-          id: req.body.title, // Passamos o nome do plano como ID para referência
+          id: req.body.title,
           title: req.body.title,
           quantity: 1,
           currency_id: "BRL",
@@ -78,14 +77,14 @@ app.post("/webhook-mercadopago", async (req, res) => {
           const userRecord = await admin.auth().getUserByEmail(payerEmail);
           const userId = userRecord.uid;
           
-          // ATUALIZA O DOCUMENTO DO USUÁRIO NA COLEÇÃO "usuarios"
           const userDocRef = db.collection('usuarios').doc(userId);
-        await userDocRef.set({ ... }, { merge: true });
+          // Usando .set com merge:true para mais robustez
+          await userDocRef.set({
             plano: planName,
-            status: 'ativo', // Define o status como ATIVO
+            status: 'ativo',
             paymentId: paymentId,
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
-          });
+          }, { merge: true });
 
           console.log(`Acesso liberado para ${payerEmail} (UID: ${userId}) no plano ${planName}`);
         } catch (authError) {
@@ -93,7 +92,6 @@ app.post("/webhook-mercadopago", async (req, res) => {
         }
       }
     }
-    // Responde 200 OK para o Mercado Pago para confirmar o recebimento
     res.sendStatus(200);
   } catch (error) {
     console.error("❌ Erro ao processar webhook:", error);
