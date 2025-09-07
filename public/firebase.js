@@ -3,7 +3,8 @@
 // Importa os módulos Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+// Adicionamos o 'getDoc' aqui para podermos LER um documento
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // Sua configuração do Firebase (está correta)
 const firebaseConfig = {
@@ -21,26 +22,42 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// Função de login com Google
+// Função de login com Google (LÓGICA CORRIGIDA)
 export async function loginGoogle() {
   const provider = new GoogleAuthProvider();
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    // Garante que o usuário tem um registro no Firestore ao logar pela 1ª vez
-    // Usaremos a estrutura padronizada
+    // --- INÍCIO DA CORREÇÃO ---
+    // 1. Primeiro, criamos uma referência ao documento do usuário
     const userDocRef = doc(db, "usuarios", user.uid);
-    await setDoc(userDocRef, {
-      email: user.email,
-      nome: user.displayName,
-      status: "pendente", // O status inicial é sempre pendente
-      plano: null
-    }, { merge: true }); // Merge true para não apagar dados se já existir
+    // 2. Em seguida, tentamos ler esse documento
+    const userDocSnap = await getDoc(userDocRef);
+
+    // 3. Apenas criamos o registro inicial se o documento NÃO existir
+    if (!userDocSnap.exists()) {
+      console.log("Primeiro login do usuário via Google. Criando registro no Firestore.");
+      await setDoc(userDocRef, {
+        email: user.email,
+        nome: user.displayName,
+        status: "pendente", // O status inicial é sempre pendente
+        plano: null
+      });
+    } else {
+      // Se o documento já existe, não fazemos nada, preservando o status atual ('ativo' ou 'pendente').
+      console.log("Usuário já existente fez login. Status preservado.");
+    }
+    // --- FIM DA CORREÇÃO ---
 
     return user;
   } catch (e) {
-    console.error("Erro no login Google:", e);
+    // Melhoria para não mostrar erro quando o usuário simplesmente fecha o popup
+    if (e.code === 'auth/popup-closed-by-user') {
+      console.log("Login com Google cancelado pelo usuário.");
+    } else {
+      console.error("Erro no login Google:", e);
+    }
     return null;
   }
 }
