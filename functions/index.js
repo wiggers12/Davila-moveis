@@ -1,27 +1,35 @@
 // functions/index.js
+
+// ----------------- IMPORTS -----------------
 const functions = require("firebase-functions");
 const express = require("express");
 const cors = require("cors");
-// Importamos o "Payment" para buscar os detalhes do pagamento
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
+const admin = require("firebase-admin");
 
+// ----------------- INICIALIZAÇÃO -----------------
+admin.initializeApp();
+const db = admin.firestore();
 const app = express();
 
-// Configuração CORS final para garantir o funcionamento
+// ----------------- MIDDLEWARE -----------------
+// Habilita o CORS para permitir que seu site acesse a API
 app.use(cors({ origin: true }));
-
+// Habilita o Express para interpretar o corpo das requisições como JSON
 app.use(express.json());
 
-// Use a chave "Access Token" do seu painel do Mercado Pago
+// ----------------- CONFIGURAÇÃO DO CLIENTE MERCADO PAGO -----------------
 const client = new MercadoPagoConfig({
-  accessToken: "APP_USR-4207416003425678-090517-e5f2c87311b1ecf64828f28fc093fc23-2668676373" // Ex: "APP_USR-108469..."
+  accessToken: functions.config().mercadopago.token
 });
 
+// ----------------- ROTA PARA CRIAR PREFERÊNCIA DE PAGAMENTO -----------------
 app.post("/create_preference", async (req, res) => {
   try {
     const preferenceData = {
       items: [
         {
+          id: req.body.title, // Passamos o nome do plano como ID para referência
           title: req.body.title,
           quantity: 1,
           currency_id: "BRL",
@@ -38,56 +46,61 @@ app.post("/create_preference", async (req, res) => {
 
     const preference = new Preference(client);
     const result = await preference.create({ body: preferenceData });
+    
+    console.log("Preferência de pagamento criada com ID:", result.id);
     res.json({ id: result.id });
 
   } catch (error) {
     console.error("Erro ao criar preferência:", error);
-    res.status(500).json({ error: "Erro ao criar preferência" });
+    res.status(500).json({ error: "Erro ao criar preferência de pagamento" });
   }
 });
 
 
-// ✅ NOVA ROTA DE WEBHOOK ADICIONADA AQUI
+// ----------------- ROTA DE WEBHOOK PARA CONFIRMAR PAGAMENTOS -----------------
 app.post("/webhook-mercadopago", async (req, res) => {
   console.log("---------- Webhook Recebido ----------");
-  console.log(req.body);
-
-  // A notificação vem no corpo da requisição
   const notification = req.body;
 
   try {
-    // Verificamos se a notificação é do tipo 'payment'
     if (notification.type === "payment") {
       const paymentId = notification.data.id;
-
-      // Usamos o SDK para buscar os dados completos do pagamento de forma segura
       const payment = new Payment(client);
       const paymentDetails = await payment.get({ id: paymentId });
 
-      console.log("---------- Detalhes do Pagamento ----------");
-      console.log(paymentDetails);
-
-      // Verificamos se o pagamento foi aprovado
       if (paymentDetails.status === 'approved') {
         console.log(`✅ Pagamento ${paymentId} APROVADO!`);
         
-        // --- LÓGICA DO SEU NEGÓCIO AQUI ---
-        // Exemplo:
-        // 1. Busque o e-mail do pagador: const email = paymentDetails.payer.email;
-        // 2. Procure o usuário no seu banco de dados pelo e-mail.
-        // 3. Atualize o status da conta do usuário para "premium".
-        // 4. Envie um e-mail de confirmação.
+        const payerEmail = paymentDetails.payer.email;
+        const planName = paymentDetails.additional_info.items[0].title;
+
+        try {
+          const userRecord = await admin.auth().getUserByEmail(payerEmail);
+          const userId = userRecord.uid;
+          
+          // ATUALIZA O DOCUMENTO DO USUÁRIO NA COLEÇÃO "usuarios"
+          const userDocRef = db.collection('usuarios').doc(userId);
+          await userDocRef.update({
+            plano: planName,
+            status: 'ativo', // Define o status como ATIVO
+            paymentId: paymentId,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+          });
+
+          console.log(`Acesso liberado para ${payerEmail} (UID: ${userId}) no plano ${planName}`);
+        } catch (authError) {
+          console.error(`Erro: Usuário com e-mail ${payerEmail} pagou mas não foi encontrado no Firebase Auth.`, authError);
+        }
       }
     }
-
-    // Respondemos com status 200 para o Mercado Pago saber que recebemos
+    // Responde 200 OK para o Mercado Pago para confirmar o recebimento
     res.sendStatus(200);
-
   } catch (error) {
     console.error("❌ Erro ao processar webhook:", error);
-    res.status(500).send("Erro no servidor");
+    res.status(500).send("Erro no servidor ao processar webhook");
   }
 });
 
 
+// ----------------- EXPORTA A API PARA O FIREBASE -----------------
 exports.api = functions.https.onRequest(app);
