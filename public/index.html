@@ -9,10 +9,12 @@
 </head>
 <body>
 
-  <div id="splash" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background-color: #121212;">
+  <!-- Splash -->
+  <div id="splash" style="display: flex;">
     <h1>Jiu-Jitsu Puro</h1>
   </div>
 
+  <!-- Hub Principal -->
   <div id="hub" class="screen center-content" style="display: none;">
     
     <div id="planos-venda" class="hub-container">
@@ -25,6 +27,7 @@
         </div>
         <div class="price-tag">R$ 9,90</div>
       </div>
+
       <div class="premium-card" onclick="criarPreferencia('Plano Premium - Jiu-Jitsu Puro', 39.90)">
         <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
         <i class="fa-solid fa-sitemap main-icon"></i>
@@ -34,6 +37,7 @@
         </div>
         <div class="price-tag">R$ 39,90</div>
       </div>
+
       <div class="premium-card" onclick="criarPreferencia('Plano Black - Jiu-Jitsu Puro', 69.90)">
         <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
         <i class="fa-solid fa-chart-line main-icon"></i>
@@ -48,117 +52,60 @@
     <div id="conteudo-liberado" class="hub-container" style="display: none;">
       <h2>Conteúdo Exclusivo</h2>
       <p>Bem-vindo à sua área de assinante!</p>
-      <a href="#" class="conteudo-link">Acessar Quizzes</a>
-      <a href="#" class="conteudo-link">Ver Biblioteca de Posições</a>
-      <a href="#" class="conteudo-link">Analisar Minhas Lutas</a>
+      <a href="quizzes.html" class="conteudo-link">Acessar Quizzes</a>
+      <a href="posicoes.html" class="conteudo-link">Ver Biblioteca de Posições</a>
+      <a href="analise.html" class="conteudo-link">Analisar Minhas Lutas</a>
     </div>
 
   </div>
 
+  <!-- Login -->
   <div class="login-container" id="loginBox" style="display: none;">
-    <div class="form-login">
-      <input type="email" id="emailInput" placeholder="Seu e-mail" class="login-input">
-      <input type="password" id="passwordInput" placeholder="Sua senha" class="login-input">
-      <div class="botoes-login">
-        <button id="btnEmailLogin" class="login-btn">Entrar</button>
-        <button id="btnEmailSignup" class="login-btn signup">Cadastrar</button>
-      </div>
-    </div>
-    <p class="divisor">ou</p>
     <button id="btnLoginGoogle" class="google-btn">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
       Entrar com Google
     </button>
-    <button id="btnAnonymous" class="anonymous-btn">Continuar sem cadastro</button>
-    <p id="loginErrorMsg" class="error-msg"></p>
   </div>
 
+  <!-- Usuário -->
   <div class="login-container" id="userBox" style="display:none; flex-direction: column; align-items: center;">
     <p id="welcomeMsg"></p>
     <button id="btnLogout" class="back-btn">Sair</button>
   </div>
 
+  <!-- Firebase -->
   <script type="module">
-    import { loginGoogle, auth, app, db } from "./firebase.js"; 
-    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { 
-      signOut, 
-      onAuthStateChanged,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signInAnonymously
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { loginGoogle, auth, db } from "./firebase.js"; 
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const hub = document.getElementById('hub');
     const loginBox = document.getElementById("loginBox");
     const userBox = document.getElementById("userBox");
     const welcomeMsg = document.getElementById("welcomeMsg");
     const btnLogout = document.getElementById("btnLogout");
-    const emailInput = document.getElementById('emailInput');
-    const passwordInput = document.getElementById('passwordInput');
-    const btnEmailLogin = document.getElementById('btnEmailLogin');
-    const btnEmailSignup = document.getElementById('btnEmailSignup');
-    const btnLoginGoogle = document.getElementById('btnLoginGoogle');
-    const btnAnonymous = document.getElementById('btnAnonymous');
-    const loginErrorMsg = document.getElementById('loginErrorMsg');
     const planosVenda = document.getElementById('planos-venda');
     const conteudoLiberado = document.getElementById('conteudo-liberado');
 
+    const btnLoginGoogle = document.getElementById("btnLoginGoogle");
     btnLoginGoogle.addEventListener("click", loginGoogle);
-    btnEmailSignup.addEventListener("click", async () => {
-      try {
-        loginErrorMsg.textContent = '';
-        const userCredential = await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-        const user = userCredential.user;
-        const userDocRef = doc(db, "usuarios", user.uid);
-        await setDoc(userDocRef, {
-            email: user.email,
-            nome: user.email,
-            status: "pendente",
-            plano: null
-        }, { merge: true });
-      } catch (error) {
-        loginErrorMsg.textContent = "Erro ao cadastrar. Verifique o e-mail e a senha.";
-        console.error("Erro no cadastro:", error);
-      }
-    });
-    btnEmailLogin.addEventListener("click", async () => {
-      try {
-        loginErrorMsg.textContent = '';
-        await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-      } catch (error) {
-        loginErrorMsg.textContent = "E-mail ou senha inválidos.";
-        console.error("Erro no login:", error);
-      }
-    });
-    btnAnonymous.addEventListener("click", () => signInAnonymously(auth));
     btnLogout.addEventListener("click", () => signOut(auth));
 
     onAuthStateChanged(auth, async (user) => {
-      loginErrorMsg.textContent = '';
-      hub.style.display = 'none'; // Garante que o hub comece escondido
-      
+      hub.style.display = 'none';
       if (user) {
-        hub.style.display = 'flex'; // Mostra o hub para qualquer usuário logado
+        hub.style.display = 'flex';
         loginBox.style.display = "none";
         userBox.style.display = "flex";
+        welcomeMsg.textContent = `Bem-vindo, ${user.displayName || user.email} 👊`;
 
-        if (user.isAnonymous) {
-          welcomeMsg.textContent = `Bem-vindo, Visitante 👊`;
-          planosVenda.style.display = 'flex';
-          conteudoLiberado.style.display = 'none';
+        const snap = await getDoc(doc(db, "usuarios", user.uid));
+        if (snap.exists() && snap.data().status === "ativo") {
+          planosVenda.style.display = "none";
+          conteudoLiberado.style.display = "flex";
         } else {
-          welcomeMsg.textContent = `Bem-vindo, ${user.displayName || user.email} 👊`;
-          const userDocRef = doc(db, "usuarios", user.uid);
-          const userDocSnap = await getDoc(userDocRef);
-
-          if (userDocSnap.exists() && userDocSnap.data().status === 'ativo') {
-            planosVenda.style.display = 'none';
-            conteudoLiberado.style.display = 'flex';
-          } else {
-            planosVenda.style.display = 'flex';
-            conteudoLiberado.style.display = 'none';
-          }
+          planosVenda.style.display = "flex";
+          conteudoLiberado.style.display = "none";
         }
       } else {
         hub.style.display = 'none';
@@ -166,21 +113,23 @@
         userBox.style.display = "none";
       }
     });
-  </script>
 
-  <script src="https://sdk.mercadopago.com/js/v2"></script>
-  <script>
-    // IMPORTANTE: USE SUA PUBLIC KEY DE PRODUÇÃO AQUI
-    const mp = new MercadoPago("APP_USR-a984cf15-517f-4d10-a57f-f47617a3a10d", { locale: "pt-BR" });
+    // Função que cria preferência
+    window.criarPreferencia = async (nomePlano, valor) => {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Faça login antes de comprar um plano.");
+        return;
+      }
 
-    async function criarPreferencia(nomePlano, valor) {
       try {
         const res = await fetch("https://api-amhpksgvbq-uc.a.run.app/create_preference", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: nomePlano, price: valor })
+          body: JSON.stringify({ title: nomePlano, price: valor, uid: user.uid })
         });
         const data = await res.json();
+
         if (data.id) {
           mp.checkout({ preference: { id: data.id }, autoOpen: true });
         } else {
@@ -190,17 +139,22 @@
         console.error("Erro:", e);
         alert("Falha na comunicação com servidor de pagamentos");
       }
-    }
+    };
   </script>
 
+  <!-- Mercado Pago SDK -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script>
+    const mp = new MercadoPago("APP_USR-a984cf15-517f-4d10-a57f-f47617a3a10d", { locale: "pt-BR" });
+  </script>
+
+  <!-- Splash -->
   <script>
     window.addEventListener('load', () => {
       const splash = document.getElementById('splash');
-      // Este script agora só tem a responsabilidade de esconder o splash.
-      // A lógica principal (onAuthStateChanged) decide o que mostrar em seguida.
       setTimeout(() => {
         splash.style.display = 'none';
-      }, 2000); 
+      }, 2000);
     });
   </script>
 
