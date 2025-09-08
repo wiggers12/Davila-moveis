@@ -24,6 +24,7 @@
 <body>
   <h1>Painel de Administração</h1>
 
+  <!-- Login do Admin -->
   <div id="adminLogin">
     <button id="btnLoginAdmin" class="google-btn">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
@@ -31,10 +32,12 @@
     </button>
   </div>
 
+  <!-- Painel principal -->
   <div id="painel" style="display:none;">
     <p>Bem-vindo, <span id="adminName"></span> 👑</p>
     <button id="btnLogout" class="back-btn">Sair</button>
 
+    <!-- Gestão de Usuários -->
     <h2>Usuários</h2>
     <table>
       <thead>
@@ -47,12 +50,16 @@
       </thead>
       <tbody id="usuariosTable"></tbody>
     </table>
+
+    <!-- Gestão de Quizzes -->
+    <h2>Gerenciar Quizzes</h2>
+    <button onclick="importarQuizzes()">📥 Importar quizzes.json</button>
   </div>
 
   <script type="module">
     import { auth, db, loginGoogle } from "./firebase.js";
     import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { collection, getDocs, updateDoc, doc, addDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const btnLoginAdmin = document.getElementById("btnLoginAdmin");
     const btnLogout = document.getElementById("btnLogout");
@@ -61,8 +68,10 @@
     const usuariosTable = document.getElementById("usuariosTable");
     const adminName = document.getElementById("adminName");
 
+    // 📌 Emails autorizados como Admin
     const ADMINS = ["dionegalato1212@gmail.com"];
 
+    // Login Google
     if (btnLoginAdmin) {
       btnLoginAdmin.addEventListener("click", async () => {
         const user = await loginGoogle();
@@ -73,10 +82,12 @@
       });
     }
 
+    // Logout
     if (btnLogout) {
       btnLogout.addEventListener("click", () => signOut(auth));
     }
 
+    // Observa mudanças no login
     onAuthStateChanged(auth, (user) => {
       if (user && ADMINS.includes(user.email)) {
         adminLogin.style.display = "none";
@@ -89,6 +100,7 @@
       }
     });
 
+    // Carregar lista de usuários
     async function carregarUsuarios() {
       usuariosTable.innerHTML = "<tr><td colspan='4'>Carregando...</td></tr>";
       try {
@@ -122,6 +134,7 @@
       }
     }
 
+    // Atualizar status do usuário
     window.setStatus = async (uid, novoStatus) => {
       try {
         const dataToUpdate = novoStatus === 'inativo' ? { status: novoStatus, plano: null } : { status: novoStatus };
@@ -130,6 +143,7 @@
       } catch (error) { console.error("Erro ao atualizar status:", error); }
     };
 
+    // Atualizar plano do usuário
     window.setPlano = async (uid, nomeDoPlano) => {
       try {
         await updateDoc(doc(db, "usuarios", uid), {
@@ -138,6 +152,31 @@
         });
         carregarUsuarios();
       } catch (error) { console.error("Erro ao definir plano:", error); }
+    };
+
+    // 📦 Importar quizzes.json para o Firestore
+    window.importarQuizzes = async () => {
+      try {
+        const response = await fetch("../quizzes.json"); // busca o JSON na raiz
+        const data = await response.json();
+
+        for (const tema in data) {
+          const temaData = data[tema];
+          const temaRef = doc(db, "quizzes", tema);
+
+          // Cria o documento do tema
+          await setDoc(temaRef, { titulo: temaData.titulo });
+
+          // Adiciona cada pergunta na subcoleção
+          for (const p of temaData.perguntas) {
+            await addDoc(collection(db, "quizzes", tema, "perguntas"), p);
+          }
+        }
+        alert("✅ Quizzes importados com sucesso!");
+      } catch (error) {
+        console.error("Erro ao importar quizzes:", error);
+        alert("❌ Erro ao importar quizzes. Veja o console.");
+      }
     };
   </script>
 </body>

@@ -38,191 +38,63 @@
     </div>
   </div>
 
-  <script>
-    /* ================= CONTEÚDOS DOS QUIZZES ================= */
+  <script type="module">
+    import { db, verificarAcesso } from "./firebase.js";
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
     const conteudos = {
       comeco: `<strong>O Começo:</strong> Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é evolução. Teste seus conhecimentos básicos.`,
-      regras: `<strong>Regras:</strong> Entender a pontuação e as regras básicas é fundamental. Vamos ver se você está por dentro.`,
-      tatame: `<strong>Tatame:</strong> O tatame é um local sagrado com suas próprias regras de conduta e respeito. Você conhece a etiqueta?`,
-      mentalidade: `<strong>Mentalidade:</strong> A mente é tão importante quanto o corpo no Jiu-Jitsu. Qual é a mentalidade correta?`,
-      guarda: `<strong>Guarda:</strong> A guarda é a essência do Jiu-Jitsu. Teste seus conhecimentos sobre os diferentes tipos e seus objetivos.`,
-      passagens: `<strong>Passagens:</strong> Passar a guarda é um dos maiores desafios. Você conhece os conceitos e tipos de passagem?`,
-      meiaguarda: `<strong>Meia Guarda:</strong> Uma posição complexa e cheia de detalhes. Vamos ver o que você sabe sobre ela.`,
-      finalizacoes: `<strong>Finalizações:</strong> O objetivo final da luta. Conheça os ataques mais comuns e seus conceitos.`,
-      quedas: `<strong>Quedas:</strong> Levar a luta para o chão é uma arte. Você entende os princípios das quedas no Jiu-Jitsu?`,
-      drills: `<strong>Drills:</strong> A repetição leva à perfeição. Conhece os drills essenciais para a evolução?`
+      regras: `<strong>Regras:</strong> Entender a pontuação e as regras básicas é fundamental.`,
+      tatame: `<strong>Tatame:</strong> O tatame é um local sagrado com regras de respeito.`,
+      mentalidade: `<strong>Mentalidade:</strong> A mente é tão importante quanto o corpo no Jiu-Jitsu.`,
+      guarda: `<strong>Guarda:</strong> A guarda é a essência do Jiu-Jitsu.`,
+      passagens: `<strong>Passagens:</strong> Passar a guarda é um dos maiores desafios.`,
+      meiaguarda: `<strong>Meia Guarda:</strong> Uma posição complexa e cheia de detalhes.`,
+      finalizacoes: `<strong>Finalizações:</strong> O objetivo final da luta.`,
+      quedas: `<strong>Quedas:</strong> Levar a luta para o chão é uma arte.`,
+      drills: `<strong>Drills:</strong> A repetição leva à perfeição.`
     };
 
-    /* ================= DADOS DOS QUIZZES (10 PERGUNTAS CADA) ================= */
-    const quizzes = {
-      comeco: {
-        perguntas: [
-          { pergunta: "Qual é o item essencial para começar no Jiu-Jitsu de kimono?", opcoes: ["Luvas", "Kimono", "Capacete", "Caneleira"], correta: 1 },
-          { pergunta: "Quantas vezes por semana é recomendado treinar no início?", opcoes: ["1", "2 a 3", "5", "Todos os dias"], correta: 1 },
-          { pergunta: "Qual deve ser a principal atitude de um iniciante?", opcoes: ["Competitividade", "Humildade", "Velocidade", "Força"], correta: 1 },
-          { pergunta: "O que é mais importante nos primeiros treinos?", opcoes: ["Ganhar dos colegas", "Aprender os fundamentos", "Lutar com força máxima", "Evitar ser finalizado"], correta: 1 },
-          { pergunta: "Para treinos sem kimono (No-Gi), o que se deve vestir?", opcoes: ["Roupa confortável (rashguard e bermuda)", "Short jeans", "Jaqueta de couro", "Apenas o kimono"], correta: 0 },
-          { pergunta: "Qual a melhor forma de evoluir rapidamente no início?", opcoes: ["Focando em repetição e técnica", "Usando apenas a força bruta", "Competindo o mais cedo possível", "Treinando apenas uma vez por mês"], correta: 0 },
-          { pergunta: "O que significa 'bater' (dar os três tapinhas)?", opcoes: ["Ganhar a luta", "Pedir um tempo", "Desistir para não se machucar", "Comemorar um ponto"], correta: 2 },
-          { pergunta: "O que NÃO se deve fazer no tatame?", opcoes: ["Respeitar os mais graduados", "Treinar com o kimono sujo", "Ser pontual", "Ajudar os colegas"], correta: 1 },
-          { pergunta: "Qual parte do corpo deve ter a higiene redobrada (unhas cortadas)?", opcoes: ["Apenas as mãos", "Apenas os pés", "Apenas a cabeça", "Mãos e pés"], correta: 3 },
-          { pergunta: "O que cada treino representa para um iniciante?", opcoes: ["Uma chance de provar ser o melhor", "Uma oportunidade de aprendizado", "Uma obrigação", "Uma competição interna"], correta: 1 }
-        ]
-      },
-      regras: {
-        perguntas: [
-          { pergunta: "Quantos pontos vale uma passagem de guarda?", opcoes: ["2", "3", "4", "5"], correta: 1 },
-          { pergunta: "Quantos pontos vale uma queda?", opcoes: ["1", "2", "3", "4"], correta: 1 },
-          { pergunta: "Uma raspagem (inversão partindo da guarda) vale quantos pontos?", opcoes: ["2", "3", "4", "5"], correta: 0 },
-          { pergunta: "Chegar na montada vale quantos pontos?", opcoes: ["2", "3", "4", "5"], correta: 2 },
-          { pergunta: "Qual ação geralmente encerra a luta imediatamente?", opcoes: ["Marcar 10 pontos", "Finalização", "Passar a guarda 3 vezes", "Uma queda forte"], correta: 1 },
-          { pergunta: "Qual destes golpes é ilegal em competições de faixas brancas?", opcoes: ["Armlock", "Mata-leão", "Chave de calcanhar", "Triângulo"], correta: 2 },
-          { pergunta: "A entidade que rege as principais regras do Jiu-Jitsu mundial é a:", opcoes: ["CBJJ/IBJJF", "FIFA", "FIJ", "NBA"], correta: 0 },
-          { pergunta: "Pegar as costas com os dois ganchos vale quantos pontos?", opcoes: ["2", "3", "4", "5"], correta: 2 },
-          { pergunta: "Uma joelhada na montada (joelho na barriga) vale quantos pontos?", opcoes: ["2", "3", "4", "Não pontua"], correta: 0 },
-          { pergunta: "Qual atitude pode levar a uma desclassificação imediata?", opcoes: ["Fugir da luta", "Conversar com o técnico", "Morder ou dar socos", "Raspar o oponente"], correta: 2 }
-        ]
-      },
-      tatame: {
-        perguntas: [
-            { pergunta: "O que se deve fazer sempre ao entrar e sair do tatame?", opcoes: ["Gritar 'OSS'", "Cumprimentar", "Correr", "Beber água"], correta: 1 },
-            { pergunta: "Qual a postura ideal ao assistir uma explicação do professor?", opcoes: ["Deitado", "Conversando com o colega", "Sentado em silêncio e prestando atenção", "Alongando"], correta: 2 },
-            { pergunta: "Por que é importante manter as unhas das mãos e pés sempre curtas?", opcoes: ["Por estética", "Para não arranhar e machucar os colegas", "Para o kimono não rasgar", "Não tem importância"], correta: 1 },
-            { pergunta: "A quem você deve pedir permissão para sair do tatame durante a aula?", opcoes: ["Ao colega mais próximo", "A ninguém, pode sair", "Ao professor", "Ao faixa preta mais antigo"], correta: 2 },
-            { pergunta: "Se você está com algum machucado ou doença contagiosa, o que deve fazer?", opcoes: ["Treinar mesmo assim", "Treinar devagar", "Avisar o professor e não treinar", "Treinar de luvas"], correta: 2 },
-            { pergunta: "Como se deve amarrar a faixa no kimono?", opcoes: ["De qualquer jeito", "Com um nó cego", "Com o nó correto, deixando as pontas iguais", "O mais apertado possível"], correta: 2 },
-            { pergunta: "O que é proibido fazer no tatame?", opcoes: ["Beber água", "Usar calçados", "Ajudar um colega", "Rolar com o professor"], correta: 1 },
-            { pergunta: "Como você deve se dirigir ao professor?", opcoes: ["Pelo primeiro nome", "Como 'Professor' ou 'Mestre'", "Como 'chefe'", "Como 'parceiro'"], correta: 1 },
-            { pergunta: "No final do treino, ao cumprimentar os colegas, qual é a atitude correta?", opcoes: ["Cumprimentar apenas os mais graduados", "Agradecer a todos pelo treino", "Sair correndo", "Apontar os erros de cada um"], correta: 1 },
-            { pergunta: "O tatame é considerado um local de:", opcoes: ["Apenas força", "Respeito e aprendizado", "Apenas competição", "Brincadeiras"], correta: 1 }
-        ]
-      },
-      mentalidade: {
-        perguntas: [
-            { pergunta: "Qual qualidade NÃO faz parte da mentalidade do Jiu-Jitsu?", opcoes: ["Humildade", "Resiliência", "Impaciência", "Controle emocional"], correta: 2 },
-            { pergunta: "O que é 'Resiliência' no contexto do Jiu-Jitsu?", opcoes: ["Ter muita força", "Saber desistir fácil", "A capacidade de se recuperar de posições ruins e derrotas", "Ganhar sempre"], correta: 2 },
-            { pergunta: "Por que a 'Humildade' é crucial para a evolução?", opcoes: ["Para ser submisso", "Porque permite reconhecer que sempre há o que aprender", "Para não machucar ninguém", "Para lutar devagar"], correta: 1 },
-            { pergunta: "O que acontece quando você é finalizado no treino?", opcoes: ["É uma vergonha", "Significa que você é ruim", "É uma oportunidade de aprender com um erro", "Você deve desafiar a pessoa de novo"], correta: 2 },
-            { pergunta: "Qual atitude mais atrapalha a evolução de um praticante?", opcoes: ["Perguntar demais", "O Ego", "Treinar com frequência", "Descansar"], correta: 1 },
-            { pergunta: "O 'controle emocional' durante a luta serve para:", opcoes: ["Não sentir dor", "Pensar com clareza e não gastar energia à toa", "Assustar o oponente", "Não conversar"], correta: 1 },
-            { pergunta: "O que significa a expressão 'o tatame é um espelho'?", opcoes: ["Que o tatame é brilhante", "Que suas atitudes na luta refletem quem você é na vida", "Que você deve se olhar no espelho", "Que o tatame é frágil"], correta: 1 },
-            { pergunta: "Qual é o foco principal de um treino ('rola')?", opcoes: ["Vencer a qualquer custo", "Testar técnicas e aprender, sem se preocupar em 'ganhar' ou 'perder'", "Apenas se defender", "Cansar o oponente"], correta: 1 },
-            { pergunta: "A paciência no Jiu-Jitsu é importante para:", opcoes: ["Esperar o oponente errar e aplicar a técnica no momento certo", "Lutar devagar para não cansar", "Deixar o tempo da luta acabar", "Irritar o oponente"], correta: 0 },
-            { pergunta: "Qual a melhor forma de lidar com a frustração de não conseguir executar uma técnica?", opcoes: ["Desistir da técnica", "Culpar o colega", "Insistir com calma, repetir e pedir ajuda", "Tentar usar mais força"], correta: 2 }
-        ]
-      },
-      guarda: {
-        perguntas: [
-          { pergunta: "Qual das seguintes NÃO é considerada uma guarda ofensiva?", opcoes: ["Guarda Aranha", "Guarda De La Riva", "Guarda Borboleta", "Guarda Tartaruga"], correta: 3 },
-          { pergunta: "Para que serve a guarda no Jiu-Jitsu?", opcoes: ["Apenas para atacar", "Apenas para se defender", "Para controlar, defender e atacar", "Para descansar"], correta: 2 },
-          { pergunta: "Qual guarda usa um gancho com a perna na coxa interna do oponente?", opcoes: ["Guarda Fechada", "Guarda De La Riva", "Guarda Aranha", "Guarda X"], correta: 1 },
-          { pergunta: "A 'Guarda Fechada' é caracterizada por:", opcoes: ["Segurar os dois pés do oponente", "Cruzar os pés nas costas do oponente", "Segurar uma perna só", "Ficar de quatro"], correta: 1 },
-          { pergunta: "Qual é o principal objetivo da guarda aberta?", opcoes: ["Finalizar rápido", "Manter distância e criar oportunidades de ataque", "Esperar o tempo acabar", "Apenas se defender de passagens"], correta: 1 },
-          { pergunta: "A 'Guarda Aranha' utiliza principalmente qual parte do corpo para controlar?", opcoes: ["Os pés no bíceps do oponente", "As mãos na gola", "Os joelhos no peito", "A cabeça"], correta: 0 },
-          { pergunta: "Qual guarda é famosa por facilitar raspagens e a pegada de costas?", opcoes: ["Guarda 50/50", "Guarda Borboleta", "Guarda Fechada", "Guarda de Gola e Manga"], correta: 1 },
-          { pergunta: "O que é 'quebrar a postura' na guarda fechada?", opcoes: ["Machucar as costas do oponente", "Desequilibrar o oponente, trazendo-o para frente", "Abrir a guarda", "Levantar"], correta: 1 },
-          { pergunta: "A 'Guarda X' é uma posição para:", opcoes: ["Estrangular", "Principalmente raspar e levantar", "Descansar", "Defender o cem quilos"], correta: 1 },
-          { pergunta: "O que um 'guardeiro' mais teme?", opcoes: ["Ser raspado", "Ser finalizado da guarda", "Ter sua guarda passada", "O tempo acabar"], correta: 2 }
-        ]
-      },
-      passagens: {
-        perguntas: [
-          { pergunta: "Qual o objetivo principal de uma passagem de guarda?", opcoes: ["Finalizar o oponente", "Chegar a uma posição de controle lateral (100kg)", "Cansar o oponente", "Marcar 2 pontos"], correta: 1 },
-          { pergunta: "A passagem 'Torreando' envolve principalmente...", opcoes: ["Empurrar os joelhos", "Andar em círculo ao redor das pernas do oponente", "Pular por cima da guarda", "Segurar a cabeça e pressionar"], correta: 1 },
-          { pergunta: "Qual tipo de passagem é caracterizada pelo uso do peso do corpo e pressão constante?", opcoes: ["Passagem de pressão (Smash Pass)", "Passagem rápida (Blitz)", "Leg Drag", "Torreando"], correta: 0 },
-          { pergunta: "O que é fundamental para iniciar qualquer passagem de guarda?", opcoes: ["Ter mais força", "Ser mais rápido", "Quebrar a postura do guardeiro", "Estabilizar pegadas e ter uma boa base"], correta: 3 },
-          { pergunta: "A passagem 'Leg Drag' consiste em:", opcoes: ["Puxar a perna do oponente para o lado oposto do corpo", "Pular sobre as duas pernas", "Passar de joelhos", "Empurrar os dois joelhos para o chão"], correta: 0 },
-          { pergunta: "Para passar a guarda, é importante controlar:", opcoes: ["Apenas as pernas", "Apenas a cabeça", "O quadril e/ou a cabeça do oponente", "Apenas os braços"], correta: 2 },
-          { pergunta: "Qual é o maior erro ao tentar passar a guarda?", opcoes: ["Ser lento", "Deixar a postura ser quebrada e ser desequilibrado", "Usar muita força", "Tentar passar pelo meio"], correta: 1 },
-          { pergunta: "A passagem 'Double Under' (duas por baixo) envolve:", opcoes: ["Abraçar as duas pernas do oponente por baixo", "Abraçar o pescoço", "Segurar as duas mangas", "Pular por cima"], correta: 0 },
-          { pergunta: "Quando um passador estabiliza o controle lateral (100kg) por 3 segundos, ele ganha:", opcoes: ["2 pontos", "3 pontos", "4 pontos", "Nenhum ponto, apenas a posição"], correta: 1 },
-          { pergunta: "Contra um guardeiro flexível, qual tipo de passagem é geralmente mais eficaz?", opcoes: ["Passagens de pressão, limitando o espaço", "Passagens rápidas e de longe, como a torreando", "Tentar finalizar de dentro da guarda", "Puxar para a guarda também"], correta: 1 }
-        ]
-      },
-      meiaguarda: {
-        perguntas: [
-            { pergunta: "Estar na meia guarda significa que você prendeu com suas pernas:", opcoes: ["As duas pernas do oponente", "Um braço e uma perna", "Apenas uma perna do oponente", "A cabeça do oponente"], correta: 2 },
-            { pergunta: "A meia guarda profunda é uma posição primariamente...", opcoes: ["Ofensiva para raspar ou pegar as costas", "Defensiva para segurar a luta", "Neutra, sem vantagens", "De finalização direta"], correta: 0 },
-            { pergunta: "Qual é um ataque comum para quem está por baixo na meia guarda?", opcoes: ["Armlock", "Mata-leão", "Raspagem", "Triângulo"], correta: 2 },
-            { pergunta: "O que o passador (quem está por cima) mais busca fazer na meia guarda?", opcoes: ["Levantar e sair", "Liberar a perna presa para chegar ao controle lateral", "Pegar as costas", "Esperar o oponente cansar"], correta: 1 },
-            { pergunta: "O que é a 'esgrima' na meia guarda?", opcoes: ["Usar a lapela como uma espada", "Ganhar o controle do braço interno (underhook)", "Bater no oponente", "Dar cotoveladas"], correta: 1 },
-            { pergunta: "Qual destes é um tipo de meia guarda?", opcoes: ["Meia Guarda Profunda", "Meia Guarda Rasa", "Meia Guarda de Longe", "Todos estão corretos"], correta: 3 },
-            { pergunta: "Para quem está por baixo, o que é fundamental na meia guarda?", opcoes: ["Ficar reto de costas no chão", "Ficar de lado, de frente para o oponente", "Abraçar a cabeça do oponente", "Empurrar o joelho"], correta: 1 },
-            { pergunta: "A 'Meia Guarda Invertida' é uma variação usada para:", opcoes: ["Descansar", "Atacar as pernas e as costas", "Apenas segurar a posição", "Estrangular"], correta: 1 },
-            { pergunta: "Um bom passador de meia guarda tenta controlar qual parte do corpo do oponente?", opcoes: ["A perna que está livre", "A cabeça e a esgrima", "O pé", "O kimono"], correta: 1 },
-            { pergunta: "A meia guarda é considerada uma posição:", opcoes: ["Ruim para quem está por baixo", "Ruim para quem está por cima", "Dinâmica, com ataques para ambos os lados", "Exclusiva para faixas-pretas"], correta: 2 }
-        ]
-      },
-      finalizacoes: {
-        perguntas: [
-            { pergunta: "Qual finalização ataca a articulação do cotovelo?", opcoes: ["Mata-leão", "Armlock (chave de braço)", "Estrangulamento de lapela", "Guilhotina"], correta: 1 },
-            { pergunta: "O 'Triângulo' é uma finalização que usa principalmente:", opcoes: ["Os braços para estrangular", "As pernas para estrangular o pescoço e um braço", "A lapela contra a garganta", "A força de um braço"], correta: 1 },
-            { pergunta: "A 'Kimura' e a 'Americana' são chaves de braço que atacam qual articulação?", opcoes: ["Joelho", "Tornozelo", "Ombro", "Pescoço"], correta: 2 },
-            { pergunta: "O 'Mata-Leão' é um tipo de:", opcoes: ["Chave de perna", "Chave de braço", "Estrangulamento sanguíneo", "Queda"], correta: 2 },
-            { pergunta: "Qual o nome do estrangulamento aplicado com a gola por baixo do braço do oponente?", opcoes: ["Ezequiel", "Katagatami", "Triângulo de mão", "Baseball Bat Choke"], correta: 0 },
-            { pergunta: "Uma 'Guilhotina' é um estrangulamento que ataca:", opcoes: ["As costas", "O pescoço, pela frente", "O braço", "O ombro"], correta: 1 },
-            { pergunta: "A 'Omoplata' é uma finalização que usa as pernas para atacar qual parte do corpo?", opcoes: ["O pescoço", "O joelho", "O ombro do oponente", "O tornozelo"], correta: 2 },
-            { pergunta: "Para uma finalização ser eficiente, o mais importante é:", opcoes: ["Força bruta", "Velocidade", "Controle da posição e ajuste técnico", "Gritar"], correta: 2 },
-            { pergunta: "Qual destas chaves de perna é geralmente proibida para faixas iniciantes?", opcoes: ["Chave de pé reta", "Chave de calcanhar", "Botinha", "Chave de joelho"], correta: 1 },
-            { pergunta: "O que é um 'Katagatami'?", opcoes: ["Uma queda", "Um estrangulamento onde se usa o ombro e o braço para pressionar o pescoço", "Uma chave de pulso", "Um tipo de raspagem"], correta: 1 }
-        ]
-      },
-      quedas: {
-        perguntas: [
-            { pergunta: "Qual é o nome da queda onde você usa a perna para 'ceifar' a perna de apoio do oponente?", opcoes: ["Double Leg", "Single Leg", "O Soto Gari", "Tomoe Nage"], correta: 2 },
-            { pergunta: "Um 'Single Leg' tem como objetivo principal:", opcoes: ["Derrubar o oponente para trás", "Controlar uma das pernas para desequilibrar e derrubar", "Projetar o oponente por cima do ombro", "Puxar o oponente para a guarda"], correta: 1 },
-            { pergunta: "Qual queda é conhecida como 'queda de sacrifício', onde quem aplica se joga no chão?", opcoes: ["Baiana (Double Leg)", "Tomoe Nage", "Seoi Nage", "O Goshi"], correta: 1 },
-            { pergunta: "O que é 'Kuzushi' no contexto das quedas?", opcoes: ["Força máxima", "O ato de desequilibrar o oponente", "A pegada no kimono", "A defesa de queda"], correta: 1 },
-            { pergunta: "A 'Baiana' é o nome popular para qual queda?", opcoes: ["Single Leg", "Seoi Nage", "Double Leg", "Harai Goshi"], correta: 2 },
-            { pergunta: "Qual a defesa mais comum para um Double Leg?", opcoes: ["Pular", "O Sprawl", "Abraçar a cabeça", "Virar de costas"], correta: 1 },
-            { pergunta: "O que é 'puxar para a guarda'?", opcoes: ["Um tipo de queda", "Uma forma de levar a luta para o chão de forma segura, sem tentar a queda", "Um tipo de finalização", "Uma falta"], correta: 1 },
-            { pergunta: "Qual pegada é fundamental para a maioria das quedas de Judô aplicadas ao Jiu-Jitsu?", opcoes: ["Pegada na calça", "Pegada de gola e manga", "Pegada nas costas", "Pegada no pescoço"], correta: 1 },
-            { pergunta: "O 'Uchi Mata' é uma queda que ataca principalmente com:", opcoes: ["O braço", "A perna, pela parte interna da coxa do oponente", "A cabeça", "Os pés"], correta: 1 },
-            { pergunta: "Um bom 'timing' é importante para uma queda por quê?", opcoes: ["Para não se cansar", "Para aproveitar o movimento e o desequilíbrio do oponente", "Para o juiz ver", "Para assustar o adversário"], correta: 1 }
-        ]
-      },
-      drills: {
-        perguntas: [
-            { pergunta: "Qual é o drill mais fundamental para criar espaço e fugir do controle lateral (100kg)?", opcoes: ["Rolamento para frente", "Fuga de quadril (Hip Escape)", "Polichinelo", "Levantada técnica"], correta: 1 },
-            { pergunta: "Drills (repetições de movimento) servem principalmente para...", opcoes: ["Ganhar força máxima", "Desenvolver memória muscular e fluidez", "Cansar o corpo antes do 'rola'", "Aprender a lutar sem técnica"], correta: 1 },
-            { pergunta: "A 'troca de base' em pé é um drill importante para qual situação de luta?", opcoes: ["Aplicar finalizações", "Preparar entradas de queda", "Defender o cem quilos", "Fazer aquecimento"], correta: 1 },
-            { pergunta: "Fazer 'jacaré' (andar de um lado para o outro por cima de um colega) é um drill para quê?", opcoes: ["Melhorar o equilíbrio", "Fortalecer o pescoço", "Melhorar a mobilidade na passagem de guarda", "Aquecer os braços e ombros"], correta: 2 },
-            { pergunta: "A 'levantada técnica' é um drill para:", opcoes: ["Levantar-se do chão de forma segura, se protegendo", "Dar uma cambalhota", "Fortalecer o abdômen", "Iniciar uma queda"], correta: 0 },
-            { pergunta: "Repetir a entrada de 'armlock' da montada é um drill para:", opcoes: ["Aumentar a velocidade e precisão do ataque", "Ganhar força nos braços", "Cansar o colega", "Aprender a cair"], correta: 0 },
-            { pergunta: "O que é o drill de 'passagem torreando' sem parceiro?", opcoes: ["Correr em círculos", "Simular o movimento circular das pernas e do quadril", "Pular corda", "Fazer flexões"], correta: 1 },
-            { pergunta: "Qual o benefício de fazer drills de rolamento sobre os ombros?", opcoes: ["Melhorar a queda de Judô", "Melhorar a consciência corporal e a capacidade de inverter posições", "Fortalecer o pescoço", "Aprender a voar"], correta: 1 },
-            { pergunta: "Drills de 'pegada' (ficar trocando pegadas com um colega) melhoram o quê?", opcoes: ["A força das mãos (grip)", "A velocidade das pernas", "A capacidade de finalização", "Apenas a amizade"], correta: 0 },
-            { pergunta: "Por que é importante fazer drills de forma lenta no início?", opcoes: ["Para não suar", "Para focar na execução correta da técnica antes de adicionar velocidade", "Para o professor não brigar", "Para não cansar"], correta: 1 }
-        ]
-      }
-    };
-    
-    /* ================= LÓGICA DO QUIZ SEQUENCIAL ================= */
-    let pontos = 0; 
+    let pontos = 0;
     let currentQuizKey = null;
     let currentQuestionIndex = 0;
     let currentQuizScore = 0;
-    
-    function abrirConteudo(titulo, chave) {
+    let perguntasAtuais = [];
+
+    async function abrirConteudo(titulo, chave) {
       document.getElementById("conteudo-titulo").innerText = titulo;
       document.getElementById("conteudo-texto").innerHTML = conteudos[chave] || "";
       currentQuizKey = chave;
       currentQuestionIndex = 0;
       currentQuizScore = 0;
+
+      // 🔥 Buscar perguntas do Firestore
+      perguntasAtuais = [];
+      const querySnapshot = await getDocs(collection(db, "quizzes", chave, "perguntas"));
+      querySnapshot.forEach((doc) => perguntasAtuais.push(doc.data()));
+
+      if (perguntasAtuais.length === 0) {
+        alert("⚠️ Nenhuma pergunta cadastrada ainda.");
+        return;
+      }
+
       displayQuestion();
       showScreen('conteudo');
     }
-    
+
     function displayQuestion() {
       const quizArea = document.getElementById("quiz-area");
-      const quizData = quizzes[currentQuizKey].perguntas[currentQuestionIndex];
+      const quizData = perguntasAtuais[currentQuestionIndex];
       if (!quizData) return;
       quizArea.innerHTML = "";
+
       const questionTitle = document.createElement("h3");
       questionTitle.className = "quiz-question";
       questionTitle.innerText = quizData.pergunta;
+
       const optionsContainer = document.createElement("div");
       optionsContainer.className = "quiz-options";
+
       quizData.opcoes.forEach((opcao, index) => {
         const optionDiv = document.createElement("div");
         optionDiv.className = "option";
@@ -230,9 +102,11 @@
         optionDiv.onclick = () => selectAnswer(index, quizData.correta, optionDiv);
         optionsContainer.appendChild(optionDiv);
       });
+
       const progressIndicator = document.createElement("div");
       progressIndicator.className = "quiz-progress";
-      progressIndicator.innerText = `Pergunta ${currentQuestionIndex + 1} de ${quizzes[currentQuizKey].perguntas.length}`;
+      progressIndicator.innerText = `Pergunta ${currentQuestionIndex + 1} de ${perguntasAtuais.length}`;
+
       quizArea.appendChild(questionTitle);
       quizArea.appendChild(optionsContainer);
       quizArea.appendChild(progressIndicator);
@@ -240,16 +114,16 @@
       feedbackDiv.className = "quiz-feedback";
       quizArea.appendChild(feedbackDiv);
     }
-    
+
     function selectAnswer(selectedIndex, correctIndex, selectedElement) {
       const quizArea = document.getElementById("quiz-area");
       const options = quizArea.querySelectorAll(".option");
       const feedbackDiv = quizArea.querySelector(".quiz-feedback");
       options.forEach(opt => opt.classList.add("disabled"));
+
       if (selectedIndex === correctIndex) {
         selectedElement.classList.add("correct");
         feedbackDiv.innerText = "Correto! 👊";
-        feedbackDiv.style.color = "var(--correct)";
         pontos++;
         currentQuizScore++;
         atualizarPlacar();
@@ -257,11 +131,11 @@
         selectedElement.classList.add("wrong");
         options[correctIndex].classList.add("correct");
         feedbackDiv.innerText = "Incorreto! ❌";
-        feedbackDiv.style.color = "var(--wrong)";
       }
+
       const nextButton = document.createElement("button");
       nextButton.className = "quiz-button";
-      if (currentQuestionIndex < quizzes[currentQuizKey].perguntas.length - 1) {
+      if (currentQuestionIndex < perguntasAtuais.length - 1) {
         nextButton.innerText = "Próxima Pergunta";
         nextButton.onclick = () => {
           currentQuestionIndex++;
@@ -273,38 +147,24 @@
       }
       quizArea.appendChild(nextButton);
     }
-    
+
     function showFinalScore() {
       const quizArea = document.getElementById("quiz-area");
-      const totalQuestions = quizzes[currentQuizKey].perguntas.length;
-      quizArea.innerHTML = `<div class="quiz-final-score"><h3>Fim do Quiz!</h3><p>Você acertou ${currentQuizScore} de ${totalQuestions} perguntas.</p></div>`;
+      quizArea.innerHTML = `<div class="quiz-final-score"><h3>Fim do Quiz!</h3><p>Você acertou ${currentQuizScore} de ${perguntasAtuais.length} perguntas.</p></div>`;
     }
-    
+
     function atualizarPlacar() {
       document.getElementById("placar").innerText = `Placar: ${pontos} acertos`;
     }
 
-    /* ================= CONTROLE DE NAVEGAÇÃO ================= */
     function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
-        const screenToShow = document.getElementById(id);
-        
-        if (id === 'hub' || id === 'quizzes' || id === 'conteudo') {
-            screenToShow.style.display = 'flex';
-        } else {
-            screenToShow.style.display = 'block';
-        }
-
-        if (id === 'quizzes') {
-            atualizarPlacar();
-        }
+      document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
+      const screenToShow = document.getElementById(id);
+      screenToShow.style.display = 'flex';
+      if (id === 'quizzes') atualizarPlacar();
     }
-  </script>
-  <!-- ==================== FIREBASE CHECK ==================== -->
-  <script type="module">
-    import { verificarAcesso } from "./firebase.js";
 
-    // Executa em TODAS as páginas protegidas
+    // 🔒 Checa login/assinatura
     verificarAcesso((permitido, user) => {
       if (!permitido) {
         alert("⚠️ Você precisa assinar para acessar esta página.");
@@ -316,4 +176,3 @@
   </script>
 </body>
 </html>
-

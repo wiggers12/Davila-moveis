@@ -9,58 +9,109 @@
 </head>
 <body>
 
-  <div id="splash" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background-color: #121212; justify-content: center; align-items: center;">
+  <!-- SPLASH -->
+  <div id="splash">
     <h1>Jiu-Jitsu Puro</h1>
   </div>
 
+  <!-- HUB -->
   <div id="hub" class="screen center-content" style="display: none;">
     
+    <!-- PLANOS DE VENDA (NOVA VERSÃO) -->
     <div id="planos-venda" class="hub-container">
-        <div class="premium-card" onclick="criarPreferencia('Plano Básico - Jiu-Jitsu Puro', 9.90)">
-            <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
-            <i class="fa-solid fa-graduation-cap main-icon"></i>
-            <div><h2>Aprenda e Teste</h2><p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p></div>
-            <div class="price-tag">R$ 9,90</div>
+      <section class="pricing-hero">
+        <h2>Escolha seu plano</h2>
+        <p>Aprenda, evolua e leve seu Jiu-Jitsu para o próximo nível</p>
+      </section>
+
+      <!-- TABELA COMPARATIVA -->
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Recursos</th>
+            <th class="basic">Básico</th>
+            <th class="premium">Premium</th>
+            <th class="black">Black</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Quizzes interativos</td>
+            <td>✔️</td>
+            <td>✔️</td>
+            <td>✔️</td>
+          </tr>
+          <tr>
+            <td>Biblioteca de posições</td>
+            <td>✖️</td>
+            <td>✔️</td>
+            <td>✔️</td>
+          </tr>
+          <tr>
+            <td>Análise de lutas</td>
+            <td>✖️</td>
+            <td>✖️</td>
+            <td>✔️</td>
+          </tr>
+          <tr>
+            <td>Suporte prioritário</td>
+            <td>✖️</td>
+            <td>✔️</td>
+            <td>✔️</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- CARDS DE PREÇO -->
+      <div class="pricing-cards">
+        <div class="plan-card basic" onclick="criarPreferencia('Plano Básico - Jiu-Jitsu Puro', 19.90)">
+          <h3>Básico</h3>
+          <p class="price">R$ 19,90/mês</p>
+          <p>Acesso a quizzes teóricos</p>
+          <button>Assinar</button>
         </div>
-        <div class="premium-card" onclick="criarPreferencia('Plano Premium - Jiu-Jitsu Puro', 39.90)">
-            <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
-            <i class="fa-solid fa-sitemap main-icon"></i>
-            <div><h2>Biblioteca de Posições</h2><p class="description">Explore um acervo completo de posições e técnicas.</p></div>
-            <div class="price-tag">R$ 39,90</div>
+        <div class="plan-card premium" onclick="criarPreferencia('Plano Premium - Jiu-Jitsu Puro', 49.90)">
+          <h3>Premium</h3>
+          <p class="price">R$ 49,90/mês</p>
+          <p>Quizzes + biblioteca completa</p>
+          <button>Assinar</button>
         </div>
-        <div class="premium-card" onclick="criarPreferencia('Plano Black - Jiu-Jitsu Puro', 69.90)">
-            <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
-            <i class="fa-solid fa-chart-line main-icon"></i>
-            <div><h2>Análise de Luta</h2><p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p></div>
-            <div class="price-tag">R$ 69,90</div>
+        <div class="plan-card black" onclick="criarPreferencia('Plano Black - Jiu-Jitsu Puro', 89.90)">
+          <h3>Black</h3>
+          <p class="price">R$ 89,90/mês</p>
+          <p>Tudo incluso + análises exclusivas</p>
+          <button>Assinar</button>
         </div>
+      </div>
     </div>
 
+    <!-- CONTEÚDO LIBERADO (APÓS LOGIN/APROVAÇÃO) -->
     <div id="conteudo-liberado" class="hub-container" style="display: none;">
       <a href="quizzes.html" class="card-link" id="link-quizzes" style="display: none;">
         <div class="premium-card">
-            <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
-            <i class="fa-solid fa-graduation-cap main-icon"></i>
-            <div><h2>Aprenda e Teste</h2><p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p></div>
+          <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
+          <i class="fa-solid fa-graduation-cap main-icon"></i>
+          <div><h2>Aprenda e Teste</h2><p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p></div>
         </div>
       </a>
       <a href="posicoes.html" class="card-link" id="link-biblioteca" style="display: none;">
         <div class="premium-card">
-            <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
-            <i class="fa-solid fa-sitemap main-icon"></i>
-            <div><h2>Biblioteca de Posições</h2><p class="description">Explore um acervo completo de posições e técnicas.</p></div>
+          <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
+          <i class="fa-solid fa-sitemap main-icon"></i>
+          <div><h2>Biblioteca de Posições</h2><p class="description">Explore um acervo completo de posições e técnicas.</p></div>
         </div>
       </a>
       <a href="analise.html" class="card-link" id="link-analise" style="display: none;">
         <div class="premium-card">
-            <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
-            <i class="fa-solid fa-chart-line main-icon"></i>
-            <div><h2>Análise de Luta</h2><p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p></div>
+          <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
+          <i class="fa-solid fa-chart-line main-icon"></i>
+          <div><h2>Análise de Luta</h2><p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p></div>
         </div>
       </a>
     </div>
   </div>
 
+  <!-- LOGIN -->
   <div class="login-container" id="loginBox" style="display: none;">
     <div class="form-login">
       <input type="email" id="emailInput" placeholder="Seu e-mail" class="login-input">
@@ -76,17 +127,19 @@
     <p id="loginErrorMsg" class="error-msg"></p>
   </div>
 
+  <!-- USER LOGADO -->
   <div class="login-container" id="userBox" style="display:none; flex-direction: column; align-items: center;">
     <p id="welcomeMsg"></p>
     <button id="btnLogout" class="back-btn">Sair</button>
   </div>
 
+  <!-- MERCADO PAGO -->
   <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script>
-    // IMPORTANTE: USE SUA PUBLIC KEY DE PRODUÇÃO AQUI
     const mp = new MercadoPago("APP_USR-a984cf15-517f-4d10-a57f-f47617a3a10d", { locale: "pt-BR" });
   </script>
 
+  <!-- FIREBASE / LÓGICA -->
   <script type="module">
     import { loginGoogle, auth, db } from "./firebase.js"; 
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -201,5 +254,5 @@
     };
   </script>
 
-  </body>
+</body>
 </html>

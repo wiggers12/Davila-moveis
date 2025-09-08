@@ -1,5 +1,5 @@
 /* =======================================================
-   ARQUIVO: style.css (VERSÃO ULTRA PREMIUM REVISADA)
+   ARQUIVO: style.css (VERSÃO ULTRA PREMIUM COMPLETA)
    ======================================================= */
 
 /* ================= VARIÁVEIS ================= */
@@ -328,6 +328,125 @@ h1, h2, h3 {
   box-shadow: inset 0 3px 6px rgba(0,0,0,0.4);
 }
 
+/* ================= NOVA ÁREA DE PLANOS ================= */
+.pricing-hero {
+  text-align: center;
+  margin: 40px 0 30px;
+}
+.pricing-hero h1 {
+  font-size: 2.2em;
+  font-weight: 800;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, #ffdd00, #ff4d6d, #007bff, #6f42c1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 300%;
+  animation: faixaAnim 5s linear infinite;
+}
+.pricing-hero p {
+  font-size: 1.1em;
+  color: var(--gray);
+}
+
+/* TABELA COMPARATIVA */
+.pricing-table {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto 40px;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.pricing-table th, .pricing-table td {
+  padding: 14px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.pricing-table th {
+  background: #1c1c1c;
+  font-weight: bold;
+  color: var(--gold-light);
+}
+.pricing-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+  color: var(--white);
+}
+.pricing-table tr:nth-child(even) {
+  background: rgba(255,255,255,0.03);
+}
+.pricing-table i {
+  font-size: 1.2em;
+}
+.pricing-table i.fa-check { color: var(--correct); }
+.pricing-table i.fa-times { color: var(--wrong); }
+
+/* CARDS DE PLANOS */
+.pricing-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+.plan-card {
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  color: var(--white);
+  box-shadow: var(--shadow);
+  transition: transform .3s ease, box-shadow .3s ease;
+  cursor: pointer;
+}
+.plan-card h3 {
+  font-size: 1.6em;
+  margin-bottom: 12px;
+}
+.plan-card .price {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 10px 0 15px;
+}
+.plan-card .desc {
+  font-size: 0.95em;
+  color: var(--gray);
+  margin-bottom: 18px;
+}
+.plan-card .btn-assinar {
+  background: var(--white);
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .25s;
+}
+.plan-card .btn-assinar:hover {
+  background: var(--gold-light);
+  transform: translateY(-3px);
+}
+
+/* CORES ESPECÍFICAS DOS PLANOS */
+.plan-card.basic {
+  background: linear-gradient(135deg, #222, #444);
+  border: 2px solid #f1c40f;
+}
+.plan-card.premium {
+  background: linear-gradient(135deg, #1a2a6c, #3498db, #6f42c1);
+  border: 2px solid #3498db;
+}
+.plan-card.black {
+  background: linear-gradient(135deg, #000000, #434343);
+  border: 2px solid #e74c3c;
+}
+
+.plan-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 0 25px rgba(255,255,255,0.4);
+}
+
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 900px) {
   .cards {
@@ -337,6 +456,14 @@ h1, h2, h3 {
   .card { padding: 15px; }
   .card i { font-size: 22px; }
   .card a { font-size: 0.9em; }
+}
+
+@media (max-width: 768px) {
+  .pricing-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 600px) {
@@ -357,6 +484,11 @@ h1, h2, h3 {
   /* botão de login ocupa quase toda a tela */
   .login-container { max-width: 95%; }
   .google-btn { width: 100%; padding: 16px; font-size: 1em; }
+
+  .pricing-hero h1 { font-size: 1.6em; }
+  .pricing-hero p { font-size: 0.95em; }
+  .plan-card h3 { font-size: 1.3em; }
+  .plan-card .price { font-size: 1.2em; }
 }
 
 /* ================= ANIMAÇÕES ================= */
