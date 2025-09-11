@@ -39,7 +39,7 @@
   </div>
 
   <script type="module">
-    import { verificarAcesso } from "./firebase.js";
+    // 👉 REMOVIDO: import { verificarAcesso } from "./firebase.js";
 
     const conteudos = {
       comeco: `<strong>O Começo:</strong> Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é evolução. Teste seus conhecimentos básicos.`,
@@ -54,14 +54,14 @@
       drills: `<strong>Drills:</strong> A repetição leva à perfeição.`
     };
 
-    let quizzes = {};        // conteúdo do quizzes.json
+    let quizzes = {};        
     let pontos = 0;
     let currentQuizKey = null;
     let currentQuestionIndex = 0;
     let currentQuizScore = 0;
     let perguntasAtuais = [];
 
-    // Carregar quizzes.json na inicialização
+    // Carregar quizzes.json
     async function carregarQuizzes() {
       try {
         const res = await fetch("quizzes.json");
@@ -81,7 +81,6 @@
       currentQuestionIndex = 0;
       currentQuizScore = 0;
 
-      // 🔥 Buscar perguntas do quizzes.json
       perguntasAtuais = quizzes[chave]?.perguntas || [];
 
       if (perguntasAtuais.length === 0) {
@@ -175,15 +174,8 @@
       if (id === 'quizzes') atualizarPlacar();
     }
 
-    // 🔒 Checa login/assinatura
-    verificarAcesso((permitido, user) => {
-      if (!permitido) {
-        alert("⚠️ Você precisa assinar para acessar esta página.");
-        window.location.href = "index.html";
-      } else {
-        console.log("✅ Usuário logado:", user.email);
-      }
-    });
+    // 👉 Expõe a função para o HTML conseguir usar
+    window.abrirConteudo = abrirConteudo;
   </script>
 </body>
 </html>
