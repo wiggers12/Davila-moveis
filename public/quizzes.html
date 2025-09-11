@@ -39,8 +39,7 @@
   </div>
 
   <script type="module">
-    import { db, verificarAcesso } from "./firebase.js";
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { verificarAcesso } from "./firebase.js";
 
     const conteudos = {
       comeco: `<strong>O Começo:</strong> Iniciar no Jiu-Jitsu pode parecer desafiador, mas cada treino é evolução. Teste seus conhecimentos básicos.`,
@@ -55,11 +54,25 @@
       drills: `<strong>Drills:</strong> A repetição leva à perfeição.`
     };
 
+    let quizzes = {};        // conteúdo do quizzes.json
     let pontos = 0;
     let currentQuizKey = null;
     let currentQuestionIndex = 0;
     let currentQuizScore = 0;
     let perguntasAtuais = [];
+
+    // Carregar quizzes.json na inicialização
+    async function carregarQuizzes() {
+      try {
+        const res = await fetch("quizzes.json");
+        quizzes = await res.json();
+        console.log("✅ quizzes.json carregado:", quizzes);
+      } catch (e) {
+        console.error("Erro ao carregar quizzes.json:", e);
+        alert("Erro ao carregar perguntas.");
+      }
+    }
+    carregarQuizzes();
 
     async function abrirConteudo(titulo, chave) {
       document.getElementById("conteudo-titulo").innerText = titulo;
@@ -68,10 +81,8 @@
       currentQuestionIndex = 0;
       currentQuizScore = 0;
 
-      // 🔥 Buscar perguntas do Firestore
-      perguntasAtuais = [];
-      const querySnapshot = await getDocs(collection(db, "quizzes", chave, "perguntas"));
-      querySnapshot.forEach((doc) => perguntasAtuais.push(doc.data()));
+      // 🔥 Buscar perguntas do quizzes.json
+      perguntasAtuais = quizzes[chave]?.perguntas || [];
 
       if (perguntasAtuais.length === 0) {
         alert("⚠️ Nenhuma pergunta cadastrada ainda.");
