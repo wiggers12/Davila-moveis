@@ -44,7 +44,6 @@
       { "pergunta": "O tatame é considerado um local de:", "opcoes": ["Apenas força", "Respeito e aprendizado", "Apenas competição", "Brincadeiras"], "correta": 1 }
     ]
   },
-{
   "mentalidade": {
     "perguntas": [
       { "pergunta": "Qual qualidade NÃO faz parte da mentalidade do Jiu-Jitsu?", "opcoes": ["Humildade", "Resiliência", "Impaciência", "Controle emocional"], "correta": 2 },
