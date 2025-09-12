@@ -91,20 +91,29 @@
   </div>
 
   <!-- LOGIN -->
-  <div class="login-container" id="loginBox" style="display: none;">
-    <div class="form-login">
-      <input type="email" id="emailInput" placeholder="Seu e-mail" class="login-input">
-      <input type="password" id="passwordInput" placeholder="Sua senha" class="login-input">
-      <div class="botoes-login">
-        <button id="btnEmailLogin" class="login-btn">Entrar</button>
-        <button id="btnEmailSignup" class="login-btn signup">Cadastrar</button>
-      </div>
+<div class="login-container" id="loginBox" style="display: none;">
+  <div class="form-login">
+    <input type="email" id="emailInput" placeholder="Seu e-mail" class="login-input">
+    <input type="password" id="passwordInput" placeholder="Sua senha" class="login-input">
+
+    <div class="botoes-login">
+      <button id="btnEmailLogin" class="login-btn">Entrar</button>
+      <button id="btnEmailSignup" class="login-btn signup">Cadastrar</button>
     </div>
+
     <p class="divisor">ou</p>
-    <button id="btnLoginGoogle" class="google-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"> Entrar com Google</button>
+
+    <button id="btnLoginGoogle" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+      Entrar com Google
+    </button>
+
     <button id="btnAnonymous" class="anonymous-btn">Continuar sem cadastro</button>
+
     <p id="loginErrorMsg" class="error-msg"></p>
   </div>
+</div>
+
 
   <!-- USER LOGADO -->
   <div class="login-container" id="userBox" style="display:none; flex-direction: column; align-items: center;">
