@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jiu-Jitsu Puro - Bem-vindo</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d4af37">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <!-- SPLASH -->
   <div id="splash">
     <h1>Jiu-Jitsu Puro</h1>
@@ -16,15 +18,13 @@
 
   <!-- HUB -->
   <div id="hub" class="screen center-content" style="display: none;">
-    
-    <!-- PLANOS DE VENDA (NOVA VERSÃO) -->
+    <!-- PLANOS DE VENDA -->
     <div id="planos-venda" class="hub-container">
       <section class="pricing-hero">
         <h2>Escolha seu plano</h2>
         <p>Aprenda, evolua e leve seu Jiu-Jitsu para o próximo nível</p>
       </section>
 
-      <!-- TABELA COMPARATIVA -->
       <table class="pricing-table">
         <thead>
           <tr>
@@ -35,34 +35,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Quizzes interativos</td>
-            <td>✔️</td>
-            <td>✔️</td>
-            <td>✔️</td>
-          </tr>
-          <tr>
-            <td>Biblioteca de posições</td>
-            <td>✖️</td>
-            <td>✔️</td>
-            <td>✔️</td>
-          </tr>
-          <tr>
-            <td>Análise de lutas</td>
-            <td>✖️</td>
-            <td>✖️</td>
-            <td>✔️</td>
-          </tr>
-          <tr>
-            <td>Suporte prioritário</td>
-            <td>✖️</td>
-            <td>✔️</td>
-            <td>✔️</td>
-          </tr>
+          <tr><td>Quizzes interativos</td><td>✔️</td><td>✔️</td><td>✔️</td></tr>
+          <tr><td>Biblioteca de posições</td><td>✖️</td><td>✔️</td><td>✔️</td></tr>
+          <tr><td>Análise de lutas</td><td>✖️</td><td>✖️</td><td>✔️</td></tr>
+          <tr><td>Suporte prioritário</td><td>✖️</td><td>✔️</td><td>✔️</td></tr>
         </tbody>
       </table>
 
-      <!-- CARDS DE PREÇO -->
       <div class="pricing-cards">
         <div class="plan-card basic" onclick="criarPreferencia('Plano Básico - Jiu-Jitsu Puro', 19.90)">
           <h3>Básico</h3>
@@ -85,27 +64,27 @@
       </div>
     </div>
 
-    <!-- CONTEÚDO LIBERADO (APÓS LOGIN/APROVAÇÃO) -->
+    <!-- CONTEÚDO LIBERADO -->
     <div id="conteudo-liberado" class="hub-container" style="display: none;">
       <a href="quizzes.html" class="card-link" id="link-quizzes" style="display: none;">
         <div class="premium-card">
           <span class="tier-indicator"><i class="fa-solid fa-star"></i> Básica</span>
           <i class="fa-solid fa-graduation-cap main-icon"></i>
-          <div><h2>Aprenda e Teste</h2><p class="description">Acesse nossos quizzes e aprimore seu conhecimento teórico.</p></div>
+          <div><h2>Aprenda e Teste</h2><p>Acesse nossos quizzes e aprimore seu conhecimento.</p></div>
         </div>
       </a>
       <a href="posicoes.html" class="card-link" id="link-biblioteca" style="display: none;">
         <div class="premium-card">
           <span class="tier-indicator"><i class="fa-solid fa-lock"></i> Premium</span>
           <i class="fa-solid fa-sitemap main-icon"></i>
-          <div><h2>Biblioteca de Posições</h2><p class="description">Explore um acervo completo de posições e técnicas.</p></div>
+          <div><h2>Biblioteca de Posições</h2><p>Explore posições e técnicas completas.</p></div>
         </div>
       </a>
       <a href="analise.html" class="card-link" id="link-analise" style="display: none;">
         <div class="premium-card">
           <span class="tier-indicator"><i class="fa-solid fa-crown"></i> Black</span>
           <i class="fa-solid fa-chart-line main-icon"></i>
-          <div><h2>Análise de Luta</h2><p class="description">Faça o upload e analise suas lutas com nossa ferramenta exclusiva.</p></div>
+          <div><h2>Análise de Luta</h2><p>Envie e analise suas lutas com exclusividade.</p></div>
         </div>
       </a>
     </div>
@@ -144,6 +123,7 @@
     import { loginGoogle, auth, db } from "./firebase.js"; 
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
     const splash = document.getElementById('splash');
     const hub = document.getElementById('hub');
@@ -164,6 +144,7 @@
     const linkBiblioteca = document.getElementById('link-biblioteca');
     const linkAnalise = document.getElementById('link-analise');
 
+    // === LOGIN ===
     btnLoginGoogle.addEventListener("click", loginGoogle);
     btnEmailSignup.addEventListener("click", async () => {
       try {
@@ -183,6 +164,42 @@
     btnAnonymous.addEventListener("click", () => signInAnonymously(auth));
     btnLogout.addEventListener("click", () => signOut(auth));
 
+    // === PUSH NOTIFICATIONS ===
+    const messaging = getMessaging();
+
+    async function iniciarNotificacoes() {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          console.warn("🚫 Permissão para notificações negada");
+          return;
+        }
+
+        const token = await getToken(messaging, {
+          vapidKey: "BLvR9D4pq1scn1BusaUJOwUdzjVigbVE_WdsxvsnAnZHbQ9fwARj_l-yzLpTFhMWeozvb-JoKc8noxKQ-Ibqhx0",
+          serviceWorkerRegistration: await navigator.serviceWorker.ready
+        });
+
+        console.log("✅ Token FCM:", token);
+
+        const user = auth.currentUser;
+        if (user) {
+          const userDocRef = doc(db, "usuarios", user.uid);
+          await setDoc(userDocRef, { fcmToken: token }, { merge: true });
+        }
+      } catch (err) {
+        console.error("❌ Erro ao obter token FCM:", err);
+      }
+    }
+
+    onMessage(messaging, (payload) => {
+      console.log("📩 Notificação recebida:", payload);
+      if (payload.notification) {
+        alert(`${payload.notification.title}\n${payload.notification.body}`);
+      }
+    });
+
+    // === AUTH STATE ===
     onAuthStateChanged(auth, async (user) => {
       hub.style.display = 'none';
       loginBox.style.display = 'none';
@@ -220,6 +237,8 @@
             if (planoDoUsuario.includes('Black')) {
                 linkAnalise.style.display = 'block';
             }
+
+            iniciarNotificacoes();
           } else {
             planosVenda.style.display = 'flex';
             conteudoLiberado.style.display = 'none';
@@ -252,7 +271,14 @@
         }
       } catch (e) { console.error("Erro:", e); alert("Falha na comunicação com servidor"); }
     };
-  </script>
+   </script>
 
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/firebase-messaging-sw.js")
+        .then(() => console.log("✅ Service Worker registrado"))
+        .catch(err => console.error("❌ Erro no SW:", err));
+    }
+  </script>
 </body>
 </html>

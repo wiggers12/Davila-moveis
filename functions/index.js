@@ -21,7 +21,6 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.MERCADOPAGO_TOKEN
 });
 
-
 // ----------------- ROTA PARA CRIAR PREFERÊNCIA DE PAGAMENTO -----------------
 app.post("/create_preference", async (req, res) => {
   try {
@@ -45,7 +44,7 @@ app.post("/create_preference", async (req, res) => {
 
     const preference = new Preference(client);
     const result = await preference.create({ body: preferenceData });
-    
+
     console.log("Preferência de pagamento criada com ID:", result.id);
     res.json({ id: result.id });
 
@@ -54,7 +53,6 @@ app.post("/create_preference", async (req, res) => {
     res.status(500).json({ error: "Erro ao criar preferência de pagamento" });
   }
 });
-
 
 // ----------------- ROTA DE WEBHOOK PARA CONFIRMAR PAGAMENTOS -----------------
 app.post("/webhook-mercadopago", async (req, res) => {
@@ -67,21 +65,20 @@ app.post("/webhook-mercadopago", async (req, res) => {
       const payment = new Payment(client);
       const paymentDetails = await payment.get({ id: paymentId });
 
-      if (paymentDetails.status === 'approved') {
+      if (paymentDetails.status === "approved") {
         console.log(`✅ Pagamento ${paymentId} APROVADO!`);
-        
+
         const payerEmail = paymentDetails.payer.email;
         const planName = paymentDetails.additional_info.items[0].title;
 
         try {
           const userRecord = await admin.auth().getUserByEmail(payerEmail);
           const userId = userRecord.uid;
-          
-          const userDocRef = db.collection('usuarios').doc(userId);
-          // Usando .set com merge:true para mais robustez
+
+          const userDocRef = db.collection("usuarios").doc(userId);
           await userDocRef.set({
             plano: planName,
-            status: 'ativo',
+            status: "ativo",
             paymentId: paymentId,
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
           }, { merge: true });
@@ -99,6 +96,31 @@ app.post("/webhook-mercadopago", async (req, res) => {
   }
 });
 
+// ----------------- ROTA PARA ENVIAR NOTIFICAÇÕES -----------------
+app.post("/send-notification", async (req, res) => {
+  const { token, title, body } = req.body;
+
+  if (!token || !title || !body) {
+    return res.status(400).json({ error: "Token, título e corpo são obrigatórios." });
+  }
+
+  const message = {
+    notification: {
+      title,
+      body,
+    },
+    token: token,
+  };
+
+  try {
+    const response = await admin.messaging().send(message);
+    console.log("✅ Notificação enviada:", response);
+    res.json({ success: true, response });
+  } catch (error) {
+    console.error("❌ Erro ao enviar notificação:", error);
+    res.status(500).json({ error: "Falha ao enviar notificação", details: error });
+  }
+});
 
 // ----------------- EXPORTA A API PARA O FIREBASE -----------------
 exports.api = functions.https.onRequest(app);
